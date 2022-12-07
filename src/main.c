@@ -28,6 +28,7 @@ int main()
 			.isUnderlined = false,
 			.isViewLocal = false,
 	};
+
 	//Window Init
 	H3Handle screen = H3_Init((SH3InitParams) {
 			.width = 1920,
@@ -35,11 +36,14 @@ int main()
 			.fullscreen = false,
 			.windowTitle = "T-REX3008"
 	});
+
 	bool IsMainMenu = true;
 	bool IsCredits = false;
 	bool IsSettings = false;
 	bool IsNewGame = false;
+
 	while (1) {
+
 		//Main Menu
 		if (IsMainMenu) {
 			H3Handle MainMenuScene = H3_Scene_Create(screen, true);
@@ -120,7 +124,8 @@ int main()
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(960, 540, player));
 
-			while (IsNewGame) {
+			while (IsNewGame) 
+		    {
 				H3_DoFrame(screen, GameScene);
 			}
 			H3_Texture_Destroy(fullBar);
