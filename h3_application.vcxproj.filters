@@ -18,6 +18,10 @@
     </Filter>
     <Filter Include="Header Files\components">
       <UniqueIdentifier>{a08baedd-795b-42af-9e23-9990c834633f}</UniqueIdentifier>
+      <UniqueIdentifier>{695429f2-76fa-49de-accb-9e9794c38196}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\components">
+      <UniqueIdentifier>{ab616b8a-2fda-4b87-b53c-1ce6db84aef1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +58,13 @@
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\mycameracomponent.h">
+
+    <ClCompile Include="src\components\energycomponents.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\components\energycomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
   </ItemGroup>

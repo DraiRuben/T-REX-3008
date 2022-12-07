@@ -178,6 +178,11 @@
     <ClInclude Include="Include\components\MainMenu.h" />
     <ClInclude Include="Include\components\mycameracomponent.h" />
     <ClInclude Include="Include\components\Settings.h" />
+    <ClCompile Include="src\components\energycomponents.c" />
+    <ClCompile Include="src\main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\components\energycomponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
