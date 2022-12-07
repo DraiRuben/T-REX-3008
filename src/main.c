@@ -106,17 +106,17 @@ int main()
 			//temp Map init
 			H3Handle map = H3_Map_Load("assets/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
-			H3Handle mapplayer = H3_Object_Create(GameScene, "layer floor", NULL);
+			H3Handle mapplayer = H3_Object_Create2(GameScene, "layer floor", NULL, 1);
 			H3_Object_AddComponent(mapplayer, MAPLAYERCOMPONENT_CREATE(map, "floor"));
-			H3Handle mapplayer1 = H3_Object_Create(GameScene, "layer object", NULL);
+			H3Handle mapplayer1 = H3_Object_Create2(GameScene, "layer object", NULL,4);
 			H3_Object_AddComponent(mapplayer1, MAPLAYERCOMPONENT_CREATE(map, "object"));
-			H3Handle mapplayer2 = H3_Object_Create(GameScene, "layer object up", NULL);
+			H3Handle mapplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL,4);
 			H3_Object_AddComponent(mapplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
-			H3Handle mapplayer3 = H3_Object_Create(GameScene, "layer wall", NULL);
+			H3Handle mapplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL,4);
 			H3_Object_AddComponent(mapplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
 
 			//player
-			H3Handle player = H3_Object_Create(GameScene, "player", NULL);
+			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE());
 			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 25, 35, 0x22, false));
@@ -125,7 +125,7 @@ int main()
 
 			//camera 
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
-			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(960, 540, player));
+			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(480, 270, player));
 
 			while (IsNewGame) 
 		    {

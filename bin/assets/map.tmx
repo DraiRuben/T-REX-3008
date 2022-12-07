@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="45" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="100">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="45" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="102">
  <tileset firstgid="1" source="Room_Builder_32x32.tsx"/>
  <tileset firstgid="8285" source="16_Grocery_store_32x32.tsx"/>
  <layer id="4" name="floor" width="60" height="45">
@@ -176,6 +176,7 @@
   <object id="97" x="597.333" y="1073.33" width="241.333" height="25.3333"/>
   <object id="98" x="885.333" y="1069.33" width="241.333" height="28"/>
   <object id="99" x="1173.33" y="1070.67" width="242.667" height="25.3333"/>
+  <object id="101" x="110" y="1022" width="33" height="254"/>
  </objectgroup>
  <layer id="1" name="wall" width="60" height="45">
   <data encoding="csv">
