@@ -136,7 +136,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)h3\h3\include;$(SolutionDir)h3\external\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)include;$(SolutionDir)h3\h3\include;$(SolutionDir)h3\external\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,7 +154,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)include;$(SolutionDir)h3\h3\include;$(SolutionDir)h3\external\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)include;$(SolutionDir)h3\h3\include;$(SolutionDir)h3\external\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -165,7 +165,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\Credits.c" />
+    <ClCompile Include="src\components\energycomponents.c" />
+    <ClCompile Include="src\components\MainMenu.c" />
+    <ClCompile Include="src\components\mycameracomponent.c" />
+    <ClCompile Include="src\components\Settings.c" />
     <ClCompile Include="src\main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\components\Credits.h" />
+    <ClInclude Include="Include\components\energycomponent.h" />
+    <ClInclude Include="Include\components\MainMenu.h" />
+    <ClInclude Include="Include\components\mycameracomponent.h" />
+    <ClInclude Include="Include\components\Settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
