@@ -8,6 +8,7 @@
 #include "components/maplayercomponent.h"
 #include "components/energycomponent.h"
 #include "components/mycameracomponent.h"
+#include "components/ClockComponent.h"
 #ifndef NDEBUG
 # pragma comment(lib, "h3-s-d.lib")
 #else // !NDEBUG
@@ -120,6 +121,9 @@ int main()
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(960, 540, player));
 
+			//Time
+			H3Handle time = H3_Object_Create2(GameScene, "Clock", NULL, 5);
+			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&textprops));
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 			}

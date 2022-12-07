@@ -165,6 +165,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\ClockComponent.c" />
     <ClCompile Include="src\components\Credits.c" />
     <ClCompile Include="src\components\energycomponents.c" />
     <ClCompile Include="src\components\MainMenu.c" />
@@ -173,6 +174,7 @@
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\components\ClockComponent.h" />
     <ClInclude Include="Include\components\Credits.h" />
     <ClInclude Include="Include\components\energycomponent.h" />
     <ClInclude Include="Include\components\MainMenu.h" />
