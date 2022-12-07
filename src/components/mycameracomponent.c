@@ -9,6 +9,11 @@ typedef struct
 	float Height;
 } MyCameraComponent_Properties;
 
+/*-----------------------------------------*/
+float playerx;
+float playery;
+/*-----------------------------------------*/
+
 void MyCameraComponent_Terminate(void* properties)
 {
 	free(properties);
@@ -18,13 +23,8 @@ void MyCameraComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transf
 {
 	MyCameraComponent_Properties* props = (MyCameraComponent_Properties*)properties;
 
-	//vars
-	float playerx;
-	float playery;
-
 	//take the position of player and follow the player
-	SH3Transform* transformplayer = H3_Object_GetTransform(props->player);
-	H3_Transform_GetPosition(transformplayer, &playerx, &playery);
+	H3_Transform_GetPosition(H3_Object_GetTransform(props->player) , &playerx, &playery);
 	H3_Object_SetTranslation(object, playerx, playery);
 
 	// Set the vision of the camera

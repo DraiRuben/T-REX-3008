@@ -39,6 +39,12 @@
     <ClCompile Include="src\components\mycameracomponent.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
+    <ClCompile Include="src\components\ClockComponent.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\playercomponent.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\components\MainMenu.h">
@@ -54,6 +60,12 @@
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\mycameracomponent.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\components\ClockComponent.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\components\playercomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
   </ItemGroup>
