@@ -22,7 +22,7 @@ void CreditsComponent_Terminate(void* properties)
 void CreditsComponent_Draw(H3Handle h3, SH3Transform* transform, void* properties)
 {
 	CreditsComponent_Properties* props = (CreditsComponent_Properties*)properties;
-	if (H3_Button(h3, props->BackBtn, 500, 600, 0x11)) {
+	if (H3_Button(h3, props->BackBtn, 800, 700, 0x11)) {
 		*props->IsMainMenu = true;
 		*props->IsCredits = false;
 	}

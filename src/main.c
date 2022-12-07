@@ -26,8 +26,8 @@ int main()
 	};
 	//Window Init
 	H3Handle screen = H3_Init((SH3InitParams) {
-			.width = 1280,
-			.height = 720,
+			.width = 1920,
+			.height = 1080,
 			.fullscreen = false,
 			.windowTitle = "T-REX3008"
 	});
@@ -43,13 +43,13 @@ int main()
 			H3_Object_AddComponent(MainMenu, MAINMENUCOMPONENT_CREATE(&IsMainMenu,&IsCredits,&IsSettings,&IsNewGame));
 			H3Handle InstanceCode = H3_Object_Create2(MainMenuScene, "InstanceCode", NULL, 1);
 			H3_Object_AddComponent(InstanceCode, TEXTCOMPONENT_CREATE("2022-I1, by T-REX 3008", textprops));
-			H3_Object_SetTranslation(InstanceCode, 220, 600);
+			H3_Object_SetTranslation(InstanceCode, 220, 900);
 			H3Handle GameName = H3_Object_Create2(MainMenuScene, "GameName", NULL, 1);
 			H3_Object_AddComponent(GameName, TEXTCOMPONENT_CREATE("GAMENAME PLACEHOLDER", textprops));
-			H3_Object_SetTranslation(GameName, 650, 40);
+			H3_Object_SetTranslation(GameName, 950, 100);
 			H3Handle LaHordeLogo = H3_Object_Create2(MainMenuScene, "LaHordeLogo", NULL, 1);
 			H3_Object_AddComponent(LaHordeLogo, SPRITECOMPONENT_CREATE("assets/LaHordeLogo.png",0x22));
-			H3_Object_SetTranslation(LaHordeLogo, 1200, 620);
+			H3_Object_SetTranslation(LaHordeLogo, 1800, 900);
 			while (IsMainMenu) {
 				H3_DoFrame(screen, MainMenuScene);
 			}
@@ -63,7 +63,7 @@ int main()
 			H3_Object_AddComponent(Credits, CREDITSCOMPONENT_CREATE(&IsCredits,&IsMainMenu));
 			H3Handle CreditText = H3_Object_Create2(CreditsScene, "CreditsText", NULL, 1);
 			H3_Object_AddComponent(CreditText, TEXTCOMPONENT_CREATE("A big thanks to Nicolas, Arthur, Dorian and Ruben\n who worked really hard.\n\n As well as to limezu on itch.io whose\n assetpack we couldn't have done without", textprops));
-			H3_Object_SetTranslation(CreditText, 700, 100);
+			H3_Object_SetTranslation(CreditText, 950, 300);
 			while (IsCredits) {
 				H3_DoFrame(screen, CreditsScene);
 			}

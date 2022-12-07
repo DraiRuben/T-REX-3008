@@ -30,19 +30,19 @@ void MainMenuComponent_Terminate(void* properties)
 void MainMenuComponent_Draw(H3Handle h3, SH3Transform* transform, void* properties)
 {
 	MainMenuComponent_Properties* props = (MainMenuComponent_Properties*)properties;
-	if (H3_Button(h3, props->NewGameBtn, 500, 200, 0x11)) {
+	if (H3_Button(h3, props->NewGameBtn,800, 400, 0x11)) {
 		*props->IsMainMenu = false;
 		*props->IsNewGame = true;
 	}
-	if (H3_Button(h3, props->CreditsBtn, 500, 300, 0x11)) {
+	if (H3_Button(h3, props->CreditsBtn, 800, 500, 0x11)) {
 		*props->IsMainMenu = false;
 		*props->IsCredits = true;
 	}
-	if (H3_Button(h3, props->SettingsBtn, 500, 400, 0x11)) {
+	if (H3_Button(h3, props->SettingsBtn, 800, 600, 0x11)) {
 		*props->IsMainMenu = false;
 		*props->IsSettings = true;
 	}
-	if (H3_Button(h3, props->ExitBtn, 500, 500, 0x11)) {
+	if (H3_Button(h3, props->ExitBtn, 800, 700, 0x11)) {
 		exit(0);
 		
 	}
