@@ -8,6 +8,7 @@
 #include "components/maplayercomponent.h"
 #include "components/energycomponent.h"
 #include "components/mycameracomponent.h"
+#include "components/playercomponent.h"
 #ifndef NDEBUG
 # pragma comment(lib, "h3-s-d.lib")
 #else // !NDEBUG
@@ -117,8 +118,10 @@ int main()
 			//player
 			H3Handle player = H3_Object_Create(GameScene, "player", NULL);
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
+			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE());
 			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 25, 35, 0x22, false));
 			H3_Object_SetTranslation(player, 960, 540);
+			
 
 			//camera 
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
