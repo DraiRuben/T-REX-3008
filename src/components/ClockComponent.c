@@ -6,6 +6,7 @@
 #include <math.h>
 typedef struct
 {
+	float x, y;
 	bool IsInitialized;
 	char time[256];
 	float minutes;
@@ -22,9 +23,11 @@ void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform
 	ClockComponent_Properties* props = (ClockComponent_Properties*)properties;
 	if (!props->IsInitialized) {
 		H3_Object_AddComponent(object, TEXTCOMPONENT_CREATE(props->time, *props->textprops));
-		H3_Object_SetTranslation(object, 1000, 300);
+		H3_Transform_GetPosition(transform, &props->x, &props->y);
+		H3_Object_SetTranslation(object, props->x, props->y - 250);
 		props->IsInitialized = true;
 	}
+	
 	props->minutes += 0.25*H3_GetDeltaTime();
 	if (props->minutes >= 60) {
 		if (props->hours == 23) {
