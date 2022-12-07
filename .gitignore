@@ -1,9 +1,0 @@
-.vs
-build/
-imgui.ini
-bin/*.pdb
-bin/*.idb
-bin/*.lib
-bin/*.exp
-
-bin/*.exe
