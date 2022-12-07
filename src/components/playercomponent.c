@@ -6,6 +6,7 @@ typedef struct
 {
 	int player;
 	float pvx, pvy;
+	float speed;
 	
 } PlayerComponent_Properties;
 
@@ -45,14 +46,29 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	{
 		props->pvx = 0;
 	}
-	H3_Object_SetVelocity(object, props->pvx, props->pvy);
+
+	//sprint
+	if (H3_Input_IsKeyDown(K_Shift))
+	{
+		props->speed = 1.65;
+	}
+	else
+	{
+		props->speed = 1;
+	}
+
+	H3_Object_SetVelocity(object, props->pvx * props->speed, props->pvy * props->speed);
+
+
+		
+
 }
 
 void* PlayerComponent_CreateProperties()
 {
 	PlayerComponent_Properties* properties = malloc(sizeof(PlayerComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
-
+	properties->speed = 1;
 	return properties;
 }
 
