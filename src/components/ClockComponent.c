@@ -25,7 +25,7 @@ void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform
 		H3_Object_SetTranslation(object, 1000, 300);
 		props->IsInitialized = true;
 	}
-	props->minutes += 8*H3_GetDeltaTime();
+	props->minutes += 0.25*H3_GetDeltaTime();
 	if (props->minutes >= 60) {
 		if (props->hours == 23) {
 			props->hours = 0;
