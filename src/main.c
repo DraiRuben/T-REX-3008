@@ -1,13 +1,17 @@
 #include <h3.h>
+
 #include <math.h>
+
 #include "components/MainMenu.h"
 #include "components/Credits.h"
 #include "components/Settings.h"
+
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
 #include "components/maplayercomponent.h"
 #include "components/energycomponent.h"
 #include "components/mycameracomponent.h"
+
 #ifndef NDEBUG
 # pragma comment(lib, "h3-s-d.lib")
 #else // !NDEBUG
@@ -35,10 +39,12 @@ int main()
 			.fullscreen = false,
 			.windowTitle = "T-REX3008"
 	});
+
 	bool IsMainMenu = true;
 	bool IsCredits = false;
 	bool IsSettings = false;
 	bool IsNewGame = false;
+
 	while (1) {
 		//Main Menu
 		if (IsMainMenu) {
@@ -54,6 +60,7 @@ int main()
 			H3Handle LaHordeLogo = H3_Object_Create2(MainMenuScene, "LaHordeLogo", NULL, 1);
 			H3_Object_AddComponent(LaHordeLogo, SPRITECOMPONENT_CREATE("assets/LaHordeLogo.png",0x22));
 			H3_Object_SetTranslation(LaHordeLogo, 1800, 900);
+
 			while (IsMainMenu) {
 				H3_DoFrame(screen, MainMenuScene);
 			}
@@ -68,6 +75,7 @@ int main()
 			H3Handle CreditText = H3_Object_Create2(CreditsScene, "CreditsText", NULL, 1);
 			H3_Object_AddComponent(CreditText, TEXTCOMPONENT_CREATE("A big thanks to Nicolas, Arthur, Dorian and Ruben\n who worked really hard.\n\n As well as to limezu on itch.io whose\n assetpack we couldn't have done without", textprops));
 			H3_Object_SetTranslation(CreditText, 950, 300);
+
 			while (IsCredits) {
 				H3_DoFrame(screen, CreditsScene);
 			}
@@ -79,6 +87,7 @@ int main()
 			H3Handle SettingsScene = H3_Scene_Create(screen, true);
 			H3Handle Settings = H3_Object_Create2(SettingsScene, "Settings", NULL, 1);
 			H3_Object_AddComponent(Settings, SETTINGSCOMPONENT_CREATE(&IsSettings, &IsMainMenu));
+
 			while (IsSettings) {
 				H3_DoFrame(screen, SettingsScene);
 			}
@@ -88,15 +97,12 @@ int main()
 		//game
 		if (IsNewGame) {
 			H3Handle GameScene = H3_Scene_Create(screen, true);
+
+			//vars
 			uint32_t barWidth, barHeight;
 			uint32_t backBarWidth, backBarHeight;
 			H3Handle fullBar = H3_Texture_Load("assets/AllBar.png", &barWidth, &barHeight);
 			H3Handle backBar = H3_Texture_Load("assets/EmptyBar.png", &backBarWidth, &backBarHeight);
-
-			//bar of tiredness
-			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", NULL, 5);
-			H3_Object_AddComponent(energyBar, ENERGYCOMPONENT_CREATE(fullBar, backBar));
-			H3_Object_SetTranslation(energyBar, 30, 5);
 
 			//temp Map init
 			H3Handle map = H3_Map_Load("assets/map.tmx");
@@ -120,9 +126,15 @@ int main()
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(960, 540, player));
 
+			//bar of tiredness
+			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 5);
+			H3_Object_AddComponent(energyBar, ENERGYCOMPONENT_CREATE(fullBar, backBar));
+			H3_Object_SetTranslation(energyBar, 30, 5);
+
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 			}
+
 			H3_Texture_Destroy(fullBar);
 			H3_Texture_Destroy(backBar);
 			H3_Scene_Destroy(GameScene);
