@@ -165,11 +165,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\tirednesscomponents.c" />
+    <ClCompile Include="src\components\energycomponents.c" />
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\components\tirednesscomponent.h" />
+    <ClInclude Include="include\components\energycomponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

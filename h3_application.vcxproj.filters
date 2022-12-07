@@ -24,12 +24,12 @@
     <ClCompile Include="src\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\tirednesscomponents.c">
+    <ClCompile Include="src\components\energycomponents.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\components\tirednesscomponent.h">
+    <ClInclude Include="include\components\energycomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
   </ItemGroup>

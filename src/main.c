@@ -1,6 +1,6 @@
 #include <h3.h>
 
-#include <components/tirednesscomponent.h>
+#include <components/energycomponent.h>
 
 #ifndef NDEBUG
 # pragma comment(lib, "h3-s-d.lib")
@@ -27,9 +27,9 @@ int main(int argc, char** argv)
 	H3Handle backBar = H3_Texture_Load("assets/EmptyBar.png", &backBarWidth, &backBarHeight);
 
 	//bar of tiredness
-	H3Handle tiredness = H3_Object_Create2(scene, "player", NULL, 3);
-	H3_Object_AddComponent(tiredness, TIREDNESSCOMPONENT_CREATE(fullBar, backBar));
-	H3_Object_SetTranslation(tiredness, 0, 5);
+	H3Handle energyBar = H3_Object_Create2(scene, "player", NULL, 3);
+	H3_Object_AddComponent	(energyBar, ENERGYCOMPONENT_CREATE(fullBar, backBar));
+	H3_Object_SetTranslation(energyBar, 0, 5);
 
 	while (1)
 		H3_DoFrame(screen, scene);
