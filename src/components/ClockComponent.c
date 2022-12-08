@@ -24,7 +24,7 @@ void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform
 	if (!props->IsInitialized) {
 		H3_Object_AddComponent(object, TEXTCOMPONENT_CREATE(props->time, *props->textprops));
 		H3_Transform_GetPosition(transform, &props->x, &props->y);
-		H3_Object_SetTranslation(object, props->x, props->y - 250);
+		H3_Object_SetTranslation(object, props->x, props->y - 125);
 		props->IsInitialized = true;
 	}
 	
