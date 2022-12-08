@@ -182,7 +182,7 @@ int main()
 			H3Handle slot2 = H3_Object_Create2(GameScene, "inventory, slot 2", camera, 10);
 			H3_Object_AddComponent(slot0, SPRITECOMPONENT_CREATE("assets/UI_inventorySlot.png", 0x22));
 			H3_Object_AddComponent(slot1, SPRITECOMPONENT_CREATE("assets/UI_inventorySlot.png", 0x22));
-			H3_Object_AddComponent(slot2, SPRITECOMPONENT_CREATE("assets/UI_inventorySlot.png", 0x22));
+			H3_Object_AddComponent(slot2, SPRITECOMPONENT_CREATE("assets/UI_MainSlot_Inventory.png", 0x22));
 			H3_Object_SetTranslation(slot0, 220, -115);
 			H3_Object_SetTranslation(slot1, 185, -115);
 			H3_Object_SetTranslation(slot2, 150, -115);
