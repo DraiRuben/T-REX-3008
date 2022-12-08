@@ -33,9 +33,6 @@
     <ClCompile Include="src\components\Settings.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\energycomponents.c">
-      <Filter>Source Files\components</Filter>
-    </ClCompile>
     <ClCompile Include="src\components\mycameracomponent.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
@@ -43,6 +40,12 @@
       <Filter>Source Files\components</Filter>
     </ClCompile>
     <ClCompile Include="src\components\playercomponent.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\EnemyComponent.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\tirednesscomponents.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,9 +59,6 @@
     <ClInclude Include="Include\components\Settings.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
-    <ClInclude Include="Include\components\energycomponent.h">
-      <Filter>Header Files\components</Filter>
-    </ClInclude>
     <ClInclude Include="Include\components\mycameracomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
@@ -66,6 +66,12 @@
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\playercomponent.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\components\EnemyComponent.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\components\tirednesscomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
   </ItemGroup>

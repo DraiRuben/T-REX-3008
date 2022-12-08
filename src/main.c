@@ -1,15 +1,18 @@
 #include <h3.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "components/MainMenu.h"
 #include "components/Credits.h"
 #include "components/Settings.h"
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
 #include "components/maplayercomponent.h"
-#include "components/energycomponent.h"
+#include "components/tirednesscomponent.h"
 #include "components/mycameracomponent.h"
 #include "components/ClockComponent.h"
 #include "components/playercomponent.h"
+#include "components/EnemyComponent.h"
 #ifndef NDEBUG
 # pragma comment(lib, "h3-s-d.lib")
 #else // !NDEBUG
@@ -26,6 +29,17 @@ int main()
 			.hasOutline = false,
 			.anchor = 0x22,
 			.isBold = true,
+			.isItalic = false,
+			.isUnderlined = false,
+			.isViewLocal = false,
+	};
+	SH3TextProperties clockprops = (SH3TextProperties){
+			.font = H3_Font_Load("assets/Comfortaa-regular.ttf"),
+			.size = 12,
+			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
+			.hasOutline = false,
+			.anchor = 0x22,
+			.isBold = false,
 			.isItalic = false,
 			.isUnderlined = false,
 			.isViewLocal = false,
@@ -116,18 +130,34 @@ int main()
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE());
 			H3_Object_SetTranslation(player, 960, 540);
 
-			//bar of tiredness
-			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", NULL, 5);
-			H3_Object_AddComponent(energyBar, ENERGYCOMPONENT_CREATE(fullBar, backBar));
-			H3_Object_SetTranslation(energyBar, 30, 5);
-
 			//camera 
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
-			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(960, 540, player));
+			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(480, 270, player));
 
+			//bar of tiredness
+			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 5);
+			H3_Object_AddComponent(emptyBar, SPRITECOMPONENT_CREATE("assets/EmptyBar.png", A_Left + A_Top));
+			H3_Object_SetTranslation(emptyBar, -235, -130);
+
+			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 5);
+			H3_Object_AddComponent(energyBar, TIREDNESSCOMPONENT_CREATE(fullBar));
+			H3_Object_SetTranslation(energyBar, -234, -128);
+
+			
 			//Time
 			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 5);
-			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&textprops));
+			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops));
+			//raycast init
+			int raycast_index = 0;
+			//enemies init
+			char enemies[256];
+			int enemy_index = 0;
+			bool IsWave = false;
+			for (int i = 0; i < 5; i++) {
+				snprintf(enemies, 256, "enemy_%d", enemy_index++);
+				H3Handle enemy = H3_Object_Create2(GameScene, enemies, NULL, 3);
+				//H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(&player, &raycast_index, &GameScene));
+			}
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 			}
