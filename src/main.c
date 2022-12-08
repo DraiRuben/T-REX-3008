@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 //h3's components
 #include "components/textcomponent.h"
@@ -32,6 +33,9 @@
 
 int main()
 {
+	//randow init
+	srand(time(NULL));
+	
 	//Text Init
 	SH3TextProperties textprops = (SH3TextProperties){
 			.font = H3_Font_Load("assets/Toriko.ttf"),
@@ -177,9 +181,9 @@ int main()
 			H3_Object_Translate(monstere3, 150, 150);
 
 			//Inventory Slots
-			H3Handle slot0 = H3_Object_Create2(GameScene, "inventory, slot 0", camera, 10);
-			H3Handle slot1 = H3_Object_Create2(GameScene, "inventory, slot 1", camera, 10);
-			H3Handle slot2 = H3_Object_Create2(GameScene, "inventory, slot 2", camera, 10);
+			H3Handle slot0 = H3_Object_Create2(GameScene, "inventory, slot 0", camera, 10);	//pocket 2
+			H3Handle slot1 = H3_Object_Create2(GameScene, "inventory, slot 1", camera, 10);	//pocket 1
+			H3Handle slot2 = H3_Object_Create2(GameScene, "inventory, slot 2", camera, 10); //hand
 			H3_Object_AddComponent(slot0, SPRITECOMPONENT_CREATE("assets/UI_inventorySlot.png", 0x22));
 			H3_Object_AddComponent(slot1, SPRITECOMPONENT_CREATE("assets/UI_inventorySlot.png", 0x22));
 			H3_Object_AddComponent(slot2, SPRITECOMPONENT_CREATE("assets/UI_MainSlot_Inventory.png", 0x22));
