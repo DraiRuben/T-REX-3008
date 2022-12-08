@@ -123,7 +123,7 @@ int main()
 			H3_Object_AddComponent(mapplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
 			H3Handle mapplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL,4);
 			H3_Object_AddComponent(mapplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
-
+			// Alexandre est passé par là
 			//player
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
