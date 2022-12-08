@@ -165,19 +165,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\ClockComponent.c" />
     <ClCompile Include="src\components\Credits.c" />
-    <ClCompile Include="src\components\tirednesscomponents.c" />
+    <ClCompile Include="src\components\EnemyComponent.c" />
+    <ClCompile Include="src\components\inventorycomponent.c" />
     <ClCompile Include="src\components\MainMenu.c" />
     <ClCompile Include="src\components\mycameracomponent.c" />
+    <ClCompile Include="src\components\playercomponent.c" />
     <ClCompile Include="src\components\Settings.c" />
+    <ClCompile Include="src\components\tirednesscomponents.c" />
     <ClCompile Include="src\main.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\components\ClockComponent.h" />
     <ClInclude Include="Include\components\Credits.h" />
-    <ClInclude Include="Include\components\tirednesscomponent.h" />
+    <ClInclude Include="Include\components\EnemyComponent.h" />
+    <ClInclude Include="Include\components\inventorycomponent.h" />
     <ClInclude Include="Include\components\MainMenu.h" />
     <ClInclude Include="Include\components\mycameracomponent.h" />
+    <ClInclude Include="Include\components\playercomponent.h" />
     <ClInclude Include="Include\components\Settings.h" />
+    <ClInclude Include="Include\components\tirednesscomponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
