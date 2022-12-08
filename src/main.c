@@ -9,7 +9,7 @@
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
 #include "components/maplayercomponent.h"
-#include "components/energycomponent.h"
+#include "components/tirednesscomponent.h"
 #include "components/mycameracomponent.h"
 
 #ifndef NDEBUG
@@ -100,9 +100,7 @@ int main()
 
 			//vars
 			uint32_t barWidth, barHeight;
-			uint32_t backBarWidth, backBarHeight;
 			H3Handle fullBar = H3_Texture_Load("assets/AllBar.png", &barWidth, &barHeight);
-			H3Handle backBar = H3_Texture_Load("assets/EmptyBar.png", &backBarWidth, &backBarHeight);
 
 			//temp Map init
 			H3Handle map = H3_Map_Load("assets/map.tmx");
@@ -127,16 +125,19 @@ int main()
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(960, 540, player));
 
 			//bar of tiredness
-			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 5);
-			H3_Object_AddComponent(energyBar, ENERGYCOMPONENT_CREATE(fullBar, backBar));
-			H3_Object_SetTranslation(energyBar, 30, 5);
+			H3Handle emptyBar	= H3_Object_Create2(GameScene, "emptyBar", camera, 5);
+			H3_Object_AddComponent	(emptyBar, SPRITECOMPONENT_CREATE("assets/EmptyBar.png", A_Left + A_Top));
+			H3_Object_SetTranslation(emptyBar, -470, -260);
+
+			H3Handle energyBar	= H3_Object_Create2(GameScene, "energybar", camera, 5);
+			H3_Object_AddComponent	(energyBar, TIREDNESSCOMPONENT_CREATE(fullBar));
+			H3_Object_SetTranslation(energyBar, -469, -258);
 
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 			}
 
 			H3_Texture_Destroy(fullBar);
-			H3_Texture_Destroy(backBar);
 			H3_Scene_Destroy(GameScene);
 		}
 	}

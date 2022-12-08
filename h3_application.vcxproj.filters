@@ -33,7 +33,7 @@
     <ClCompile Include="src\components\Settings.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\energycomponents.c">
+    <ClCompile Include="src\components\tirednesscomponents.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
     <ClCompile Include="src\components\mycameracomponent.c">
@@ -50,7 +50,7 @@
     <ClInclude Include="Include\components\Settings.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
-    <ClInclude Include="Include\components\energycomponent.h">
+    <ClInclude Include="Include\components\tirednesscomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\mycameracomponent.h">
