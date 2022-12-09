@@ -2,18 +2,23 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
 #include "components/MainMenu.h"
 #include "components/Credits.h"
 #include "components/Settings.h"
-#include "components/textcomponent.h"
-#include "components/spritecomponent.h"
-#include "components/maplayercomponent.h"
 #include "components/tirednesscomponent.h"
 #include "components/mycameracomponent.h"
 #include "components/ClockComponent.h"
 #include "components/playercomponent.h"
 #include "components/EnemyComponent.h"
 #include "components/inventorycomponent.h"
+
+#include "components/textcomponent.h"
+#include "components/spritecomponent.h"
+#include "components/maplayercomponent.h"
+
+
 #ifndef NDEBUG
 # pragma comment(lib, "h3-s-d.lib")
 #else // !NDEBUG
@@ -22,6 +27,9 @@
 
 int main()
 {
+	//randow init
+	srand(time(NULL));
+
 	//Text Init
 	SH3TextProperties textprops = (SH3TextProperties){
 			.font = H3_Font_Load("assets/Toriko.ttf"),
@@ -123,7 +131,7 @@ int main()
 			H3_Object_AddComponent(mapplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
 			H3Handle mapplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL,4);
 			H3_Object_AddComponent(mapplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
-
+			// Alexandre est passé par là
 			//player
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
@@ -186,16 +194,15 @@ int main()
 			H3_Object_Translate(monstere3, 150, 150);
 
 			//Inventory Slots
-			H3Handle slot0 = H3_Object_Create2(GameScene, "inventory, slot 0", camera, 10);
-			H3Handle slot1 = H3_Object_Create2(GameScene, "inventory, slot 1", camera, 10);
-			H3Handle slot2 = H3_Object_Create2(GameScene, "inventory, slot 2", camera, 10);
+			H3Handle slot0 = H3_Object_Create2(GameScene, "inventory, slot 0", camera, 10);	//pocket 2
+			H3Handle slot1 = H3_Object_Create2(GameScene, "inventory, slot 1", camera, 10);	//pocket 1
+			H3Handle slot2 = H3_Object_Create2(GameScene, "inventory, slot 2", camera, 10); //hand
 			H3_Object_AddComponent(slot0, SPRITECOMPONENT_CREATE("assets/UI_inventorySlot.png", 0x22));
 			H3_Object_AddComponent(slot1, SPRITECOMPONENT_CREATE("assets/UI_inventorySlot.png", 0x22));
 			H3_Object_AddComponent(slot2, SPRITECOMPONENT_CREATE("assets/UI_MainSlot_Inventory.png", 0x22));
 			H3_Object_SetTranslation(slot0, 220, -115);
 			H3_Object_SetTranslation(slot1, 185, -115);
 			H3_Object_SetTranslation(slot2, 150, -115);
-
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 			}
