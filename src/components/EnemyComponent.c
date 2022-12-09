@@ -150,8 +150,19 @@ EnemyComponent_Properties* props = (EnemyComponent_Properties*)properties;
 			props->index = 0;
 			props->IsAggro = false;
 		}
+		//raycast check obstacle each second to reset aggrotimer if needed
+		props->RaycastTimer += H3_GetDeltaTime();
+		if (distance < 200 && props->RaycastTimer>1) {
+			*props->raycast_index += 1;
+			snprintf(props->raycasts, 256, "ray_%d", *props->raycast_index);
+			props->raycasting = H3_Object_Create(*props->GameScene, props->raycasts, NULL);
+			H3_Object_AddComponent(props->raycasting, RAYCASTCOMPONENT_CREATE(object));
+			H3_Object_EnablePhysics(props->raycasting, H3_BOX_COLLIDER(CDT_Dynamic, 3, 3, 0x22, true));
+			H3_Object_SetTranslation(props->raycasting, props->x, props->y);
+			H3_Object_SetVelocity(props->raycasting, (px - props->x) / distance * 1000, (py - props->y) / distance * 1000);
+			props->RaycastTimer = 0;
+		}
 	}
-
 }
 
 
