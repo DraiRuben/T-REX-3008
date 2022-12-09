@@ -34,7 +34,7 @@ int main()
 
 	//Text props Init
 	SH3TextProperties textprops = (SH3TextProperties){
-			.font = H3_Font_Load("assets/Toriko.ttf"),
+			.font = H3_Font_Load("assets/Fonts/Toriko.ttf"),
 			.size = 50,
 			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
 			.hasOutline = false,
@@ -45,7 +45,7 @@ int main()
 			.isViewLocal = false,
 	};
 	SH3TextProperties clockprops = (SH3TextProperties){
-			.font = H3_Font_Load("assets/Comfortaa-regular.ttf"),
+			.font = H3_Font_Load("assets/Fonts/Comfortaa-regular.ttf"),
 			.size = 12,
 			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
 			.hasOutline = false,
@@ -79,7 +79,7 @@ int main()
 			H3_Object_AddComponent(GameName, TEXTCOMPONENT_CREATE("GAMENAME PLACEHOLDER", textprops));
 			H3_Object_SetTranslation(GameName, 950, 100);
 			H3Handle LaHordeLogo = H3_Object_Create2(MainMenuScene, "LaHordeLogo", NULL, 1);
-			H3_Object_AddComponent(LaHordeLogo, SPRITECOMPONENT_CREATE("assets/LaHordeLogo.png",0x22));
+			H3_Object_AddComponent(LaHordeLogo, SPRITECOMPONENT_CREATE("assets/Menu/LaHordeLogo.png",0x22));
 			H3_Object_SetTranslation(LaHordeLogo, 1800, 900);
 			while (IsMainMenu) {
 				H3_DoFrame(screen, MainMenuScene);
@@ -117,13 +117,13 @@ int main()
 			H3Handle GameScene = H3_Scene_Create(screen, true);
 			uint32_t barWidth, barHeight;
 			uint32_t backBarWidth, backBarHeight;
-			H3Handle fullBar = H3_Texture_Load("assets/AllBar.png", &barWidth, &barHeight);
-			H3Handle backBar = H3_Texture_Load("assets/EmptyBar.png", &backBarWidth, &backBarHeight);
+			H3Handle fullBar = H3_Texture_Load("assets/Sprites/AllBar.png", &barWidth, &barHeight);
+			H3Handle backBar = H3_Texture_Load("assets/Sprites/EmptyBar.png", &backBarWidth, &backBarHeight);
 
 			
 
 			//Map init
-			H3Handle map = H3_Map_Load("assets/map.tmx");
+			H3Handle map = H3_Map_Load("assets/Map/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
 			H3Handle mapplayer = H3_Object_Create2(GameScene, "layer floor", NULL,1);
 			H3_Object_AddComponent(mapplayer, MAPLAYERCOMPONENT_CREATE(map, "floor"));
@@ -136,7 +136,7 @@ int main()
 			
 			//player
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
-			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
+			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/Sprites/p.png", 0x22));
 			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE());
 			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE());
@@ -148,7 +148,7 @@ int main()
 			H3_Object_SetTranslation(camera, 1850, 1125);
 			//bar of tiredness
 			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 5);
-			H3_Object_AddComponent(emptyBar, SPRITECOMPONENT_CREATE("assets/EmptyBar.png", A_Left + A_Top));
+			H3_Object_AddComponent(emptyBar, SPRITECOMPONENT_CREATE("assets/Sprites/EmptyBar.png", A_Left + A_Top));
 			H3_Object_SetTranslation(emptyBar, -235, -130);
 
 			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 5);
@@ -168,25 +168,25 @@ int main()
 
 			//Monstere
 			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 2);
-			H3_Object_AddComponent(monstere, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
+			H3_Object_AddComponent(monstere, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_EnablePhysics(monstere, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere, 100, 100);
 
 			H3Handle monstere1 = H3_Object_Create2(GameScene, "monstere1", NULL, 2);
-			H3_Object_AddComponent(monstere1, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
+			H3_Object_AddComponent(monstere1, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere1, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_EnablePhysics(monstere1, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere1, 150, 100);
 
 			H3Handle monstere2 = H3_Object_Create2(GameScene, "monstere2", NULL, 2);
-			H3_Object_AddComponent(monstere2, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
+			H3_Object_AddComponent(monstere2, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere2, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_EnablePhysics(monstere2, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere2, 100, 150);
 
 			H3Handle monstere3 = H3_Object_Create2(GameScene, "monstere3", NULL, 2);
-			H3_Object_AddComponent(monstere3, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
+			H3_Object_AddComponent(monstere3, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere3, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_EnablePhysics(monstere3, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere3, 150, 150);
@@ -195,9 +195,9 @@ int main()
 			H3Handle slot0 = H3_Object_Create2(GameScene, "inventory, slot 0", camera, 10);	//pocket 2
 			H3Handle slot1 = H3_Object_Create2(GameScene, "inventory, slot 1", camera, 10);	//pocket 1
 			H3Handle slot2 = H3_Object_Create2(GameScene, "inventory, slot 2", camera, 10); //hand
-			H3_Object_AddComponent(slot0, SPRITECOMPONENT_CREATE("assets/UI_inventorySlot.png", 0x22));
-			H3_Object_AddComponent(slot1, SPRITECOMPONENT_CREATE("assets/UI_inventorySlot.png", 0x22));
-			H3_Object_AddComponent(slot2, SPRITECOMPONENT_CREATE("assets/UI_MainSlot_Inventory.png", 0x22));
+			H3_Object_AddComponent(slot0, SPRITECOMPONENT_CREATE("assets/Sprites/UI_inventorySlot.png", 0x22));
+			H3_Object_AddComponent(slot1, SPRITECOMPONENT_CREATE("assets/Sprites/UI_inventorySlot.png", 0x22));
+			H3_Object_AddComponent(slot2, SPRITECOMPONENT_CREATE("assets/Sprites/UI_MainSlot_Inventory.png", 0x22));
 			H3_Object_SetTranslation(slot0, 220, -115);
 			H3_Object_SetTranslation(slot1, 185, -115);
 			H3_Object_SetTranslation(slot2, 150, -115);

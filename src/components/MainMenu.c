@@ -59,10 +59,10 @@ void* MainMenuComponent_CreateProperties(bool* IsMainMenu,bool* IsCredits,bool* 
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	MainMenuComponent_Properties* props = (MainMenuComponent_Properties*)properties;
 	//load needed btn images
-	properties->NewGameBtn = H3_Texture_Load("assets/NewGame.png", &props->w, &props->h);
-	properties->CreditsBtn = H3_Texture_Load("assets/Credits.png", &props->w, &props->h);
-	properties->SettingsBtn = H3_Texture_Load("assets/Settings.png", &props->w, &props->h);
-	properties->ExitBtn = H3_Texture_Load("assets/Exit.png", &props->w, &props->h);
+	properties->NewGameBtn = H3_Texture_Load("assets/Menu/NewGame.png", &props->w, &props->h);
+	properties->CreditsBtn = H3_Texture_Load("assets/Menu/Credits.png", &props->w, &props->h);
+	properties->SettingsBtn = H3_Texture_Load("assets/Menu/Settings.png", &props->w, &props->h);
+	properties->ExitBtn = H3_Texture_Load("assets/Menu/Exit.png", &props->w, &props->h);
 
 	properties->IsMainMenu = IsMainMenu;
 	properties->IsCredits = IsCredits;

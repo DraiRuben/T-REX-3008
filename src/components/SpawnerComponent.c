@@ -52,7 +52,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 			snprintf(props->enemies, 256, "enemy_%d", props->enemy_index++);
 			H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
 			H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
-			H3_Object_AddComponent(enemy, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
+			H3_Object_AddComponent(enemy, SPRITECOMPONENT_CREATE("assets/Sprites/p.png", 0x22));
 			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene));
 			H3_Object_SetTranslation(enemy, props->x, props->y);
 
