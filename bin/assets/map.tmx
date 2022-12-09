@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="45" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="197">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="45" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="201">
  <tileset firstgid="1" source="Room_Builder_32x32.tsx"/>
  <tileset firstgid="8285" source="16_Grocery_store_32x32.tsx"/>
  <layer id="4" name="floor" width="60" height="45">
@@ -185,11 +185,8 @@
   <object id="165" x="866" y="1283" width="89" height="27"/>
   <object id="166" x="1056" y="1278" width="95" height="31"/>
   <object id="167" x="1219" y="1279" width="93" height="30"/>
-  <object id="178" x="81.3333" y="515.333" width="92.6667" height="28.6667"/>
   <object id="179" x="240.667" y="512.667" width="95.3333" height="28.6667"/>
   <object id="180" x="240.667" y="607.333" width="93.3333" height="31.3333"/>
-  <object id="181" x="80" y="606.667" width="94.6667" height="32.6667"/>
-  <object id="182" x="79.3333" y="702.667" width="95.3333" height="31.3333"/>
   <object id="183" x="240" y="704" width="93.3333" height="30"/>
   <object id="184" x="428.667" y="982.667" width="36.6667" height="72"/>
   <object id="185" x="333.333" y="984.667" width="36" height="71.3333"/>
@@ -203,6 +200,9 @@
   <object id="193" x="178.667" y="1152" width="90" height="30.6667"/>
   <object id="194" x="50.6667" y="1152" width="91.3333" height="30.6667"/>
   <object id="196" x="131.333" y="1372.67" width="150.667" height="34"/>
+  <object id="198" x="84.6667" y="605.333" width="88.6667" height="31.3333"/>
+  <object id="199" x="84.6667" y="507.333" width="88.6667" height="33.3333"/>
+  <object id="200" x="84" y="700.667" width="90" height="33.3333"/>
  </objectgroup>
  <layer id="1" name="wall" width="60" height="45">
   <data encoding="csv">
