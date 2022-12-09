@@ -36,7 +36,7 @@ void MonstereComponent_PreUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 			TirednessComponent_SetrecovEnergyEx(props->energyBar, 2);
 
 		//consumes object and remove to the inventory
-		if (TirednessComponent_GetrecovEnergyEx(props->energyBar) <= 1)
+		if (TirednessComponent_GetrecovEnergyEx(props->energyBar) < 2)
 		{
 			InventoryComponent_SetObjSlot2Ex(props->player, NULL);
 			H3_Object_Destroy(object, false);

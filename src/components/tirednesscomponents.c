@@ -68,7 +68,7 @@ void TirednessComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			props->tiredness += 0.001f * H3_GetDeltaTime();//fill 0.1%/s in normal run
 	}
 
-	//reduce tiredness when player drink monstere
+	//reduce tiredness when player drink 1 monstere
 	if (props->recovEnergy >= 1)
 	{
 		//time limit to reduce tiredness
@@ -89,6 +89,7 @@ void TirednessComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	else
 		H3_Object_SetEnabled(props->iconEnergy1, false);
 
+	//reduce tiredness when player drink a second monstere
 	if (props->recovEnergy >= 2)
 	{
 		//show an icon
@@ -100,6 +101,15 @@ void TirednessComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	}
 	else
 		H3_Object_SetEnabled(props->iconEnergy2, false);
+
+	//slowdown player when he is tired
+	if (props->tiredness > 0.5)
+	{
+		float slowdown = (1 - props->tiredness) * 1.5 + 0.25;
+		PlayerComponent_SetslowdownEx(props->player, slowdown);
+	}
+	else
+		PlayerComponent_SetslowdownEx(props->player, 1);
 }
 
 void* TirednessComponent_CreateProperties(H3Handle textureBar, H3Handle playerRef, H3Handle cameraRef, H3Handle sceneRef)
