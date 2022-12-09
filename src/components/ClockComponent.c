@@ -6,8 +6,11 @@
 #include <math.h>
 typedef struct
 {
+	//clock pos
 	float x, y;
 	bool IsInitialized;
+
+	//time
 	char time[256];
 	float minutes;
 	float hours;
@@ -21,13 +24,14 @@ void ClockComponent_Terminate(void* properties)
 
 void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties) {
 	ClockComponent_Properties* props = (ClockComponent_Properties*)properties;
+	//clock creation
 	if (!props->IsInitialized) {
 		H3_Object_AddComponent(object, TEXTCOMPONENT_CREATE(props->time, *props->textprops));
 		H3_Transform_GetPosition(transform, &props->x, &props->y);
 		H3_Object_SetTranslation(object, props->x, props->y - 125);
 		props->IsInitialized = true;
 	}
-	
+	//flow of time
 	props->minutes += 0.25*H3_GetDeltaTime();
 	if (props->minutes >= 60) {
 		if (props->hours == 23) {
@@ -38,8 +42,10 @@ void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform
 		}
 		props->minutes = 0;
 	}
+	//concatenate hours and min into a char
 	snprintf(props->time, 256, "%d:%d", (int)floor(props->hours), (int)floor(props->minutes));
 
+	//adds an extra 0 if needed, e.g if time is 21h and 7 min write 21:07 instead of 21:7
 	if ((int)floor(props->hours) >= 0 && (int)floor(props->hours) < 10) {
 		snprintf(props->time, 256, "0%d:%d", (int)floor(props->hours), (int)floor(props->minutes));
 	}
@@ -49,6 +55,7 @@ void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform
 	if ((int)floor(props->minutes) >= 0 && (int)floor(props->minutes) < 10 && (int)floor(props->hours) >= 0 && (int)floor(props->hours) < 10) {
 		snprintf(props->time, 256, "0%d:0%d", (int)floor(props->hours), (int)floor(props->minutes));
 	}
+	//enter time in textcomp
 	TextComponent_SetTextEx(object, props->time);
 }
 

@@ -48,6 +48,9 @@
     <ClCompile Include="src\components\tirednesscomponents.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
+    <ClCompile Include="src\components\raycastcomponent.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
     <ClCompile Include="src\components\inventorycomponent.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
@@ -78,6 +81,9 @@
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\tirednesscomponent.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\components\raycastcomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\inventorycomponent.h">

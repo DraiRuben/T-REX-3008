@@ -1,30 +1,24 @@
 #include <h3.h>
-
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-//h3's components
+#include "components/MainMenu.h"
+#include "components/Credits.h"
+#include "components/Settings.h"
+#include "components/tirednesscomponent.h"
+#include "components/mycameracomponent.h"
+#include "components/ClockComponent.h"
+#include "components/playercomponent.h"
+#include "components/EnemyComponent.h"
+#include "components/inventorycomponent.h"
+#include "components/collectablecomponent.h"
+
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
 #include "components/maplayercomponent.h"
 
-//ruben's components
-#include "components/MainMenu.h"
-#include "components/Credits.h"
-#include "components/Settings.h"
-#include "components/ClockComponent.h"
-#include "components/EnemyComponent.h"
-
-//arthur's components
-#include "components/tirednesscomponent.h"
-#include "components/inventorycomponent.h"
-#include "components/collectablecomponent.h"
-
-//nicolas's components
-#include "components/playercomponent.h"
-#include "components/mycameracomponent.h"
 
 #ifndef NDEBUG
 # pragma comment(lib, "h3-s-d.lib")
@@ -36,8 +30,8 @@ int main()
 {
 	//randow init
 	srand(time(NULL));
-	
-	//Text Init
+
+	//Text props Init
 	SH3TextProperties textprops = (SH3TextProperties){
 			.font = H3_Font_Load("assets/Toriko.ttf"),
 			.size = 50,
@@ -127,24 +121,24 @@ int main()
 
 			
 
-			//temp Map init
+			//Map init
 			H3Handle map = H3_Map_Load("assets/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
 			H3Handle mapplayer = H3_Object_Create2(GameScene, "layer floor", NULL,1);
 			H3_Object_AddComponent(mapplayer, MAPLAYERCOMPONENT_CREATE(map, "floor"));
 			H3Handle mapplayer1 = H3_Object_Create2(GameScene, "layer object", NULL,4);
 			H3_Object_AddComponent(mapplayer1, MAPLAYERCOMPONENT_CREATE(map, "object"));
-			H3Handle mapplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL,4);
+			H3Handle mapplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL,5);
 			H3_Object_AddComponent(mapplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
 			H3Handle mapplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL,4);
 			H3_Object_AddComponent(mapplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
-
+			
 			//player
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
+			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE());
 			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE());
-			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 25, 35, 0x22, false));
 			H3_Object_SetTranslation(player, 960, 540);
 
 			//camera 
@@ -152,13 +146,32 @@ int main()
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(480, 270, player));
 
 			//bar of tiredness
-			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 10);
+			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 5);
 			H3_Object_AddComponent(emptyBar, SPRITECOMPONENT_CREATE("assets/EmptyBar.png", A_Left + A_Top));
 			H3_Object_SetTranslation(emptyBar, -235, -130);
 
-			H3Handle tirednessBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
-			H3_Object_AddComponent(tirednessBar, TIREDNESSCOMPONENT_CREATE(fullBar, player));
-			H3_Object_SetTranslation(tirednessBar, -234, -128);
+			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 5);
+			H3_Object_AddComponent(energyBar, TIREDNESSCOMPONENT_CREATE(fullBar,player));
+			H3_Object_SetTranslation(energyBar, -234, -128);
+
+			
+			//Time
+			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 5);
+			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops));
+			//raycast init
+			int raycast_index = 0;
+			//enemies init
+			char enemies[256];
+			int enemy_index = 0;
+			bool IsWave = false;
+			for (int i = 0; i < 4; i++) {
+				snprintf(enemies, 256, "enemy_%d", enemy_index++);
+				H3Handle enemy = H3_Object_Create2(GameScene, enemies, NULL, 3);
+				H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
+				H3_Object_AddComponent(enemy, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
+				H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(&player, &raycast_index, &GameScene));
+				H3_Object_SetTranslation(enemy, 500, 500);
+			}
 
 			//Monstere
 			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 2);
@@ -196,20 +209,6 @@ int main()
 			H3_Object_SetTranslation(slot1, 185, -115);
 			H3_Object_SetTranslation(slot2, 150, -115);
 			
-			//Time
-			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 5);
-			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops));
-			//raycast init
-			int raycast_index = 0;
-			//enemies init
-			char enemies[256];
-			int enemy_index = 0;
-			bool IsWave = false;
-			for (int i = 0; i < 5; i++) {
-				snprintf(enemies, 256, "enemy_%d", enemy_index++);
-				H3Handle enemy = H3_Object_Create2(GameScene, enemies, NULL, 3);
-				//H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(&player, &raycast_index, &GameScene));
-			}
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 			}

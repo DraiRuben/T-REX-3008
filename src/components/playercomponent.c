@@ -71,5 +71,4 @@ void* PlayerComponent_CreateProperties()
 	properties->IsSprint = false;
 	return properties;
 }
-
-H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(PlayerComponent, PLAYERCOMPONENT_TYPEID, bool, IsSprint);
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(PlayerComponent,PLAYERCOMPONENT_TYPEID, bool, IsSprint);
