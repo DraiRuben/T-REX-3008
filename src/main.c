@@ -152,7 +152,7 @@ int main()
 			H3_Object_SetTranslation(emptyBar, -235, -130);
 
 			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
-			H3_Object_AddComponent(energyBar, TIREDNESSCOMPONENT_CREATE(fullBar,player));
+			H3_Object_AddComponent(energyBar, TIREDNESSCOMPONENT_CREATE(fullBar, player, camera, GameScene));
 			H3_Object_SetTranslation(energyBar, -234, -128);
 
 			
@@ -178,28 +178,28 @@ int main()
 			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 2);
 			H3_Object_AddComponent(monstere, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere, COLLECTABLECOMPONENT_CREATE());
-			H3_Object_AddComponent(monstere, MONSTERECOMPONENT_CREATE(player, camera, GameScene));
+			H3_Object_AddComponent(monstere, MONSTERECOMPONENT_CREATE(player, energyBar));
 			H3_Object_EnablePhysics(monstere, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere, 100, 100);
 
 			H3Handle monstere1 = H3_Object_Create2(GameScene, "monstere1", NULL, 2);
 			H3_Object_AddComponent(monstere1, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere1, COLLECTABLECOMPONENT_CREATE());
-			H3_Object_AddComponent(monstere1, MONSTERECOMPONENT_CREATE(player, camera, GameScene));
+			H3_Object_AddComponent(monstere1, MONSTERECOMPONENT_CREATE(player, energyBar));
 			H3_Object_EnablePhysics(monstere1, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere1, 150, 100);
 
 			H3Handle monstere2 = H3_Object_Create2(GameScene, "monstere2", NULL, 2);
 			H3_Object_AddComponent(monstere2, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere2, COLLECTABLECOMPONENT_CREATE());
-			H3_Object_AddComponent(monstere2, MONSTERECOMPONENT_CREATE(player, camera, GameScene));
+			H3_Object_AddComponent(monstere2, MONSTERECOMPONENT_CREATE(player, energyBar));
 			H3_Object_EnablePhysics(monstere2, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere2, 100, 150);
 
 			H3Handle monstere3 = H3_Object_Create2(GameScene, "monstere3", NULL, 2);
 			H3_Object_AddComponent(monstere3, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere3, COLLECTABLECOMPONENT_CREATE());
-			H3_Object_AddComponent(monstere3, MONSTERECOMPONENT_CREATE(player, camera, GameScene));
+			H3_Object_AddComponent(monstere3, MONSTERECOMPONENT_CREATE(player, energyBar));
 			H3_Object_EnablePhysics(monstere3, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere3, 150, 150);
 
