@@ -136,7 +136,7 @@ int main()
 			//player
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
-			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 25, 35, 0x22, false));
+			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE());
 			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE());
 			H3_Object_SetTranslation(player, 960, 540);
