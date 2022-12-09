@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="9" height="3" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="1">
+ <tileset firstgid="1" source="16_Grocery_store_32x32.tsx"/>
+ <layer id="1" name="rayon" width="9" height="3">
+  <data encoding="csv">
+130,131,133,133,133,133,133,131,132,
+146,147,149,149,149,149,149,147,148,
+162,163,165,165,165,165,165,163,164
+</data>
+ </layer>
+ <layer id="2" name="object" width="9" height="3">
+  <data encoding="csv">
+0,230,200,232,198,215,200,232,0,
+0,215,363,215,363,215,363,217,0,
+0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="3" name="object plus" width="9" height="3">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,
+0,365,200,357,200,357,0,365,0,
+0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>
