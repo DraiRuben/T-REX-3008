@@ -39,15 +39,25 @@ int i = 0;
 void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties) {
 	SpawnerComponent_Properties* props = (SpawnerComponent_Properties*)properties;
 	H3_Transform_GetPosition(H3_Object_GetTransform(*props->player), &px, &py);
-
 	if (!props->IsInitialized){
 		while(i<props->amount)
 		{
 			distance = sqrtf((px - props->x) * (px - props->x) + (py - props->y) * (py - props->y));
 			while (distance < 100) {
 				distance = sqrtf((px - props->x) * (px - props->x) + (py - props->y) * (py - props->y));
-				props->x = rand() % 1780 + 100;
-				props->y = rand() % 880 + 100;
+				props->y = rand() % 2150 + 300;
+				//if in reserve
+				if (props->y < 1100) {
+					props->x = rand() % 1400 + 100;
+				}
+				//if in shop
+				else {
+					props->x = rand() % 1700 + 100;
+				}
+				
+				
+				distance = sqrtf((px - props->x) * (px - props->x) + (py - props->y) * (py - props->y));
+
 			}
 			snprintf(props->enemies, 256, "enemy_%d", props->enemy_index++);
 			H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
@@ -76,8 +86,8 @@ void* SpawnerComponent_CreateProperties(H3Handle* player, H3Handle* GameScene)
 	properties->enemy_index = 0;
 	properties->timer = 0;
 	properties->amount = 3;
-	properties->x = px;
-	properties->y = py;
+	properties->x = 1750;
+	properties->y = 2100;
 	properties->raycast_index = 0;
 	return properties;
 }

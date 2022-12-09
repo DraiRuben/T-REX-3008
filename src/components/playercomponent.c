@@ -8,7 +8,7 @@ typedef struct
 	float speed;
 	float pvx, pvy;
 	bool IsSprint;
-	
+	float slowdown; // slowdown when tiredness is high
 } PlayerComponent_Properties;
 
 void PlayerComponent_Terminate(void* properties)
@@ -50,17 +50,16 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	//sprint
 	if (H3_Input_IsKeyDown(K_Shift) || H3_Input_IsGamepadBtnDown(GB_A))
 	{
-		props->speed = 1.65;
+		props->speed = 1.65 * props->slowdown;
 		props->IsSprint = true;
 	}
 	else
 	{
-		props->speed = 1;
+		props->speed = 1 * props->slowdown;
 		props->IsSprint = false;
 	}
 
 	H3_Object_SetVelocity(object, props->pvx * props->speed, props->pvy * props->speed);
-
 }
 
 void* PlayerComponent_CreateProperties()
@@ -72,3 +71,4 @@ void* PlayerComponent_CreateProperties()
 	return properties;
 }
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(PlayerComponent,PLAYERCOMPONENT_TYPEID, bool, IsSprint);
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(PlayerComponent, PLAYERCOMPONENT_TYPEID, float, slowdown);
