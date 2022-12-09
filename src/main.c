@@ -14,6 +14,7 @@
 #include "components/EnemyComponent.h"
 #include "components/inventorycomponent.h"
 #include "components/collectablecomponent.h"
+#include "components/SpawnerComponent.h"
 
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
@@ -139,7 +140,7 @@ int main()
 			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE());
 			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE());
-			H3_Object_SetTranslation(player, 960, 540);
+			H3_Object_SetTranslation(player, 1850, 1125);
 
 			//camera 
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
@@ -154,24 +155,16 @@ int main()
 			H3_Object_AddComponent(energyBar, TIREDNESSCOMPONENT_CREATE(fullBar,player));
 			H3_Object_SetTranslation(energyBar, -234, -128);
 
-			
 			//Time
 			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 5);
 			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops));
-			//raycast init
-			int raycast_index = 0;
+			
 			//enemies init
-			char enemies[256];
-			int enemy_index = 0;
+			
 			bool IsWave = false;
-			for (int i = 0; i < 4; i++) {
-				snprintf(enemies, 256, "enemy_%d", enemy_index++);
-				H3Handle enemy = H3_Object_Create2(GameScene, enemies, NULL, 3);
-				H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
-				H3_Object_AddComponent(enemy, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
-				H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(&player, &raycast_index, &GameScene));
-				H3_Object_SetTranslation(enemy, 500, 500);
-			}
+			H3Handle spawner = H3_Object_Create2(GameScene, "Spawner", NULL, 3);
+			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene));
+			
 
 			//Monstere
 			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 2);

@@ -41,9 +41,9 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	}
 
 	//add an object in the hand
-	if (H3_Input_IsMouseBtnPressed(MB_Left) && 
-		props->triggerObj != NULL && 
-		props->ObjSlot2 == NULL)
+	if (H3_Input_IsMouseBtnPressed(MB_Left) &&
+		props->triggerObj != NULL &&
+		props->ObjSlot2 == NULL && H3_Object_HasComponent(props->triggerObj, COLLECTABLECOMPONENT_TYPEID))
 	{
 		props->ObjSlot2 = props->triggerObj;
 		props->triggerObj = NULL;
@@ -82,12 +82,14 @@ void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision)
 {
 	SH3Component* component = H3_Object_GetComponent(object, INVENTORYCOMPONENT_TYPEID);
 	InventoryComponent_Properties* props = (InventoryComponent_Properties*) component->properties;
-
-	if (H3_Object_HasComponent(collision.other, COLLECTABLECOMPONENT_TYPEID));
-	{
-		props->triggerObj = collision.other;
-		props->nbTrigger++;
+	if (collision.other != NULL) {
+		if (H3_Object_HasComponent(collision.other, COLLECTABLECOMPONENT_TYPEID));
+		{
+			props->triggerObj = collision.other;
+			props->nbTrigger++;
+		}
 	}
+	
 }
 
 void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other)

@@ -8,7 +8,7 @@
 typedef struct
 {
 	bool IsAggro;
-
+	bool ResetIndexes;
 	//bot pos
 	float x, y;
 
@@ -127,11 +127,14 @@ EnemyComponent_Properties* props = (EnemyComponent_Properties*)properties;
 		//go to player position in list
 		H3_Object_SetVelocity(object, (props->px[props->index2] - props->x) / sqrtf((props->px[props->index2] - props->x) * (props->px[props->index2] - props->x) + (props->py[props->index2] - props->y) * (props->py[props->index2] - props->y)) * 150,
 			(props->py[props->index2] - props->y) / sqrtf((props->px[props->index2] - props->x) * (props->px[props->index2] - props->x) + (props->py[props->index2] - props->y) * (props->py[props->index2] - props->y)) * 150);
-		//if close enough to player pos in list, go to the next one
-		if (fabs(props->x - props->px[props->index2])<10&& fabs(props->y - props->py[props->index2])<10) {
+		if (fabs(props->x - props->px[props->index2]) < 10 && fabs(props->y - props->py[props->index2]) < 10) {
 			props->index2 += 1;
 		}
-		
+		if (props->ResetIndexes) {
+			props->index = 0;
+			props->index2 = 0;
+			props->ResetIndexes = false;
+		}
 		//if not seen for 5 sec then stop aggro
 		props->AggroTimer -= H3_GetDeltaTime();
 		if (props->RaycastTimer>1) {
@@ -183,6 +186,7 @@ void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Ha
 	properties->index = 0;
 	properties->index2 = 0;
 	properties->IsAggro = false;
+	properties->ResetIndexes = false;
 	properties->raycasting = NULL;
 	properties->player = player;
 	return properties;
@@ -195,4 +199,5 @@ void EnemyCollision(H3Handle object, SH3Collision obj_id) {
 }
 
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, bool, IsAggro);
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, bool, ResetIndexes);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, float, AggroTimer);
