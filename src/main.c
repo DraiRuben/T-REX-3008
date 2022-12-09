@@ -145,7 +145,7 @@ int main()
 			//camera 
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(480, 270, player));
-
+			H3_Object_SetTranslation(camera, 1850, 1125);
 			//bar of tiredness
 			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 5);
 			H3_Object_AddComponent(emptyBar, SPRITECOMPONENT_CREATE("assets/EmptyBar.png", A_Left + A_Top));

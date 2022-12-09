@@ -21,11 +21,11 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	PlayerComponent_Properties* props = (PlayerComponent_Properties*)properties;
 
 	//movement Vertical
-	if (H3_Input_IsKeyDown(K_Z)) 
+	if (H3_Input_IsKeyDown(K_Z)|| H3_Input_IsKeyDown(K_W)||H3_Input_IsGamepadBtnDown(GB_DPad_Up)|| H3_Input_IsKeyDown(K_Up))
 	{
 		props->pvy = -125;
 	}
-	else if (H3_Input_IsKeyDown(K_S))
+	else if (H3_Input_IsKeyDown(K_S)||H3_Input_IsKeyDown(K_Down) || H3_Input_IsGamepadBtnDown(GB_DPad_Down))
 	{
 		props->pvy = 125;
 	}
@@ -35,11 +35,11 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	}
 
 	//movement horizontal
-	if (H3_Input_IsKeyDown(K_Q))
+	if (H3_Input_IsKeyDown(K_Q)||H3_Input_IsKeyDown(K_A) || H3_Input_IsGamepadBtnDown(GB_DPad_Left) || H3_Input_IsKeyDown(K_Left))
 	{
 		props->pvx = -125;
 	}
-	else if (H3_Input_IsKeyDown(K_D))
+	else if (H3_Input_IsKeyDown(K_D) || H3_Input_IsKeyDown(K_Right) || H3_Input_IsGamepadBtnDown(GB_DPad_Right))
 	{
 		props->pvx = 125;
 	}
@@ -48,7 +48,7 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 		props->pvx = 0;
 	}
 	//sprint
-	if (H3_Input_IsKeyDown(K_Shift))
+	if (H3_Input_IsKeyDown(K_Shift) || H3_Input_IsGamepadBtnDown(GB_A))
 	{
 		props->speed = 1.65;
 		props->IsSprint = true;
