@@ -9,11 +9,14 @@ typedef struct
 {
 	bool IsAggro;
 	float x, y;
+	float px;
+	float py;
 	float timer;
 	float timer2;
 	float timer3;
 	float timer4;
 	float timer5;
+	float timer6;
 	int* raycast_index;
 	int direction;
 	char raycasts[256];
@@ -84,6 +87,7 @@ EnemyComponent_Properties* props = (EnemyComponent_Properties*)properties;
 	//aggro'd
 	if (props->IsAggro == true) {
 		//follow player
+		props->timer6 += H3_GetDeltaTime();
 		H3_Object_SetVelocity(object, (px - props->x) / distance * 120,
 			(py - props->y) / sqrtf((px - props->x) * (px - props->x) + (py - props->y) * (py - props->y)) * 120);
 		props->timer5 -= H3_GetDeltaTime();
@@ -120,6 +124,7 @@ void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Ha
 	properties->timer3 = 8;
 	properties->timer4 = 0;
 	properties->timer5 = 5;
+	properties->timer6 = 0;
 	properties->IsAggro = false;
 	properties->raycasting = NULL;
 	properties->player = player;
