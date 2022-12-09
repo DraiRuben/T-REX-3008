@@ -54,6 +54,9 @@
     <ClCompile Include="src\components\inventorycomponent.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
+    <ClCompile Include="src\components\collectablecomponent.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\components\MainMenu.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\inventorycomponent.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\components\collectablecomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
   </ItemGroup>

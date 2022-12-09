@@ -13,6 +13,7 @@
 #include "components/playercomponent.h"
 #include "components/EnemyComponent.h"
 #include "components/inventorycomponent.h"
+#include "components/collectablecomponent.h"
 
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
@@ -30,7 +31,7 @@ int main()
 	//randow init
 	srand(time(NULL));
 
-	//Text Init
+	//Text props Init
 	SH3TextProperties textprops = (SH3TextProperties){
 			.font = H3_Font_Load("assets/Toriko.ttf"),
 			.size = 50,
@@ -131,7 +132,7 @@ int main()
 			H3_Object_AddComponent(mapplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
 			H3Handle mapplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL,4);
 			H3_Object_AddComponent(mapplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
-			// Alexandre est passé par là
+			
 			//player
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
@@ -163,10 +164,10 @@ int main()
 			char enemies[256];
 			int enemy_index = 0;
 			bool IsWave = false;
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 4; i++) {
 				snprintf(enemies, 256, "enemy_%d", enemy_index++);
 				H3Handle enemy = H3_Object_Create2(GameScene, enemies, NULL, 3);
-				H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 25, 35, 0x22, false));
+				H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
 				H3_Object_AddComponent(enemy, SPRITECOMPONENT_CREATE("assets/p.png", 0x22));
 				H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(&player, &raycast_index, &GameScene));
 				H3_Object_SetTranslation(enemy, 500, 500);
@@ -175,21 +176,25 @@ int main()
 			//Monstere
 			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 2);
 			H3_Object_AddComponent(monstere, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
+			H3_Object_AddComponent(monstere, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_EnablePhysics(monstere, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere, 100, 100);
 
 			H3Handle monstere1 = H3_Object_Create2(GameScene, "monstere1", NULL, 2);
 			H3_Object_AddComponent(monstere1, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
+			H3_Object_AddComponent(monstere1, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_EnablePhysics(monstere1, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere1, 150, 100);
 
 			H3Handle monstere2 = H3_Object_Create2(GameScene, "monstere2", NULL, 2);
 			H3_Object_AddComponent(monstere2, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
+			H3_Object_AddComponent(monstere2, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_EnablePhysics(monstere2, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere2, 100, 150);
 
 			H3Handle monstere3 = H3_Object_Create2(GameScene, "monstere3", NULL, 2);
 			H3_Object_AddComponent(monstere3, SPRITECOMPONENT_CREATE("assets/monstère.png", 0x22));
+			H3_Object_AddComponent(monstere3, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_EnablePhysics(monstere3, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere3, 150, 150);
 

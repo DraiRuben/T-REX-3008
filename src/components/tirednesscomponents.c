@@ -15,10 +15,10 @@ typedef struct
 void TirednessComponent_Terminate(void* properties)
 {
 	TirednessComponent_Properties* props = (TirednessComponent_Properties*)properties;
-
+	
 	if (props->tirednessBar)
 		H3_Texture_Destroy(props->tirednessBar);
-
+	
 	free(properties);
 }
 
@@ -33,8 +33,10 @@ void TirednessComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 {
 	TirednessComponent_Properties* props = (TirednessComponent_Properties*)properties;
 
+	//filled tiredness bar
 	if (props->tiredness < 1)
 	{
+		//filled 10 times when player sprint
 		if (PlayerComponent_GetIsSprintEx(props->player))
 			props->tiredness += 0.01f * H3_GetDeltaTime();
 		else
@@ -47,8 +49,8 @@ void* TirednessComponent_CreateProperties(H3Handle textureBar, H3Handle playerRe
 	TirednessComponent_Properties* properties = malloc(sizeof(TirednessComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 
-	properties->tirednessBar = textureBar;
-	properties->player = playerRef;
+	properties->tirednessBar	= textureBar;
+	properties->player			= playerRef;
 
 	properties->tiredness = 0.0f;
 
