@@ -13,6 +13,7 @@ void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other);
 
 void* InventoryComponent_CreateProperties();
 
+H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(InventoryComponent, H3Handle, ObjSlot2);
 H3_CAPI_END_BLOCK
 
 #define INVENTORYCOMPONENT_CREATE()									 \
