@@ -8,7 +8,7 @@
 162,163,163,163,163,163,163,163,164
 </data>
  </layer>
- <layer id="2" name="objet" width="9" height="3">
+ <layer id="2" name="object" width="9" height="3">
   <data encoding="csv">
 0,271,271,244,276,276,269,253,0,
 0,240,208,0,0,0,205,206,0,
