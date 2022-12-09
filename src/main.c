@@ -203,6 +203,7 @@ int main()
 			H3_Object_SetTranslation(slot0, 220, -115);
 			H3_Object_SetTranslation(slot1, 185, -115);
 			H3_Object_SetTranslation(slot2, 150, -115);
+			
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 			}
