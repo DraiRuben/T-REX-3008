@@ -33,8 +33,10 @@ void TirednessComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 {
 	TirednessComponent_Properties* props = (TirednessComponent_Properties*)properties;
 
+	//filled tiredness bar
 	if (props->tiredness < 1)
 	{
+		//filled 10 times when player sprint
 		if (PlayerComponent_GetIsSprintEx(props->player))
 			props->tiredness += 0.01f * H3_GetDeltaTime();
 		else

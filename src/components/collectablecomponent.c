@@ -18,7 +18,7 @@ void CollectableComponent_Update(H3Handle h3, H3Handle object, SH3Transform* tra
 {
 	CollectableComponent_Properties* props = (CollectableComponent_Properties*)properties;
 
-	//reset rotation
+	//reset rotation when is in hand
 	if (props->isInHand)
 	{
 		if (!props->isDoneOnce)
