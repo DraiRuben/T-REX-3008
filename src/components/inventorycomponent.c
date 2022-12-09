@@ -123,3 +123,5 @@ void* InventoryComponent_CreateProperties()
 
 	return properties;
 }
+
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(InventoryComponent, INVENTORYCOMPONENT_TYPEID, H3Handle, ObjSlot2); //access to the object in hand
