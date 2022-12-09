@@ -166,6 +166,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\components\ClockComponent.c" />
+    <ClCompile Include="src\components\collectablecomponent.c" />
     <ClCompile Include="src\components\Credits.c" />
     <ClCompile Include="src\components\EnemyComponent.c" />
     <ClCompile Include="src\components\inventorycomponent.c" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\components\ClockComponent.h" />
+    <ClInclude Include="Include\components\collectablecomponent.h" />
     <ClInclude Include="Include\components\Credits.h" />
     <ClInclude Include="Include\components\EnemyComponent.h" />
     <ClInclude Include="Include\components\inventorycomponent.h" />
