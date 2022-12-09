@@ -170,6 +170,7 @@
     <ClCompile Include="src\components\EnemyComponent.c" />
     <ClCompile Include="src\components\inventorycomponent.c" />
     <ClCompile Include="src\components\MainMenu.c" />
+    <ClCompile Include="src\components\collectablecomponent.c" />
     <ClCompile Include="src\components\mycameracomponent.c" />
     <ClCompile Include="src\components\playercomponent.c" />
     <ClCompile Include="src\components\Settings.c" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Include\components\EnemyComponent.h" />
     <ClInclude Include="Include\components\inventorycomponent.h" />
     <ClInclude Include="Include\components\MainMenu.h" />
+    <ClInclude Include="Include\components\collectablecomponent.h" />
     <ClInclude Include="Include\components\mycameracomponent.h" />
     <ClInclude Include="Include\components\playercomponent.h" />
     <ClInclude Include="Include\components\Settings.h" />

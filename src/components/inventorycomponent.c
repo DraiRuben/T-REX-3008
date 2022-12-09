@@ -1,5 +1,7 @@
 #include <components/inventorycomponent.h>
 
+#include <components/collectablecomponent.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -29,6 +31,8 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	//drop an object
 	if (H3_Input_IsKeyPressed(K_Space) && props->ObjSlot2 != NULL)
 	{
+		CollectableComponent_SetisInHandEx(props->ObjSlot2, false);
+
 		float angle = rand() % 361;
 		H3_Object_SetTranslation(props->ObjSlot2, props->playerX, props->playerY);
 		H3_Object_Rotate(props->ObjSlot2, angle);
@@ -41,9 +45,9 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 		props->triggerObj != NULL && 
 		props->ObjSlot2 == NULL)
 	{
-
 		props->ObjSlot2 = props->triggerObj;
 		props->triggerObj = NULL;
+		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 	}
 
 	//change the object in hand with an object in inventory
@@ -58,14 +62,17 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 
 	//let object in the right slot
 	if (props->ObjSlot0 != NULL) {
+		CollectableComponent_SetisInHandEx(props->ObjSlot0, false);
 		H3_Object_SetTranslation(props->ObjSlot0, (props->playerX + 220), (props->playerY - 115));
 		H3_Object_SetRenderOrder(props->ObjSlot0, 12);
 	}
 	if (props->ObjSlot1 != NULL) {
+		CollectableComponent_SetisInHandEx(props->ObjSlot1, false);
 		H3_Object_SetTranslation(props->ObjSlot1, (props->playerX + 185), (props->playerY - 115));
 		H3_Object_SetRenderOrder(props->ObjSlot1, 12);
 	}
 	if (props->ObjSlot2 != NULL) {
+		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 		H3_Object_SetTranslation(props->ObjSlot2, (props->playerX + 150), (props->playerY - 115));
 		H3_Object_SetRenderOrder(props->ObjSlot2, 12);
 	}
@@ -76,8 +83,11 @@ void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision)
 	SH3Component* component = H3_Object_GetComponent(object, INVENTORYCOMPONENT_TYPEID);
 	InventoryComponent_Properties* props = (InventoryComponent_Properties*) component->properties;
 
-	props->triggerObj = collision.other;
-	props->nbTrigger++;
+	if (H3_Object_HasComponent(collision.other, COLLECTABLECOMPONENT_TYPEID));
+	{
+		props->triggerObj = collision.other;
+		props->nbTrigger++;
+	}
 }
 
 void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other)
