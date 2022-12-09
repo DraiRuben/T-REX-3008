@@ -40,6 +40,16 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 		props->ObjSlot2 = NULL;
 	}
 
+	//change the object in hand with an object in inventory
+	if (H3_Input_IsMouseBtnPressed(MB_Right))
+	{
+		H3Handle temporarySlot2 = props->ObjSlot2;
+
+		props->ObjSlot2 = props->ObjSlot1;
+		props->ObjSlot1 = props->ObjSlot0;
+		props->ObjSlot0 = temporarySlot2;
+	}
+
 	//add an object in the hand
 	if (H3_Input_IsMouseBtnPressed(MB_Left) && 
 		props->triggerObj != NULL && 
@@ -48,16 +58,6 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 		props->ObjSlot2 = props->triggerObj;
 		props->triggerObj = NULL;
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
-	}
-
-	//change the object in hand with an object in inventory
-	if (H3_Input_IsMouseBtnPressed(MB_Right))
-	{
-		H3Handle temporarySlot2 = props->ObjSlot2;
-		
-		props->ObjSlot2 = props->ObjSlot1;
-		props->ObjSlot1 = props->ObjSlot0;
-		props->ObjSlot0 = temporarySlot2;
 	}
 
 	//let object in the right slot
@@ -83,11 +83,15 @@ void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision)
 	SH3Component* component = H3_Object_GetComponent(object, INVENTORYCOMPONENT_TYPEID);
 	InventoryComponent_Properties* props = (InventoryComponent_Properties*) component->properties;
 
-	if (H3_Object_HasComponent(collision.other, COLLECTABLECOMPONENT_TYPEID));
+	if (collision.other != NULL)
 	{
-		props->triggerObj = collision.other;
-		props->nbTrigger++;
+		if (H3_Object_HasComponent(collision.other, COLLECTABLECOMPONENT_TYPEID))
+		{
+			props->triggerObj = collision.other;
+			props->nbTrigger++;
+		}
 	}
+	
 }
 
 void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other)
@@ -95,9 +99,15 @@ void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other)
 	SH3Component* component = H3_Object_GetComponent(object, INVENTORYCOMPONENT_TYPEID);
 	InventoryComponent_Properties* props = (InventoryComponent_Properties*)component->properties;
 	
-	props->nbTrigger--;
-	if (props->nbTrigger == 0)
-		props->triggerObj = NULL;
+	if (other != NULL)
+	{
+		if (H3_Object_HasComponent(other, COLLECTABLECOMPONENT_TYPEID))
+		{
+			props->nbTrigger--;
+			if (props->nbTrigger == 0)
+				props->triggerObj = NULL;
+		}
+	}
 }
 
 void* InventoryComponent_CreateProperties()
@@ -111,6 +121,7 @@ void* InventoryComponent_CreateProperties()
 	properties->ObjSlot1 = NULL;
 	properties->ObjSlot2 = NULL;
 
-
 	return properties;
 }
+
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(InventoryComponent, INVENTORYCOMPONENT_TYPEID, H3Handle, ObjSlot2); //access to the object in hand
