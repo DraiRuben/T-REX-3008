@@ -1,5 +1,7 @@
 #include <components/playercomponent.h>
 
+#include <components/tirednesscomponent.h>
+
 #include <stdlib.h>
 
 typedef struct
@@ -9,6 +11,11 @@ typedef struct
 	float pvx, pvy;
 	bool IsSprint;
 	float slowdown; // slowdown when tiredness is high
+
+	bool* pt_isWin;
+	bool* pt_isEnd;
+	bool* pt_isGame;
+	H3Handle energyBar;
 } PlayerComponent_Properties;
 
 void PlayerComponent_Terminate(void* properties)
@@ -60,14 +67,29 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	}
 
 	H3_Object_SetVelocity(object, props->pvx * props->speed, props->pvy * props->speed);
+
+	//player death
+	if (TirednessComponent_GettirednessEx(props->energyBar) >= 1)
+	{
+		*props->pt_isWin	= false;
+		*props->pt_isGame	= false;
+		*props->pt_isEnd	= true;
+	}
 }
 
-void* PlayerComponent_CreateProperties()
+void* PlayerComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInGame, H3Handle energyBarRef)
 {
 	PlayerComponent_Properties* properties = malloc(sizeof(PlayerComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
+
+	properties->pt_isWin	= isWin;
+	properties->pt_isEnd	= isEndGame;
+	properties->pt_isGame	= isInGame;
+	properties->energyBar	= energyBarRef;
+
 	properties->speed = 1;
 	properties->IsSprint = false;
+
 	return properties;
 }
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(PlayerComponent,PLAYERCOMPONENT_TYPEID, bool, IsSprint);
