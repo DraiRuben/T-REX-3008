@@ -33,7 +33,7 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 			for (int u = 0; u < 3;u++) {
 				props->AisleTempIndex += 1;
 				snprintf(props->AisleTempName, 256, "Aisle_%d", props->AisleTempIndex);
-				H3Handle Aisle = H3_Object_Create2(*props->GameScene, props->AisleTempName, NULL, 4);
+				H3Handle Aisle = H3_Object_Create2(*props->GameScene, props->AisleTempName, NULL, 5);
 				props->aisleID = rand() % limit;
 				if (!(i > 3 && u > 1 && !IsMonsterInitialized)) {
 					if (props->aisleID <= 100 && props->aisleID>90) {

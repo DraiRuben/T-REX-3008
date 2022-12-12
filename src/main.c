@@ -129,13 +129,15 @@ int main()
 			//Map init
 			H3Handle map = H3_Map_Load("assets/Map/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
-			H3Handle maplayer = H3_Object_Create2(GameScene, "layer floor", NULL,1);
+			H3Handle maplayer4 = H3_Object_Create2(GameScene, "layer carpet", NULL, 2);
+			H3_Object_AddComponent(maplayer4, MAPLAYERCOMPONENT_CREATE(map, "carpet"));
+			H3Handle maplayer = H3_Object_Create2(GameScene, "layer floor", NULL, 1);
 			H3_Object_AddComponent(maplayer, MAPLAYERCOMPONENT_CREATE(map, "floor"));
-			H3Handle maplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL, 4);
+			H3Handle maplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL, 5);
 			H3_Object_AddComponent(maplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
-			H3Handle maplayer1 = H3_Object_Create2(GameScene, "layer object", NULL,4);
+			H3Handle maplayer1 = H3_Object_Create2(GameScene, "layer object", NULL, 5);
 			H3_Object_AddComponent(maplayer1, MAPLAYERCOMPONENT_CREATE(map, "object"));
-			H3Handle maplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL,5);
+			H3Handle maplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL, 6);
 			H3_Object_AddComponent(maplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
 			
 			//Random Aisle Init
@@ -145,8 +147,8 @@ int main()
 			//related objects
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
-			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 5);
-			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 5);
+			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 10);
+			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
 
 			//player
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/Sprites/p.png", 0x22));
@@ -165,16 +167,18 @@ int main()
 			H3_Object_AddComponent(energyBar, TIREDNESSCOMPONENT_CREATE(fullBar,player,camera,GameScene));
 			H3_Object_SetTranslation(energyBar, -234, -128);
 
-			//Time
-			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 5);
-			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops));
+			
 			
 			//enemies init
-			
+			bool IsNewWave = false;
 			bool IsWave = false;
+			bool GlobalAggro = false;
 			H3Handle spawner = H3_Object_Create2(GameScene, "Spawner", NULL, 3);
-			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar));
+			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar,&IsNewWave,&IsWave,&GlobalAggro));
 			
+			//Time
+			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 10);
+			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops, &IsNewWave));
 
 			//Monstere
 			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 2);
@@ -216,6 +220,21 @@ int main()
 			H3_Object_SetTranslation(slot1, 185, -115);
 			H3_Object_SetTranslation(slot2, 150, -115);
 			
+			//gradient
+			H3Handle gradient = H3_Object_Create2(GameScene, "gradient", camera, 9);
+			H3Handle gradient1 = H3_Object_Create2(GameScene, "gradient1", camera, 9);
+			H3Handle gradient2 = H3_Object_Create2(GameScene, "gradient2", camera, 9);
+			H3Handle gradient3 = H3_Object_Create2(GameScene, "gradient3", camera, 9);
+			H3Handle gradient4 = H3_Object_Create2(GameScene, "gradient4", camera, 9);
+			H3Handle gradient5 = H3_Object_Create2(GameScene, "gradient5", camera, 9);
+
+			H3_Object_AddComponent(gradient, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient1, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient2, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient3, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient4, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient5, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 			}

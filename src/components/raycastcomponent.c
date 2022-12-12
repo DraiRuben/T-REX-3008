@@ -23,7 +23,7 @@ void RaycastComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 	if (props->DestroyTimer > 3) {
 		H3_Object_Destroy(object,false);
 	}
-
+	
 }
 
 
@@ -44,8 +44,11 @@ void RaycastComponentCollision(H3Handle object, SH3Collision obj_id) {
 	}
 	else if (H3_Object_HasComponent(obj_id.other, PLAYERCOMPONENT_TYPEID)) {
 		EnemyComponent_SetIsAggroEx(props->Owner, true);
+		if (!EnemyComponent_GetIsTempEx(props->Owner)) {
+			EnemyComponent_SetAggroTimerEx(props->Owner, 5);
+			EnemyComponent_SetFollowTimerEx(props->Owner, 3);
+		}
 		EnemyComponent_SetResetIndexesEx(props->Owner, true);
-		EnemyComponent_SetAggroTimerEx(props->Owner, 5);
 		H3_Object_Destroy(object, false);
 	}
 }
