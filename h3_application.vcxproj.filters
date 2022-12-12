@@ -57,6 +57,9 @@
     <ClCompile Include="src\components\collectablecomponent.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
+    <ClCompile Include="src\components\SpawnerComponent.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
     <ClCompile Include="src\components\monsterecomponent.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
@@ -93,6 +96,9 @@
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\collectablecomponent.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\components\SpawnerComponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\monsterecomponent.h">

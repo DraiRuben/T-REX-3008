@@ -176,6 +176,7 @@
     <ClCompile Include="src\components\playercomponent.c" />
     <ClCompile Include="src\components\raycastcomponent.c" />
     <ClCompile Include="src\components\Settings.c" />
+    <ClCompile Include="src\components\SpawnerComponent.c" />
     <ClCompile Include="src\components\tirednesscomponents.c" />
     <ClCompile Include="src\main.c" />
   </ItemGroup>
@@ -191,6 +192,7 @@
     <ClInclude Include="Include\components\playercomponent.h" />
     <ClInclude Include="Include\components\raycastcomponent.h" />
     <ClInclude Include="Include\components\Settings.h" />
+    <ClInclude Include="Include\components\SpawnerComponent.h" />
     <ClInclude Include="Include\components\tirednesscomponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

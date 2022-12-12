@@ -33,14 +33,14 @@ void MonstereComponent_PreUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 		if (TirednessComponent_GetrecovEnergyEx(props->energyBar) == 0)
 		{
 			TirednessComponent_SetrecovEnergyEx(props->energyBar, 1);
-			//remove to inventory
+			//remove from inventory
 			InventoryComponent_SetObjSlot2Ex(props->player, NULL);
 			H3_Object_Destroy(object, false);
 		}
 		else if (TirednessComponent_GetrecovEnergyEx(props->energyBar) == 1)
 		{
 			TirednessComponent_SetrecovEnergyEx(props->energyBar, 2);
-			//remove to inventory
+			//remove from inventory
 			InventoryComponent_SetObjSlot2Ex(props->player, NULL);
 			H3_Object_Destroy(object, false);
 		}

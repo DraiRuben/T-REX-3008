@@ -1,4 +1,6 @@
 #include "components/EnemyComponent.h"
+#include "components/playercomponent.h"
+#include "components/tirednesscomponent.h"
 #include "components/spritecomponent.h"
 #include "components/raycastcomponent.h"
 #include <stdlib.h>
@@ -8,7 +10,8 @@
 typedef struct
 {
 	bool IsAggro;
-
+	bool ResetIndexes;
+	bool isTouchPlayer;
 	//bot pos
 	float x, y;
 
@@ -39,6 +42,8 @@ typedef struct
 	//ref to player and scene
 	H3Handle* player;
 	H3Handle* GameScene;
+
+	H3Handle energyBar;
 
 } EnemyComponent_Properties;
 
@@ -127,11 +132,14 @@ EnemyComponent_Properties* props = (EnemyComponent_Properties*)properties;
 		//go to player position in list
 		H3_Object_SetVelocity(object, (props->px[props->index2] - props->x) / sqrtf((props->px[props->index2] - props->x) * (props->px[props->index2] - props->x) + (props->py[props->index2] - props->y) * (props->py[props->index2] - props->y)) * 150,
 			(props->py[props->index2] - props->y) / sqrtf((props->px[props->index2] - props->x) * (props->px[props->index2] - props->x) + (props->py[props->index2] - props->y) * (props->py[props->index2] - props->y)) * 150);
-		//if close enough to player pos in list, go to the next one
-		if (fabs(props->x - props->px[props->index2])<10&& fabs(props->y - props->py[props->index2])<10) {
+		if (fabs(props->x - props->px[props->index2]) < 10 && fabs(props->y - props->py[props->index2]) < 10) {
 			props->index2 += 1;
 		}
-		
+		if (props->ResetIndexes) {
+			props->index = 0;
+			props->index2 = 0;
+			props->ResetIndexes = false;
+		}
 		//if not seen for 5 sec then stop aggro
 		props->AggroTimer -= H3_GetDeltaTime();
 		if (props->RaycastTimer>1) {
@@ -163,14 +171,25 @@ EnemyComponent_Properties* props = (EnemyComponent_Properties*)properties;
 			props->RaycastTimer = 0;
 		}
 	}
+
+	//add tiredness when touch player
+	if (props->isTouchPlayer)
+	{
+		float tiredness = TirednessComponent_GettirednessEx(props->energyBar);
+		tiredness += 0.02f * H3_GetDeltaTime(); //fill 2%/s	 in sprint
+		TirednessComponent_SettirednessEx(props->energyBar, tiredness);
+	}
 }
 
 
-void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Handle* GameScene)
+void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Handle* GameScene, H3Handle energyBarRef)
 {
 	EnemyComponent_Properties* properties = malloc(sizeof(EnemyComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	
+	properties->energyBar = energyBarRef;
+	properties->isTouchPlayer = false;
+
 	properties->raycasting = NULL;
 	properties->GameScene = GameScene;
 	properties->raycast_index = raycast_index;
@@ -183,16 +202,32 @@ void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Ha
 	properties->index = 0;
 	properties->index2 = 0;
 	properties->IsAggro = false;
+	properties->ResetIndexes = false;
 	properties->raycasting = NULL;
 	properties->player = player;
 	return properties;
 }
 
-void EnemyCollision(H3Handle object, SH3Collision obj_id) {
+void EnemyCollisionEnter(H3Handle object, SH3Collision obj_id) {
 	SH3Component* component = H3_Object_GetComponent(object, ENEMYCOMPONENT_TYPEID);
 	EnemyComponent_Properties* props = (EnemyComponent_Properties*)(component->properties);
 
+	if (obj_id.other != NULL && H3_Object_HasComponent(obj_id.other, PLAYERCOMPONENT_TYPEID))
+	{
+		props->isTouchPlayer = true;
+	}
+}
+
+void EnemyCollisionLeave(H3Handle object, H3Handle other) {
+	SH3Component* component = H3_Object_GetComponent(object, ENEMYCOMPONENT_TYPEID);
+	EnemyComponent_Properties* props = (EnemyComponent_Properties*)(component->properties);
+
+	if (other != NULL && H3_Object_HasComponent(other, PLAYERCOMPONENT_TYPEID))
+	{
+		props->isTouchPlayer = false;
+	}
 }
 
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, bool, IsAggro);
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, bool, ResetIndexes);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, float, AggroTimer);

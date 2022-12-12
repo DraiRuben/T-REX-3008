@@ -34,7 +34,7 @@ void* CreditsComponent_CreateProperties(bool* IsCredits,bool* IsMainMenu)
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	CreditsComponent_Properties* props = (CreditsComponent_Properties*)properties;
 
-	properties->BackBtn = H3_Texture_Load("assets/Back.png", &props->w, &props->h);
+	properties->BackBtn = H3_Texture_Load("assets/Menu/Back.png", &props->w, &props->h);
 	properties->IsCredits = IsCredits;
 	properties->IsMainMenu = IsMainMenu;
 	return properties;

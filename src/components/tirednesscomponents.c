@@ -47,13 +47,13 @@ void TirednessComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 		props->doOnce = true;
 
 		props->iconEnergy1 = H3_Object_Create2(props->scene, "first energy", props->camera, 15);
-		H3_Object_AddComponent(props->iconEnergy1, SPRITECOMPONENT_CREATE("assets/UI_Energy.png", 0x22));
+		H3_Object_AddComponent(props->iconEnergy1, SPRITECOMPONENT_CREATE("assets/Sprites/UI_Energy.png", 0x22));
 		H3_Object_SetTranslation(props->iconEnergy1, -232, -118);
 		H3_Object_Scale(props->iconEnergy1, 0.25f);
 		H3_Object_SetEnabled(props->iconEnergy1, false);
 
 		props->iconEnergy2 = H3_Object_Create2(props->scene, "second energy", props->camera, 15);
-		H3_Object_AddComponent(props->iconEnergy2, SPRITECOMPONENT_CREATE("assets/UI_Energy.png", 0x22));
+		H3_Object_AddComponent(props->iconEnergy2, SPRITECOMPONENT_CREATE("assets/Sprites/UI_Energy.png", 0x22));
 		H3_Object_SetTranslation(props->iconEnergy2, -224, -118);
 		H3_Object_Scale(props->iconEnergy2, 0.25f);
 		H3_Object_SetEnabled(props->iconEnergy2, false);
@@ -134,3 +134,4 @@ void* TirednessComponent_CreateProperties(H3Handle textureBar, H3Handle playerRe
 }
 
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(TirednessComponent, TIREDNESSCOMPONENT_TYPEID, int, recovEnergy);
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(TirednessComponent, TIREDNESSCOMPONENT_TYPEID, float, tiredness);
