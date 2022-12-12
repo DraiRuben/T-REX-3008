@@ -13,6 +13,8 @@ void TirednessComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 void* TirednessComponent_CreateProperties(H3Handle textureBar, H3Handle playerRef, H3Handle cameraRef, H3Handle sceneRef);
 
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(TirednessComponent, int, recovEnergy);
+H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(TirednessComponent, float, tiredness);
+
 H3_CAPI_END_BLOCK
 
 #define TIREDNESSCOMPONENT_CREATE(TEXTURE, PLAYER, CAMERA, SCENE)                                 \
