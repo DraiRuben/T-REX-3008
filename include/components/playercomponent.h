@@ -12,6 +12,7 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 void* PlayerComponent_CreateProperties();
 
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(PlayerComponent, bool, IsSprint);
+H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(PlayerComponent, float, slowdown);
 H3_CAPI_END_BLOCK
 
 #define PLAYERCOMPONENT_CREATE()                                 \

@@ -3,7 +3,7 @@
 
 #include <h3.h>
 
-#define CREDITSMENUCOMPONENT_TYPEID 0x10000002
+#define CREDITSCOMPONENT_TYPEID 0x10000002
 
 H3_CAPI_BEGIN_BLOCK
 void CreditsComponent_Terminate(void* properties);
@@ -16,7 +16,7 @@ H3_CAPI_END_BLOCK
 		.Terminate          = CreditsComponent_Terminate,                                 \
 		.Draw				= CreditsComponent_Draw,				\
 		.isInitialized      = false,                                                     \
-		.componentType      = CREDITSMENUCOMPONENT_TYPEID,                                    \
+		.componentType      = CREDITSCOMPONENT_TYPEID,                                    \
 		.properties         = CreditsComponent_CreateProperties(ISCREDITS,ISMAINMENU) \
 	}
 

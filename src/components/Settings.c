@@ -34,7 +34,7 @@ void* SettingsComponent_CreateProperties(bool* IsSettings, bool* IsMainMenu)
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	SettingsComponent_Properties* props = (SettingsComponent_Properties*)properties;
 
-	properties->BackBtn = H3_Texture_Load("assets/Back.png", &props->w, &props->h);
+	properties->BackBtn = H3_Texture_Load("assets/Menu/Back.png", &props->w, &props->h);
 	properties->IsSettings = IsSettings;
 	properties->IsMainMenu = IsMainMenu;
 	return properties;
