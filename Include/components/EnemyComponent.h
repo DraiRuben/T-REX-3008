@@ -11,8 +11,9 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 void EnemyCollisionEnter(H3Handle object, SH3Collision obj_id);
 void EnemyCollisionLeave(H3Handle object, H3Handle other);
 
-void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Handle* GameScene, H3Handle energyBarRef);
+void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Handle* GameScene, H3Handle energyBarRef,bool* IsNewWave,bool* GlobalAggro,bool IsTemp);
 
+H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, bool, IsTemp);
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, bool, IsAggro);
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, bool, ResetIndexes);
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, float, AggroTimer);
@@ -21,7 +22,7 @@ H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, float, FollowTimer
 
 H3_CAPI_END_BLOCK
 
-#define ENEMYCOMPONENT_CREATE(PLAYER,RAYCASTINDEX,GAMESCENE, ERNERGYBAR)                    \
+#define ENEMYCOMPONENT_CREATE(PLAYER,RAYCASTINDEX,GAMESCENE, ERNERGYBAR,ISNEWWAVE,GLOBALAGGRO,ISTEMP)                    \
 	(SH3Component) {                                                            \
 		.Terminate          = EnemyComponent_Terminate,                         \
 		.Update             = EnemyComponentUpdate,                             \
@@ -29,7 +30,7 @@ H3_CAPI_END_BLOCK
 		.OnCollisionLeave   = EnemyCollisionLeave,                              \
 		.isInitialized      = false,                                            \
 		.componentType      = ENEMYCOMPONENT_TYPEID,                            \
-		.properties         = EnemyComponent_CreateProperties(PLAYER,RAYCASTINDEX,GAMESCENE, ERNERGYBAR) \
+		.properties         = EnemyComponent_CreateProperties(PLAYER,RAYCASTINDEX,GAMESCENE, ERNERGYBAR,ISNEWWAVE,GLOBALAGGRO,ISTEMP) \
 	}
 
 #endif /* _H3_COMPONENTS_SPRITECOMPONENT_H_ */
