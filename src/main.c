@@ -124,8 +124,6 @@ int main()
 			H3Handle fullBar = H3_Texture_Load("assets/Sprites/AllBar.png", &barWidth, &barHeight);
 			H3Handle backBar = H3_Texture_Load("assets/Sprites/EmptyBar.png", &backBarWidth, &backBarHeight);
 
-			
-
 			//Map init
 			H3Handle map = H3_Map_Load("assets/Map/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
@@ -145,8 +143,8 @@ int main()
 			//related objects
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
-			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 5);
-			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 5);
+			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 10);
+			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
 
 			//player
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/Sprites/p.png", 0x22));
@@ -166,11 +164,25 @@ int main()
 			H3_Object_SetTranslation(energyBar, -234, -128);
 
 			//Time
-			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 5);
+			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 10);
 			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops));
+
+			//gradient
+			H3Handle gradient = H3_Object_Create2(GameScene, "gradient", camera, 9);
+			H3Handle gradient1 = H3_Object_Create2(GameScene, "gradient1", camera, 9);
+			H3Handle gradient2 = H3_Object_Create2(GameScene, "gradient2", camera, 9);
+			H3Handle gradient3 = H3_Object_Create2(GameScene, "gradient3", camera, 9);
+			H3Handle gradient4 = H3_Object_Create2(GameScene, "gradient4", camera, 9);
+			H3Handle gradient5 = H3_Object_Create2(GameScene, "gradient5", camera, 9);
+
+			H3_Object_AddComponent(gradient, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient1, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient2, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient3, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient4, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient5, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
 			
 			//enemies init
-			
 			bool IsWave = false;
 			H3Handle spawner = H3_Object_Create2(GameScene, "Spawner", NULL, 3);
 			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar));
