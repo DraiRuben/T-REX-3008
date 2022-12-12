@@ -46,6 +46,7 @@ void RaycastComponentCollision(H3Handle object, SH3Collision obj_id) {
 		EnemyComponent_SetIsAggroEx(props->Owner, true);
 		EnemyComponent_SetResetIndexesEx(props->Owner, true);
 		EnemyComponent_SetAggroTimerEx(props->Owner, 5);
+		EnemyComponent_SetFollowTimerEx(props->Owner,3);
 		H3_Object_Destroy(object, false);
 	}
 }
