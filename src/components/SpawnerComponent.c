@@ -19,9 +19,10 @@ typedef struct
 	int enemy_index;
 	int timer;
 	int amount;
-	//ref to player and scene
+	//ref to player, scene and enrgyBar
 	H3Handle* player;
 	H3Handle* GameScene;
+	H3Handle energyBar;
 
 } SpawnerComponent_Properties;
 
@@ -39,8 +40,8 @@ int i = 0;
 void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties) {
 	SpawnerComponent_Properties* props = (SpawnerComponent_Properties*)properties;
 	H3_Transform_GetPosition(H3_Object_GetTransform(*props->player), &px, &py);
-	if (!props->IsInitialized){
-		while(i<props->amount)
+	if (!props->IsInitialized) {
+		while (i < props->amount)
 		{
 			distance = sqrtf((px - props->x) * (px - props->x) + (py - props->y) * (py - props->y));
 			while (distance < 100) {
@@ -54,8 +55,8 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 				else {
 					props->x = rand() % 1700 + 100;
 				}
-				
-				
+
+
 				distance = sqrtf((px - props->x) * (px - props->x) + (py - props->y) * (py - props->y));
 
 			}
@@ -63,23 +64,25 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 			H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
 			H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
 			H3_Object_AddComponent(enemy, SPRITECOMPONENT_CREATE("assets/Sprites/p.png", 0x22));
-			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene));
+			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar));
 			H3_Object_SetTranslation(enemy, props->x, props->y);
 
 			H3_Transform_GetPosition(H3_Object_GetTransform(*props->player), &props->x, &props->y);
 			i += 1;
 			Sleep(1);
 		}
-		
+
 		props->IsInitialized = true;
 	}
 }
 
 
-void* SpawnerComponent_CreateProperties(H3Handle* player, H3Handle* GameScene)
+void* SpawnerComponent_CreateProperties(H3Handle* player, H3Handle* GameScene, H3Handle energyBarRef)
 {
 	SpawnerComponent_Properties* properties = malloc(sizeof(SpawnerComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
+
+	properties->energyBar = energyBarRef;
 	properties->IsInitialized = false;
 	properties->GameScene = GameScene;
 	properties->player = player;
