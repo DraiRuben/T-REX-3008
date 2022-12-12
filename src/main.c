@@ -124,18 +124,18 @@ int main()
 			H3Handle fullBar = H3_Texture_Load("assets/Sprites/AllBar.png", &barWidth, &barHeight);
 			H3Handle backBar = H3_Texture_Load("assets/Sprites/EmptyBar.png", &backBarWidth, &backBarHeight);
 
-			
-
 			//Map init
 			H3Handle map = H3_Map_Load("assets/Map/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
+			H3Handle maplayer4 = H3_Object_Create2(GameScene, "layer carpet", NULL, 2);
+			H3_Object_AddComponent(maplayer4, MAPLAYERCOMPONENT_CREATE(map, "carpet"));
 			H3Handle maplayer = H3_Object_Create2(GameScene, "layer floor", NULL,1);
 			H3_Object_AddComponent(maplayer, MAPLAYERCOMPONENT_CREATE(map, "floor"));
-			H3Handle maplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL, 4);
+			H3Handle maplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL, 5);
 			H3_Object_AddComponent(maplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
-			H3Handle maplayer1 = H3_Object_Create2(GameScene, "layer object", NULL,4);
+			H3Handle maplayer1 = H3_Object_Create2(GameScene, "layer object", NULL,5);
 			H3_Object_AddComponent(maplayer1, MAPLAYERCOMPONENT_CREATE(map, "object"));
-			H3Handle maplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL,5);
+			H3Handle maplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL,6);
 			H3_Object_AddComponent(maplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
 			
 			//Random Aisle Init
@@ -143,10 +143,10 @@ int main()
 			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene));
 
 			//related objects
-			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
+			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,4);
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
-			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 5);
-			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 5);
+			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 10);
+			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
 
 			//player
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/Sprites/p.png", 0x22));
@@ -166,39 +166,53 @@ int main()
 			H3_Object_SetTranslation(energyBar, -234, -128);
 
 			//Time
-			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 5);
+			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 10);
 			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops));
+
+			//gradient
+			H3Handle gradient = H3_Object_Create2(GameScene, "gradient", camera, 9);
+			H3Handle gradient1 = H3_Object_Create2(GameScene, "gradient1", camera, 9);
+			H3Handle gradient2 = H3_Object_Create2(GameScene, "gradient2", camera, 9);
+			H3Handle gradient3 = H3_Object_Create2(GameScene, "gradient3", camera, 9);
+			H3Handle gradient4 = H3_Object_Create2(GameScene, "gradient4", camera, 9);
+			H3Handle gradient5 = H3_Object_Create2(GameScene, "gradient5", camera, 9);
+
+			H3_Object_AddComponent(gradient, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient1, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient2, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient3, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient4, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+			H3_Object_AddComponent(gradient5, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
 			
 			//enemies init
-			
 			bool IsWave = false;
 			H3Handle spawner = H3_Object_Create2(GameScene, "Spawner", NULL, 3);
 			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar));
 			
 
 			//Monstere
-			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 2);
+			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 3);
 			H3_Object_AddComponent(monstere, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_AddComponent(monstere, MONSTERECOMPONENT_CREATE(player, energyBar));
 			H3_Object_EnablePhysics(monstere, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere, 1750, 2100);
 
-			H3Handle monstere1 = H3_Object_Create2(GameScene, "monstere1", NULL, 2);
+			H3Handle monstere1 = H3_Object_Create2(GameScene, "monstere1", NULL, 3);
 			H3_Object_AddComponent(monstere1, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere1, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_AddComponent(monstere1, MONSTERECOMPONENT_CREATE(player, energyBar));
 			H3_Object_EnablePhysics(monstere1, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere1, 1750, 2100);
 
-			H3Handle monstere2 = H3_Object_Create2(GameScene, "monstere2", NULL, 2);
+			H3Handle monstere2 = H3_Object_Create2(GameScene, "monstere2", NULL, 3);
 			H3_Object_AddComponent(monstere2, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere2, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_AddComponent(monstere2, MONSTERECOMPONENT_CREATE(player, energyBar));
 			H3_Object_EnablePhysics(monstere2, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere2, 1750, 2100);
 
-			H3Handle monstere3 = H3_Object_Create2(GameScene, "monstere3", NULL, 2);
+			H3Handle monstere3 = H3_Object_Create2(GameScene, "monstere3", NULL, 3);
 			H3_Object_AddComponent(monstere3, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere3, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_AddComponent(monstere3, MONSTERECOMPONENT_CREATE(player, energyBar));

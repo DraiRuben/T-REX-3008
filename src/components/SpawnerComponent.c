@@ -44,7 +44,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 		while (i < props->amount)
 		{
 			distance = sqrtf((px - props->x) * (px - props->x) + (py - props->y) * (py - props->y));
-			while (distance < 100) {
+			while (distance < 500) {
 				distance = sqrtf((px - props->x) * (px - props->x) + (py - props->y) * (py - props->y));
 				props->y = rand() % 2150 + 300;
 				//if in reserve
