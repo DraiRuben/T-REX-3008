@@ -16,6 +16,7 @@
 #include "components/collectablecomponent.h"
 #include "components/SpawnerComponent.h"
 #include "components/monsterecomponent.h"
+#include "components/aislespawnercomponent.h"
 
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
@@ -63,15 +64,12 @@ int main()
 			.fullscreen = false,
 			.windowTitle = "T-REX3008"
 	});
-	//wich scene
 	bool IsMainMenu = true;
 	bool IsCredits = false;
 	bool IsSettings = false;
 	bool IsNewGame = false;
 	bool IsEndGame = false;
-
-	bool isWin = false;
-
+	bool IsWin = false;
 	while (1) {
 		//Main Menu
 		if (IsMainMenu) {
@@ -133,14 +131,18 @@ int main()
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
 			H3Handle maplayer = H3_Object_Create2(GameScene, "layer floor", NULL,1);
 			H3_Object_AddComponent(maplayer, MAPLAYERCOMPONENT_CREATE(map, "floor"));
+			H3Handle maplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL, 4);
+			H3_Object_AddComponent(maplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
 			H3Handle maplayer1 = H3_Object_Create2(GameScene, "layer object", NULL,4);
 			H3_Object_AddComponent(maplayer1, MAPLAYERCOMPONENT_CREATE(map, "object"));
 			H3Handle maplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL,5);
 			H3_Object_AddComponent(maplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
-			H3Handle maplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL,4);
-			H3_Object_AddComponent(maplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
+			
+			//Random Aisle Init
+			H3Handle AisleSpawner = H3_Object_Create(GameScene, "AisleSpawner", NULL);
+			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene));
 
-			//objects related
+			//related objects
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
 			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 5);
@@ -149,18 +151,17 @@ int main()
 			//player
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/Sprites/p.png", 0x22));
 			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
-			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE(&isWin, &IsEndGame, &IsNewGame, energyBar));
+			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE(&IsWin, &IsEndGame, &IsNewGame, energyBar));
 			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE());
 			H3_Object_SetTranslation(player, 1750, 2100);
 
-			//camera 
+			//camera
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(480, 270, player));
 			H3_Object_SetTranslation(camera, 1850, 1125);
 
 			//bar of tiredness
 			H3_Object_AddComponent(emptyBar, SPRITECOMPONENT_CREATE("assets/Sprites/EmptyBar.png", A_Left + A_Top));
 			H3_Object_SetTranslation(emptyBar, -235, -130);
-
 			H3_Object_AddComponent(energyBar, TIREDNESSCOMPONENT_CREATE(fullBar,player,camera,GameScene));
 			H3_Object_SetTranslation(energyBar, -234, -128);
 
@@ -169,9 +170,10 @@ int main()
 			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops));
 			
 			//enemies init
+			
 			bool IsWave = false;
 			H3Handle spawner = H3_Object_Create2(GameScene, "Spawner", NULL, 3);
-			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene, energyBar));
+			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar));
 			
 
 			//Monstere
@@ -217,7 +219,6 @@ int main()
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 			}
-			
 			H3_Scene_Destroy(GameScene);
 		}
 

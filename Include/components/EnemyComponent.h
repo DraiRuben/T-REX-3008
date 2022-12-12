@@ -11,7 +11,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 void EnemyCollisionEnter(H3Handle object, SH3Collision obj_id);
 void EnemyCollisionLeave(H3Handle object, H3Handle other);
 
-void* EnemyComponent_CreateProperties(H3Handle* player,int* raycast_index,H3Handle* GameScene, H3Handle energyBarRef);
+void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Handle* GameScene, H3Handle energyBarRef);
 
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, bool, IsAggro);
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, bool, ResetIndexes);
