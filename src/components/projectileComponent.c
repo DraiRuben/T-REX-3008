@@ -55,12 +55,13 @@ void* ProjectileComponent_CreateProperties(H3Handle player)
 	return properties;
 }
 float vx, vy;
+
 void ProjectileCollisionEnter(H3Handle object, SH3Collision obj_id) {
 	SH3Component* component = H3_Object_GetComponent(object, PROJECTILECOMPONENT_TYPEID);
 	ProjectileComponent_Properties* props = (ProjectileComponent_Properties*)(component->properties);
 
 	if (props->IsLaunched && obj_id.other == NULL) {
-		//CollectableComponent_SetdurabilityEx(object, CollectableComponent_GetdurabilityEx(object) - 1);
+		CollectableComponent_SetdurabilityEx(object, CollectableComponent_GetdurabilityEx(object) - 1);
 	}
 	else if (props->IsLaunched && H3_Object_HasComponent(obj_id.other, ENEMYCOMPONENT_TYPEID)) {
 		H3_Object_GetVelocity(object, &vx, &vy);

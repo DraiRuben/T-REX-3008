@@ -223,12 +223,12 @@ int main()
 			H3Handle cashregister3 = H3_Object_Create2(GameScene, "caisse3", NULL, 4);
 			H3Handle cashregister4 = H3_Object_Create2(GameScene, "caisse4", NULL, 4);
 			H3Handle cashregister5 = H3_Object_Create2(GameScene, "caisse5", NULL, 4);
-			H3_Object_AddComponent(cashregister0, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
-			H3_Object_AddComponent(cashregister1, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
-			H3_Object_AddComponent(cashregister2, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
-			H3_Object_AddComponent(cashregister3, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
-			H3_Object_AddComponent(cashregister4, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
-			H3_Object_AddComponent(cashregister5, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
+			H3_Object_AddComponent(cashregister0, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen,&GameScene,&player));
+			H3_Object_AddComponent(cashregister1, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
+			H3_Object_AddComponent(cashregister2, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
+			H3_Object_AddComponent(cashregister3, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
+			H3_Object_AddComponent(cashregister4, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
+			H3_Object_AddComponent(cashregister5, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
 			H3_Object_EnablePhysics(cashregister0, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
 			H3_Object_EnablePhysics(cashregister1, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
 			H3_Object_EnablePhysics(cashregister2, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
