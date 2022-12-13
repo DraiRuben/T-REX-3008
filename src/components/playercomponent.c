@@ -87,11 +87,11 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	{
 		props->speed = 1.65 * props->slowdown;
 		props->IsShift = true;
-		H3_Sound_Play(props->RunSFX, 10,true);
+		//H3_Sound_Play(props->RunSFX, 10,true);
 	}
 	else
 	{
-		H3_Sound_Stop(props->RunSFX);
+		//H3_Sound_Stop(props->RunSFX);
 		props->speed = 1 * props->slowdown;
 		props->IsShift = false;
 	}
