@@ -15,6 +15,7 @@ void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Ha
 
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, bool, IsTemp);
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, bool, IsAggro);
+H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, bool, IsStunned);
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, bool, ResetIndexes);
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, float, AggroTimer);
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, float, FollowTimer);

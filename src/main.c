@@ -17,6 +17,8 @@
 #include "components/SpawnerComponent.h"
 #include "components/monsterecomponent.h"
 #include "components/aislespawnercomponent.h"
+#include "components/cashregistercomponent.h"
+#include "components/digicodecomponent.h"
 
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
@@ -154,7 +156,7 @@ int main()
 			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/Sprites/p.png", 0x22));
 			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE(&IsWin, &IsEndGame, &IsNewGame, energyBar));
-			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE());
+			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE(&GameScene,&energyBar));
 			H3_Object_SetTranslation(player, 1750, 2100);
 
 			//camera
@@ -180,35 +182,6 @@ int main()
 			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 10);
 			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops, &IsNewWave));
 
-			//Monstere
-			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 2);
-			H3_Object_AddComponent(monstere, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
-			H3_Object_AddComponent(monstere, COLLECTABLECOMPONENT_CREATE());
-			H3_Object_AddComponent(monstere, MONSTERECOMPONENT_CREATE(player, energyBar));
-			H3_Object_EnablePhysics(monstere, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
-			H3_Object_Translate(monstere, 1750, 2100);
-
-			H3Handle monstere1 = H3_Object_Create2(GameScene, "monstere1", NULL, 2);
-			H3_Object_AddComponent(monstere1, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
-			H3_Object_AddComponent(monstere1, COLLECTABLECOMPONENT_CREATE());
-			H3_Object_AddComponent(monstere1, MONSTERECOMPONENT_CREATE(player, energyBar));
-			H3_Object_EnablePhysics(monstere1, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
-			H3_Object_Translate(monstere1, 1750, 2100);
-
-			H3Handle monstere2 = H3_Object_Create2(GameScene, "monstere2", NULL, 2);
-			H3_Object_AddComponent(monstere2, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
-			H3_Object_AddComponent(monstere2, COLLECTABLECOMPONENT_CREATE());
-			H3_Object_AddComponent(monstere2, MONSTERECOMPONENT_CREATE(player, energyBar));
-			H3_Object_EnablePhysics(monstere2, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
-			H3_Object_Translate(monstere2, 1750, 2100);
-
-			H3Handle monstere3 = H3_Object_Create2(GameScene, "monstere3", NULL, 2);
-			H3_Object_AddComponent(monstere3, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
-			H3_Object_AddComponent(monstere3, COLLECTABLECOMPONENT_CREATE());
-			H3_Object_AddComponent(monstere3, MONSTERECOMPONENT_CREATE(player, energyBar));
-			H3_Object_EnablePhysics(monstere3, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
-			H3_Object_Translate(monstere3, 1750, 2100);
-
 			//Inventory Slots
 			H3Handle slot0 = H3_Object_Create2(GameScene, "inventory, slot 0", camera, 10);	//pocket 2
 			H3Handle slot1 = H3_Object_Create2(GameScene, "inventory, slot 1", camera, 10);	//pocket 1
@@ -220,7 +193,7 @@ int main()
 			H3_Object_SetTranslation(slot1, 185, -115);
 			H3_Object_SetTranslation(slot2, 150, -115);
 			
-			//gradient
+			//shadow effect
 			H3Handle gradient = H3_Object_Create2(GameScene, "gradient", camera, 9);
 			H3Handle gradient1 = H3_Object_Create2(GameScene, "gradient1", camera, 9);
 			H3Handle gradient2 = H3_Object_Create2(GameScene, "gradient2", camera, 9);
@@ -234,6 +207,40 @@ int main()
 			H3_Object_AddComponent(gradient3, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
 			H3_Object_AddComponent(gradient4, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
 			H3_Object_AddComponent(gradient5, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+
+			//Digicodes
+			H3Handle digicode = H3_Object_Create2(GameScene, "digicode", camera, 10);
+			H3_Object_AddComponent(digicode, SPRITECOMPONENT_CREATE("assets/Sprites/Digicode.png", 0x22));
+			H3_Object_AddComponent(digicode, DIGICODECOMPONENT_CREATE(camera));
+			H3_Object_SetTranslation(digicode, -185, 0);
+			H3_Object_SetEnabled(digicode, false);
+
+			//cash registers
+			bool cashregisterIsOpen = false;
+			H3Handle cashregister0 = H3_Object_Create2(GameScene, "caisse0", NULL, 4);
+			H3Handle cashregister1 = H3_Object_Create2(GameScene, "caisse1", NULL, 4);
+			H3Handle cashregister2 = H3_Object_Create2(GameScene, "caisse2", NULL, 4);
+			H3Handle cashregister3 = H3_Object_Create2(GameScene, "caisse3", NULL, 4);
+			H3Handle cashregister4 = H3_Object_Create2(GameScene, "caisse4", NULL, 4);
+			H3Handle cashregister5 = H3_Object_Create2(GameScene, "caisse5", NULL, 4);
+			H3_Object_AddComponent(cashregister0, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
+			H3_Object_AddComponent(cashregister1, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
+			H3_Object_AddComponent(cashregister2, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
+			H3_Object_AddComponent(cashregister3, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
+			H3_Object_AddComponent(cashregister4, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
+			H3_Object_AddComponent(cashregister5, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen));
+			H3_Object_EnablePhysics(cashregister0, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_EnablePhysics(cashregister1, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_EnablePhysics(cashregister2, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_EnablePhysics(cashregister3, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_EnablePhysics(cashregister4, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_EnablePhysics(cashregister5, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_SetTranslation(cashregister0, 1504, 1248);
+			H3_Object_SetTranslation(cashregister1, 1504, 1376);
+			H3_Object_SetTranslation(cashregister2, 1504, 1536);
+			H3_Object_SetTranslation(cashregister3, 1504, 1696);
+			H3_Object_SetTranslation(cashregister4, 1504, 1856);
+			H3_Object_SetTranslation(cashregister5, 1504, 2016);
 
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
