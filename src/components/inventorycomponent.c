@@ -80,18 +80,46 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 		else if (CollectableComponent_GettypeEx(props->triggerObj) == 3) {
 			CollectableComponent_SetdurabilityEx(props->triggerObj, CollectableComponent_GetdurabilityEx(props->triggerObj) - 1);
 			snprintf(Object, 256, "object_%d", object_index++);
-			H3Handle Projectile = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
-			H3_Object_AddComponent(Projectile, SPRITECOMPONENT_CREATE("assets/Objects/book.png", 0x22));
-			H3_Object_AddComponent(Projectile, COLLECTABLECOMPONENT_CREATE(4, 1));
-			H3_Object_AddComponent(Projectile, PROJECTILECOMPONENT_CREATE(object));
-			H3_Object_EnablePhysics(Projectile, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
-			props->ObjSlot2 = Projectile;
+			H3Handle Book = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
+			H3_Object_AddComponent(Book, SPRITECOMPONENT_CREATE("assets/Objects/book.png", 0x22));
+			H3_Object_AddComponent(Book, COLLECTABLECOMPONENT_CREATE(4, 1));
+			H3_Object_AddComponent(Book, PROJECTILECOMPONENT_CREATE(object));
+			H3_Object_EnablePhysics(Book, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
+			props->ObjSlot2 = Book;
 		}
-		//book object
-		else if (CollectableComponent_GettypeEx(props->triggerObj) == 4 && !ProjectileComponent_GetIsLaunchedEx(props->triggerObj)) {
-			props->ObjSlot2 = props->triggerObj;
+		//bakery Aisle
+		else if (CollectableComponent_GettypeEx(props->triggerObj) == 5) {
+			CollectableComponent_SetdurabilityEx(props->triggerObj, CollectableComponent_GetdurabilityEx(props->triggerObj) - 1);
+			snprintf(Object, 256, "object_%d", object_index++);
+			H3Handle Baguette = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
+			H3_Object_AddComponent(Baguette, SPRITECOMPONENT_CREATE("assets/Objects/baguette.png", 0x22));
+			H3_Object_AddComponent(Baguette, COLLECTABLECOMPONENT_CREATE(6, 1));
+			H3_Object_AddComponent(Baguette, PROJECTILECOMPONENT_CREATE(object));
+			H3_Object_EnablePhysics(Baguette, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
+			props->ObjSlot2 = Baguette;
 		}
 		
+		//butcher Aisle
+		else if (CollectableComponent_GettypeEx(props->triggerObj) == 7) {
+			CollectableComponent_SetdurabilityEx(props->triggerObj, CollectableComponent_GetdurabilityEx(props->triggerObj) - 1);
+			snprintf(Object, 256, "object_%d", object_index++);
+			H3Handle Meat = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
+			H3_Object_AddComponent(Meat, SPRITECOMPONENT_CREATE("assets/Objects/meat.png", 0x22));
+			H3_Object_AddComponent(Meat, COLLECTABLECOMPONENT_CREATE(8, 1));
+			H3_Object_AddComponent(Meat, PROJECTILECOMPONENT_CREATE(object));
+			H3_Object_EnablePhysics(Meat, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
+			props->ObjSlot2 = Meat;
+		}
+		//object on the ground
+		else if ((CollectableComponent_GettypeEx(props->triggerObj) == 8 
+			|| CollectableComponent_GettypeEx(props->triggerObj) == 6
+			|| CollectableComponent_GettypeEx(props->triggerObj) == 4)
+			&& !ProjectileComponent_GetIsLaunchedEx(props->triggerObj)) {
+			props->ObjSlot2 = props->triggerObj;
+		}
+		else if (CollectableComponent_GettypeEx(props->triggerObj) == 9) {
+			props->ObjSlot2 = props->triggerObj;
+		}
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 	}
 
@@ -111,9 +139,19 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3_Object_SetRenderOrder(props->ObjSlot2, 12);
 			props->triggerObj = NULL;
 		}
+		
 	}
 	
 }
+
+
+void InventoryComponent_Draw(H3Handle h3, SH3Transform* transform, void* properties) {
+	InventoryComponent_Properties* props = (InventoryComponent_Properties*)properties;
+	if (props->ObjSlot2 != NULL) {
+		H3_Texture_Draw(h3, props->playerX+5, props->playerY-10, SpriteComponent_GetTextureEx(props->ObjSlot2), 0x22);
+	}
+}
+
 
 void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision)
 {
@@ -124,7 +162,7 @@ void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision)
 	{
 		if (H3_Object_HasComponent(collision.other, COLLECTABLECOMPONENT_TYPEID))
 		{
-			if (CollectableComponent_GettypeEx(collision.other) == 4){
+			if (H3_Object_HasComponent(collision.other, PROJECTILECOMPONENT_TYPEID)) {
 				if (!ProjectileComponent_GetIsLaunchedEx(collision.other)) {
 					props->triggerObj = collision.other;
 					props->nbTrigger++;
@@ -147,14 +185,21 @@ void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other)
 	{
 		if (H3_Object_HasComponent(other, COLLECTABLECOMPONENT_TYPEID))
 		{
-			if (CollectableComponent_GettypeEx(other) == 4) {
+			if (CollectableComponent_GettypeEx(other) == 4
+				|| CollectableComponent_GettypeEx(other) == 6 
+				|| CollectableComponent_GettypeEx(other) == 8) {
 				if (!ProjectileComponent_GetIsLaunchedEx(other)) {
 					props->nbTrigger--;
 					if (props->nbTrigger == 0)
 						props->triggerObj = NULL;
 				}
+				else {
+					props->nbTrigger--;
+					if (props->nbTrigger == 0)
+						props->triggerObj = NULL;
+				}
 			}
-			else {
+			else if (CollectableComponent_GettypeEx(other) == 9) {
 				props->nbTrigger--;
 				if (props->nbTrigger == 0)
 					props->triggerObj = NULL;
