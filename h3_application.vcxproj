@@ -166,7 +166,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\components\aislespawnercomponent.c" />
-    <ClCompile Include="src\components\casecomponent.c" />
+    <ClCompile Include="src\components\cashregistercomponent.c" />
     <ClCompile Include="src\components\ClockComponent.c" />
     <ClCompile Include="src\components\collectablecomponent.c" />
     <ClCompile Include="src\components\Credits.c" />
@@ -177,6 +177,7 @@
     <ClCompile Include="src\components\monsterecomponent.c" />
     <ClCompile Include="src\components\mycameracomponent.c" />
     <ClCompile Include="src\components\playercomponent.c" />
+    <ClCompile Include="src\components\projectileComponent.c" />
     <ClCompile Include="src\components\raycastcomponent.c" />
     <ClCompile Include="src\components\Settings.c" />
     <ClCompile Include="src\components\SpawnerComponent.c" />
@@ -185,7 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\components\aislespawnercomponent.h" />
-    <ClInclude Include="Include\components\casecomponent.h" />
+    <ClInclude Include="Include\components\cashregistercomponent.h" />
     <ClInclude Include="Include\components\ClockComponent.h" />
     <ClInclude Include="Include\components\collectablecomponent.h" />
     <ClInclude Include="Include\components\Credits.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Include\components\monsterecomponent.h" />
     <ClInclude Include="Include\components\mycameracomponent.h" />
     <ClInclude Include="Include\components\playercomponent.h" />
+    <ClInclude Include="Include\components\projectileComponent.h" />
     <ClInclude Include="Include\components\raycastcomponent.h" />
     <ClInclude Include="Include\components\Settings.h" />
     <ClInclude Include="Include\components\SpawnerComponent.h" />

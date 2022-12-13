@@ -1,4 +1,4 @@
-#include <components/casecomponent.h>
+#include <components/cashregistercomponent.h>
 
 #include <components/playercomponent.h>
 #include <components/digicodecomponent.h>
@@ -10,18 +10,18 @@ typedef struct
 {
 	H3Handle digicode;
 	bool* isOpen;
-} CaseComponent_Properties;
+} CashRegisterComponent_Properties;
 
-void CaseComponent_Terminate(void* properties)
+void CashRegisterComponent_Terminate(void* properties)
 {
 	free(properties);
 }
 
-void CaseComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties)
+void CashRegisterComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties)
 {
-	CaseComponent_Properties* props = (CaseComponent_Properties*)properties;
+	CashRegisterComponent_Properties* props = (CashRegisterComponent_Properties*)properties;
 
-	//open case
+	//open cashregister
 	if (!*props->isOpen && DigicodeComponent_GetrealCodeEx(props->digicode) == 904)
 	{
 		*props->isOpen = true;
@@ -32,24 +32,21 @@ void CaseComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform,
 	}
 }
 
-void CaseComponent_CollisionEnter(H3Handle object, SH3Collision collision)
+void CashRegisterComponent_CollisionEnter(H3Handle object, SH3Collision collision)
 {
-	SH3Component* component = H3_Object_GetComponent(object, CASECOMPONENT_TYPEID);
-	CaseComponent_Properties* props = (CaseComponent_Properties*)component->properties;
+	SH3Component* component = H3_Object_GetComponent(object, CASHREGISTERCOMPONENT_TYPEID);
+	CashRegisterComponent_Properties* props = (CashRegisterComponent_Properties*)component->properties;
 
-	if (!*props->isOpen) {
-		printf("dhefg\n");
-	}
 	if (!*props->isOpen && collision.other != NULL && H3_Object_HasComponent(collision.other, PLAYERCOMPONENT_TYPEID))
 	{
 		H3_Object_SetEnabled(props->digicode, true);
 	}
 }
 
-void CaseComponent_CollisionLeave(H3Handle object, H3Handle other)
+void CashRegisterComponent_CollisionLeave(H3Handle object, H3Handle other)
 {
-	SH3Component* component = H3_Object_GetComponent(object, CASECOMPONENT_TYPEID);
-	CaseComponent_Properties* props = (CaseComponent_Properties*)component->properties;
+	SH3Component* component = H3_Object_GetComponent(object, CASHREGISTERCOMPONENT_TYPEID);
+	CashRegisterComponent_Properties* props = (CashRegisterComponent_Properties*)component->properties;
 
 	if (!*props->isOpen && other != NULL && H3_Object_HasComponent(other, PLAYERCOMPONENT_TYPEID))
 	{
@@ -76,14 +73,14 @@ void resetCode(H3Handle digicode)
 }
 /*----------------------------------------------------*/
 
-void* CaseComponent_CreateProperties(H3Handle Digicode, bool* caseIsOpen)
+void* CashRegisterComponent_CreateProperties(H3Handle Digicode, bool* cashregisterIsOpen)
 {
-	CaseComponent_Properties* properties = malloc(sizeof(CaseComponent_Properties));
+	CashRegisterComponent_Properties* properties = malloc(sizeof(CashRegisterComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 
 	properties->digicode = Digicode;
 	//properties->isOpen = false;
-	properties->isOpen = caseIsOpen;
+	properties->isOpen = cashregisterIsOpen;
 
 	return properties;
 }

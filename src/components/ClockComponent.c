@@ -6,10 +6,8 @@
 #include <math.h>
 typedef struct
 {
-	//clock pos
-	float x, y;
 	bool IsInitialized;
-
+	bool* IsNewWave;
 	//time
 	char time[256];
 	float minutes;
@@ -30,15 +28,18 @@ void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform
 		H3_Object_SetTranslation(object, 0, -125);
 		props->IsInitialized = true;
 	}
+
 	//flow of time
 	props->minutes += 0.5*H3_GetDeltaTime();
 	if (props->minutes >= 60) {
 		if (props->hours == 23) {
+			
 			props->hours = 0;
 		}
 		else {
 			props->hours += 1;
 		}
+		*props->IsNewWave = true;
 		props->minutes = 0;
 	}
 	//concatenate hours and min into a char
@@ -58,13 +59,16 @@ void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform
 	TextComponent_SetTextEx(object, props->time);
 }
 
-void* ClockComponent_CreateProperties(SH3TextProperties* textprops)
+void* ClockComponent_CreateProperties(SH3TextProperties* textprops, bool* IsNewWave)
 {
 	ClockComponent_Properties* properties = malloc(sizeof(ClockComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	properties->minutes = 30;
+	properties->IsNewWave = IsNewWave;
 	properties->hours = 20;
 	properties->IsInitialized = false;
 	properties->textprops = textprops;
 	return properties;
 }
+
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(ClockComponent, CLOCKCOMPONENT_TYPEID, float, hours);

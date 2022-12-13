@@ -35,14 +35,14 @@ void MonstereComponent_PreUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 			TirednessComponent_SetrecovEnergyEx(props->energyBar, 1);
 			//remove from inventory
 			InventoryComponent_SetObjSlot2Ex(props->player, NULL);
-			H3_Object_Destroy(object, false);
+			CollectableComponent_SetdurabilityEx(object, CollectableComponent_GetdurabilityEx(object) - 1);
 		}
 		else if (TirednessComponent_GetrecovEnergyEx(props->energyBar) == 1)
 		{
 			TirednessComponent_SetrecovEnergyEx(props->energyBar, 2);
 			//remove from inventory
 			InventoryComponent_SetObjSlot2Ex(props->player, NULL);
-			H3_Object_Destroy(object, false);
+			CollectableComponent_SetdurabilityEx(object, CollectableComponent_GetdurabilityEx(object) - 1);
 		}
 	}
 }
