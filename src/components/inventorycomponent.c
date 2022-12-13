@@ -162,11 +162,17 @@ void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision)
 	{
 		if (H3_Object_HasComponent(collision.other, COLLECTABLECOMPONENT_TYPEID))
 		{
-			if (H3_Object_HasComponent(collision.other, PROJECTILECOMPONENT_TYPEID)) {
+			if (CollectableComponent_GettypeEx(collision.other) == 4
+				|| CollectableComponent_GettypeEx(collision.other) == 6
+				|| CollectableComponent_GettypeEx(collision.other) == 8) {
 				if (!ProjectileComponent_GetIsLaunchedEx(collision.other)) {
 					props->triggerObj = collision.other;
 					props->nbTrigger++;
 				}
+			}
+			else if (CollectableComponent_GettypeEx(collision.other) == 9) {
+				props->triggerObj = collision.other;
+				props->nbTrigger++;
 			}
 			else {
 				props->triggerObj = collision.other;
@@ -186,20 +192,19 @@ void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other)
 		if (H3_Object_HasComponent(other, COLLECTABLECOMPONENT_TYPEID))
 		{
 			if (CollectableComponent_GettypeEx(other) == 4
-				|| CollectableComponent_GettypeEx(other) == 6 
+				|| CollectableComponent_GettypeEx(other) == 6
 				|| CollectableComponent_GettypeEx(other) == 8) {
 				if (!ProjectileComponent_GetIsLaunchedEx(other)) {
-					props->nbTrigger--;
-					if (props->nbTrigger == 0)
-						props->triggerObj = NULL;
-				}
-				else {
-					props->nbTrigger--;
-					if (props->nbTrigger == 0)
-						props->triggerObj = NULL;
+					props->triggerObj = other;
+					props->nbTrigger++;
 				}
 			}
 			else if (CollectableComponent_GettypeEx(other) == 9) {
+				props->nbTrigger--;
+				if (props->nbTrigger == 0)
+					props->triggerObj = NULL;
+			}
+			else {
 				props->nbTrigger--;
 				if (props->nbTrigger == 0)
 					props->triggerObj = NULL;
