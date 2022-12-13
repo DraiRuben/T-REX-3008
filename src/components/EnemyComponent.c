@@ -12,6 +12,7 @@
 
 typedef struct
 {
+	bool IsStunned;
 	bool* IsNewWave;
 	bool IsAggro;
 	bool ResetIndexes;
@@ -36,7 +37,7 @@ typedef struct
 	float RaycastTimer;
 	float AggroTimer;
 	float FollowTimer;
-
+	float StunTimer;
 	//indexes to go through lists
 	int index;
 	int index2;
@@ -85,7 +86,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 		}
 		//move periodically in choosen direction
 		props->IdleMoveTimer += H3_GetDeltaTime();
-		if (props->IdleMoveTimer > 2) {
+		if (props->IdleMoveTimer > 2&& !props->IsStunned) {
 			if (props->direction == 1) {
 				H3_Object_SetVelocity(object, -50, 0);
 			}
@@ -144,8 +145,8 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 		distancetemp = sqrtf((props->px[props->index2] - props->x) * (props->px[props->index2] - props->x) + (props->py[props->index2] - props->y) * (props->py[props->index2] - props->y));
 		H3_Transform_GetPosition(transform, &props->x, &props->y);
 		H3_Transform_GetPosition(H3_Object_GetTransform(*props->player), &px, &py);
-		if (!props->isTouchPlayer) {
-			H3_Object_SetVelocity(object, (props->px[props->index2] - props->x) / distancetemp * 150, (props->py[props->index2] - props->y) / distancetemp * 150);
+		if (!props->isTouchPlayer && !props->IsStunned) {
+			H3_Object_SetVelocity(object, (props->px[props->index2] - props->x) / distancetemp * 110, (props->py[props->index2] - props->y) / distancetemp * 110);
 		}
 		if (fabs( props->px[props->index2]-props->x ) < 10 && fabs(props->py[props->index2]-props->y) < 10) {
 			props->index2 += 1;
@@ -153,7 +154,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 		
 		//if not seen for 5 sec (15 if during wave) then stop aggro
 		props->AggroTimer -= H3_GetDeltaTime();
-		if (props->RaycastTimer > 1) {
+		if (props->RaycastTimer > 1&& !props->IsStunned) {
 			*props->raycast_index += 1;
 			snprintf(props->raycasts, 256, "ray_%d", *props->raycast_index);
 			props->raycasting = H3_Object_Create(*props->GameScene, props->raycasts, NULL);
@@ -176,7 +177,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 		}
 		//raycast check obstacle each second to reset aggrotimer if needed
 		props->RaycastTimer += H3_GetDeltaTime();
-		if (distance < 200 && props->RaycastTimer>1) {
+		if (distance < 200 && props->RaycastTimer>1&& !props->IsStunned) {
 			*props->raycast_index += 1;
 			snprintf(props->raycasts, 256, "ray_%d", *props->raycast_index);
 			props->raycasting = H3_Object_Create(*props->GameScene, props->raycasts, NULL);
@@ -206,6 +207,17 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 			globalAggroOff = 0;
 		}
 	}
+	//for projectile and melee stun
+	if (props->IsStunned) {
+		props->StunTimer += H3_GetDeltaTime();
+		if (props->StunTimer > 0.5) {
+			H3_Object_SetVelocity(object, 0, 0);
+		}
+		if (props->StunTimer > 3) {
+			props->IsStunned = false;
+			props->StunTimer = 0;
+		}
+	}
 }
 
 
@@ -227,6 +239,7 @@ void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Ha
 	properties->RaycastTimer = 0;
 	properties->AggroTimer = 5;
 	properties->FollowTimer = 8;
+	properties->StunTimer = 0;
 	properties->index = 0;
 	properties->index2 = 0;
 	properties->IsAggro = false;
@@ -258,6 +271,7 @@ void EnemyCollisionLeave(H3Handle object, H3Handle other) {
 
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, bool, IsTemp);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, bool, IsAggro);
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, bool, IsStunned);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, bool, ResetIndexes);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, float, AggroTimer);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(EnemyComponent, ENEMYCOMPONENT_TYPEID, float, FollowTimer);

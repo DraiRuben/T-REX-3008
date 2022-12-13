@@ -1,5 +1,7 @@
 #include "components/AisleSpawnerComponent.h"
 #include "components/spritecomponent.h"
+#include "components/collectablecomponent.h"
+
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
@@ -39,10 +41,14 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 					if (props->aisleID <= 100 && props->aisleID>90) {
 						limit -= 10;
 						H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->monsterAisle, 0x11));
+						H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(1,33));
+						H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 264, 82, 0x11, true));
 						IsMonsterInitialized = true;
 					}
 					else if (props->aisleID <= 90 && props->aisleID>75) {
 						H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->schoolAisle, 0x11));
+						H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(3, 15));
+						H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 264, 82, 0x11, true));
 					}
 					else if (props->aisleID <= 75) {
 						H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->uselessAisle, 0x11));
@@ -51,6 +57,8 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 				else {
 					limit -= 10;
 					H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->monsterAisle, 0x11));
+					H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(1,33));
+					H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 264, 82, 0x11, true));
 					IsMonsterInitialized = true;
 				}
 
