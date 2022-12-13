@@ -4,19 +4,22 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "components/mycameracomponent.h"
+#include "components/playercomponent.h"
 #include "components/MainMenu.h"
 #include "components/Credits.h"
 #include "components/Settings.h"
-#include "components/tirednesscomponent.h"
-#include "components/mycameracomponent.h"
 #include "components/ClockComponent.h"
-#include "components/playercomponent.h"
 #include "components/EnemyComponent.h"
+#include "components/aislespawnercomponent.h"
+#include "components/SpawnerComponent.h"
 #include "components/inventorycomponent.h"
 #include "components/collectablecomponent.h"
-#include "components/SpawnerComponent.h"
+#include "components/casecomponent.h"
 #include "components/monsterecomponent.h"
-#include "components/aislespawnercomponent.h"
+#include "components/tirednesscomponent.h"
+#include "components/digicodecomponent.h"
+
 
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
@@ -129,11 +132,11 @@ int main()
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
 			H3Handle maplayer = H3_Object_Create2(GameScene, "layer floor", NULL,1);
 			H3_Object_AddComponent(maplayer, MAPLAYERCOMPONENT_CREATE(map, "floor"));
-			H3Handle maplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL, 4);
+			H3Handle maplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL, 5);
 			H3_Object_AddComponent(maplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
-			H3Handle maplayer1 = H3_Object_Create2(GameScene, "layer object", NULL,4);
+			H3Handle maplayer1 = H3_Object_Create2(GameScene, "layer object", NULL,3);
 			H3_Object_AddComponent(maplayer1, MAPLAYERCOMPONENT_CREATE(map, "object"));
-			H3Handle maplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL,5);
+			H3Handle maplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL,4);
 			H3_Object_AddComponent(maplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
 			
 			//Random Aisle Init
@@ -141,7 +144,7 @@ int main()
 			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene));
 
 			//related objects
-			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
+			H3Handle player = H3_Object_Create2(GameScene, "player", NULL, 4);
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
 			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 10);
 			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
@@ -167,7 +170,7 @@ int main()
 			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 10);
 			H3_Object_AddComponent(time, CLOCKCOMPONENT_CREATE(&clockprops));
 
-			//gradient
+			//shadow effect
 			H3Handle gradient = H3_Object_Create2(GameScene, "gradient", camera, 9);
 			H3Handle gradient1 = H3_Object_Create2(GameScene, "gradient1", camera, 9);
 			H3Handle gradient2 = H3_Object_Create2(GameScene, "gradient2", camera, 9);
@@ -181,6 +184,40 @@ int main()
 			H3_Object_AddComponent(gradient3, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
 			H3_Object_AddComponent(gradient4, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
 			H3_Object_AddComponent(gradient5, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
+
+			//Digicodes
+			H3Handle digicode = H3_Object_Create2(GameScene, "digicode", camera, 10);
+			H3_Object_AddComponent(digicode, SPRITECOMPONENT_CREATE("assets/Sprites/Digicode.png", 0x22));
+			H3_Object_AddComponent(digicode, DIGICODECOMPONENT_CREATE(camera));
+			H3_Object_SetTranslation(digicode, -185, 0);
+			H3_Object_SetEnabled(digicode, false);
+
+			//cash cases
+			bool caseIsOpen = false;
+			H3Handle case0 = H3_Object_Create2(GameScene, "caisse0", NULL, 4);
+			H3Handle case1 = H3_Object_Create2(GameScene, "caisse1", NULL, 4);
+			H3Handle case2 = H3_Object_Create2(GameScene, "caisse2", NULL, 4);
+			H3Handle case3 = H3_Object_Create2(GameScene, "caisse3", NULL, 4);
+			H3Handle case4 = H3_Object_Create2(GameScene, "caisse4", NULL, 4);
+			H3Handle case5 = H3_Object_Create2(GameScene, "caisse5", NULL, 4);
+			H3_Object_AddComponent(case0, CASECOMPONENT_CREATE(digicode, &caseIsOpen));
+			H3_Object_AddComponent(case1, CASECOMPONENT_CREATE(digicode, &caseIsOpen));
+			H3_Object_AddComponent(case2, CASECOMPONENT_CREATE(digicode, &caseIsOpen));
+			H3_Object_AddComponent(case3, CASECOMPONENT_CREATE(digicode, &caseIsOpen));
+			H3_Object_AddComponent(case4, CASECOMPONENT_CREATE(digicode, &caseIsOpen));
+			H3_Object_AddComponent(case5, CASECOMPONENT_CREATE(digicode, &caseIsOpen));
+			H3_Object_EnablePhysics(case0, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_EnablePhysics(case1, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_EnablePhysics(case2, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_EnablePhysics(case3, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_EnablePhysics(case4, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_EnablePhysics(case5, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+			H3_Object_SetTranslation(case0, 1504, 1248);
+			H3_Object_SetTranslation(case1, 1504, 1376);
+			H3_Object_SetTranslation(case2, 1504, 1536);
+			H3_Object_SetTranslation(case3, 1504, 1696);
+			H3_Object_SetTranslation(case4, 1504, 1856);
+			H3_Object_SetTranslation(case5, 1504, 2016);
 			
 			//enemies init
 			bool IsWave = false;
@@ -189,28 +226,28 @@ int main()
 			
 
 			//Monstere
-			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 2);
+			H3Handle monstere = H3_Object_Create2(GameScene, "monstere", NULL, 3);
 			H3_Object_AddComponent(monstere, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_AddComponent(monstere, MONSTERECOMPONENT_CREATE(player, energyBar));
 			H3_Object_EnablePhysics(monstere, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere, 1750, 2100);
 
-			H3Handle monstere1 = H3_Object_Create2(GameScene, "monstere1", NULL, 2);
+			H3Handle monstere1 = H3_Object_Create2(GameScene, "monstere1", NULL, 3);
 			H3_Object_AddComponent(monstere1, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere1, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_AddComponent(monstere1, MONSTERECOMPONENT_CREATE(player, energyBar));
 			H3_Object_EnablePhysics(monstere1, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere1, 1750, 2100);
 
-			H3Handle monstere2 = H3_Object_Create2(GameScene, "monstere2", NULL, 2);
+			H3Handle monstere2 = H3_Object_Create2(GameScene, "monstere2", NULL, 3);
 			H3_Object_AddComponent(monstere2, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere2, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_AddComponent(monstere2, MONSTERECOMPONENT_CREATE(player, energyBar));
 			H3_Object_EnablePhysics(monstere2, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			H3_Object_Translate(monstere2, 1750, 2100);
 
-			H3Handle monstere3 = H3_Object_Create2(GameScene, "monstere3", NULL, 2);
+			H3Handle monstere3 = H3_Object_Create2(GameScene, "monstere3", NULL, 3);
 			H3_Object_AddComponent(monstere3, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(monstere3, COLLECTABLECOMPONENT_CREATE());
 			H3_Object_AddComponent(monstere3, MONSTERECOMPONENT_CREATE(player, energyBar));

@@ -27,12 +27,11 @@ void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform
 	//clock creation
 	if (!props->IsInitialized) {
 		H3_Object_AddComponent(object, TEXTCOMPONENT_CREATE(props->time, *props->textprops));
-		H3_Transform_GetPosition(transform, &props->x, &props->y);
-		H3_Object_SetTranslation(object, props->x, props->y - 125);
+		H3_Object_SetTranslation(object, 0, -125);
 		props->IsInitialized = true;
 	}
 	//flow of time
-	props->minutes += 0.25*H3_GetDeltaTime();
+	props->minutes += 0.5*H3_GetDeltaTime();
 	if (props->minutes >= 60) {
 		if (props->hours == 23) {
 			props->hours = 0;
