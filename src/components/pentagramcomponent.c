@@ -37,7 +37,7 @@ void* PentagramComponent_CreateProperties(const char* path)
 	return properties;
 }
 float vx, vy;
-
+//changes sprite when in contact with meat
 void PentagramTriggerEnter(H3Handle object, SH3Collision obj_id) {
 	SH3Component* component = H3_Object_GetComponent(object, PENTAGRAMCOMPONENT_TYPEID);
 	PentagramComponent_Properties* props = (PentagramComponent_Properties*)(component->properties);

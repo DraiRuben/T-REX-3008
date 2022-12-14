@@ -10,6 +10,7 @@ typedef struct
 	bool* IsNewGame;
 	bool* IsWin;
 
+	//texture stuff
 	uint32_t w, h;
 	H3Handle TextureEnd;
 	H3Handle NewGameBtn;
