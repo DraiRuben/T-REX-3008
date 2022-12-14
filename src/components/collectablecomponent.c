@@ -64,3 +64,5 @@ H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECO
 //type 7 = meatAisle
 //type 8 = Meat
 //type 9 = Black Key
+//type 10 = fishAisle
+//type 11 = fish
