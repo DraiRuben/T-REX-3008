@@ -178,9 +178,9 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 
 void InventoryComponent_Draw(H3Handle h3, SH3Transform* transform, void* properties) {
 	InventoryComponent_Properties* props = (InventoryComponent_Properties*)properties;
-	if (props->ObjSlot2 != NULL) {
+	/*if (props->ObjSlot2 != NULL) {
 		H3_Texture_Draw(h3, props->playerX+5, props->playerY-10, SpriteComponent_GetTextureEx(props->ObjSlot2), 0x22);
-	}
+	}*/
 }
 
 
