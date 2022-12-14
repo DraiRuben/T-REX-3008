@@ -48,6 +48,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 	SpawnerComponent_Properties* props = (SpawnerComponent_Properties*)properties;
 	//for normal spawn
 	H3_Transform_GetPosition(H3_Object_GetTransform(*props->player), &px, &py);
+	//adds permanent enemies in idle state
 	while (i < props->amount)
 	{
 		H3_Transform_GetPosition(H3_Object_GetTransform(*props->player), &props->x, &props->y);
@@ -75,7 +76,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 		H3_Object_SetTranslation(enemy, props->x, props->y);
 
 		i += 1;
-		//ui je sais c'est pas bien de faire dormir le programme
+		//I know...
 		Sleep(1);
 	}		
 	//for wave every hour

@@ -76,10 +76,6 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3_Object_EnablePhysics(Monster, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Monster;
 		}
-		//monster can
-		else if (CollectableComponent_GettypeEx(props->triggerObj) == 2) {
-			props->ObjSlot2 = props->triggerObj;
-		}
 		//book Aisle
 		else if (CollectableComponent_GettypeEx(props->triggerObj) == 3) {
 			CollectableComponent_SetdurabilityEx(props->triggerObj, CollectableComponent_GetdurabilityEx(props->triggerObj) - 1);
@@ -133,7 +129,9 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			&& !ProjectileComponent_GetIsLaunchedEx(props->triggerObj)) {
 			props->ObjSlot2 = props->triggerObj;
 		}
-		else if (CollectableComponent_GettypeEx(props->triggerObj) == 9 || CollectableComponent_GettypeEx(props->triggerObj) == 14) {
+		else if (CollectableComponent_GettypeEx(props->triggerObj) == 2
+			||CollectableComponent_GettypeEx(props->triggerObj) == 9
+			|| CollectableComponent_GettypeEx(props->triggerObj) == 14) {
 			props->ObjSlot2 = props->triggerObj;
 		}
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
@@ -176,10 +174,17 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	if (props->ObjSlot2 != NULL) {
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 		H3_Object_SetTranslation(props->ObjSlot2, (props->playerX + 150), (props->playerY - 115));
-		if (props->triggerObj!= NULL && CollectableComponent_GettypeEx(props->triggerObj) != 1) {
+		if (props->triggerObj!= NULL 
+			//allows for picking up multiple items in single trigger instance
+			&& CollectableComponent_GettypeEx(props->triggerObj) != 1
+			&& CollectableComponent_GettypeEx(props->triggerObj) != 3
+			&& CollectableComponent_GettypeEx(props->triggerObj) != 5
+			&& CollectableComponent_GettypeEx(props->triggerObj) !=7
+			&& CollectableComponent_GettypeEx(props->triggerObj) !=10) {
 			H3_Object_SetRenderOrder(props->ObjSlot2, 12);
 			if (CollectableComponent_GettypeEx(props->triggerObj) != 12
-				&& CollectableComponent_GettypeEx(props->triggerObj) != 13) {
+				&& CollectableComponent_GettypeEx(props->triggerObj) != 13
+				&&CollectableComponent_GettypeEx(props->triggerObj) != 2) {
 				props->triggerObj = NULL;
 			}
 		}
@@ -196,7 +201,7 @@ void InventoryComponent_Draw(H3Handle h3, SH3Transform* transform, void* propert
 	}*/
 }
 
-
+//register trigger object and trigger count
 void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision)
 {
 	SH3Component* component = H3_Object_GetComponent(object, INVENTORYCOMPONENT_TYPEID);

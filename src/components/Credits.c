@@ -24,8 +24,10 @@ void CreditsComponent_Terminate(void* properties)
 void CreditsComponent_Draw(H3Handle h3, SH3Transform* transform, void* properties)
 {
 	CreditsComponent_Properties* props = (CreditsComponent_Properties*)properties;
+	//background image
 	H3_Texture_Draw(h3, 0, 0, props->TextureMain, A_Top + A_Left);
 	H3_Texture_Draw(h3, 0, 0, props->TextureMain2, A_Top + A_Left);
+	//backbutton
 	if (H3_Button(h3, props->BackBtn, 800, 700, 0x11)) {
 		*props->IsMainMenu = true;
 		*props->IsCredits = false;

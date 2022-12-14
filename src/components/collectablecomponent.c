@@ -34,6 +34,7 @@ void CollectableComponent_Update(H3Handle h3, H3Handle object, SH3Transform* tra
 	{
 		props->isDoneOnce = false;
 	}
+	//destroy if durability reaches 0
 	if (props->durability <= 0) {
 		H3_Object_Destroy(object, false);
 	}
