@@ -171,11 +171,13 @@
     <ClCompile Include="src\components\collectablecomponent.c" />
     <ClCompile Include="src\components\Credits.c" />
     <ClCompile Include="src\components\digicodecomponent.c" />
+    <ClCompile Include="src\components\EndMenu.c" />
     <ClCompile Include="src\components\EnemyComponent.c" />
     <ClCompile Include="src\components\inventorycomponent.c" />
     <ClCompile Include="src\components\MainMenu.c" />
     <ClCompile Include="src\components\monsterecomponent.c" />
     <ClCompile Include="src\components\mycameracomponent.c" />
+    <ClCompile Include="src\components\pentagramcomponent.c" />
     <ClCompile Include="src\components\playercomponent.c" />
     <ClCompile Include="src\components\projectileComponent.c" />
     <ClCompile Include="src\components\raycastcomponent.c" />
@@ -191,11 +193,13 @@
     <ClInclude Include="Include\components\collectablecomponent.h" />
     <ClInclude Include="Include\components\Credits.h" />
     <ClInclude Include="Include\components\digicodecomponent.h" />
+    <ClInclude Include="Include\components\EndMenu.h" />
     <ClInclude Include="Include\components\EnemyComponent.h" />
     <ClInclude Include="Include\components\inventorycomponent.h" />
     <ClInclude Include="Include\components\MainMenu.h" />
     <ClInclude Include="Include\components\monsterecomponent.h" />
     <ClInclude Include="Include\components\mycameracomponent.h" />
+    <ClInclude Include="Include\components\pentagramcomponent.h" />
     <ClInclude Include="Include\components\playercomponent.h" />
     <ClInclude Include="Include\components\projectileComponent.h" />
     <ClInclude Include="Include\components\raycastcomponent.h" />

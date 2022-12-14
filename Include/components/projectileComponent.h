@@ -3,7 +3,7 @@
 
 #include <h3.h>
 
-#define PROJECTILECOMPONENT_TYPEID 0x10000010
+#define PROJECTILECOMPONENT_TYPEID 0x1000007
 
 H3_CAPI_BEGIN_BLOCK
 void ProjectileComponent_Terminate(void* properties);

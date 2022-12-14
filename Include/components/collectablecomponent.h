@@ -18,13 +18,13 @@ H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, int, durabil
 
 H3_CAPI_END_BLOCK
 
-#define COLLECTABLECOMPONENT_CREATE(TYPE, DURABILITY, DOORCOLL)									 \
+#define COLLECTABLECOMPONENT_CREATE(TYPE,DURABILITY,DOORCOLL)									 \
 	(SH3Component) {                                                 \
 		.Terminate          = CollectableComponent_Terminate,          \
 		.Update             = CollectableComponent_Update,             \
 		.isInitialized      = false,                                 \
 		.componentType      = COLLECTABLECOMPONENT_TYPEID,             \
-		.properties         = CollectableComponent_CreateProperties(TYPE, DURABILITY, DOORCOLL)  \
+		.properties         = CollectableComponent_CreateProperties(TYPE,DURABILITY,DOORCOLL)  \
 	}
 
 #endif /* _H3_COMPONENTS_COLLECTABLECOMPONENT_H_ */
