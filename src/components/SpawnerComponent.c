@@ -68,7 +68,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 		snprintf(props->enemies, 256, "enemy_%d", props->enemy_index++);
 		H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
 		H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
-		H3_Object_AddComponent(enemy, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Enemy/EnemyRunDown.png", 0x22, 6, 0.25, true));
+		H3_Object_AddComponent(enemy, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Enemy/EnemyIdleDown.png", 0x22, 6, 0.25, true));
 		H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro, false));
 		H3_Object_SetTranslation(enemy, props->x, props->y);
 
@@ -101,7 +101,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 			snprintf(props->enemies, 256, "enemy_%d", props->enemy_index++);
 			H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
 			H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
-			H3_Object_AddComponent(enemy, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Enemy/EnemyRunDown.png", 0x22, 6, 0.25, true));
+			H3_Object_AddComponent(enemy, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Enemy/EnemyIdleDown.png", 0x22, 6, 0.25, true));
 			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro,true));
 			H3_Object_SetTranslation(enemy, props->x, props->y);
 			Sleep(1);

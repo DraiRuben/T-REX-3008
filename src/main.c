@@ -129,7 +129,7 @@ int main()
 			H3Handle fullBar = H3_Texture_Load("assets/Sprites/AllBar.png", &barWidth, &barHeight);
 			H3Handle backBar = H3_Texture_Load("assets/Sprites/EmptyBar.png", &backBarWidth, &backBarHeight);
 
-			
+			bool IsFinalRush = false;
 			//music
 			H3Handle music = H3_Music_Load("assets/SFX/AmbiantSFX.wav");
 			H3_Music_Play(music, 1, true);
@@ -147,15 +147,17 @@ int main()
 			H3Handle maplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL, 6);
 			H3_Object_AddComponent(maplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
 			
-			//Random Aisle Init
-			H3Handle AisleSpawner = H3_Object_Create(GameScene, "AisleSpawner", NULL);
-			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene));
+			
 
 			//related objects
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
 			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 10);
 			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
+
+			//Random Aisle Init
+			H3Handle AisleSpawner = H3_Object_Create(GameScene, "AisleSpawner", NULL);
+			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene, &player));
 
 			//player
 			H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/player/PlayerMovefront.png", 0x22, 6, 0.2, true));
@@ -257,11 +259,9 @@ int main()
 		//end Game Menu
 		if (IsEndGame) {
 			H3Handle EndGameScene = H3_Scene_Create(screen, true);
-			H3Handle cam = H3_Object_Create(EndGameScene, "cam", NULL);
-			H3_Object_AddComponent(cam, CAMERACOMPONENT_CREATE(480,270));
-			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime", cam);
+			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime",NULL);
 			H3_Object_AddComponent(EndTime, TEXTCOMPONENT_CREATE(FinalTime, clockprops));
-			H3_Object_SetTranslation(EndTime, 0, -110);
+			H3_Object_SetTranslation(EndTime, 220, 900);
 			while (IsEndGame)
 			{
 				H3_DoFrame(screen, EndGameScene);
