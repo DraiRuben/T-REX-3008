@@ -1,6 +1,7 @@
 #include <components/playercomponent.h>
 
 #include <components/tirednesscomponent.h>
+#include <components/animatedspritecomponent.h>
 
 #include <stdlib.h>
 
@@ -11,7 +12,22 @@ typedef struct
 	float pvx, pvy;
 	bool IsSprint;
 	bool IsShift;
+	bool IsMovingV;
+	bool IsMovingH;
+	int direction; //0 = right, 1 = up, 2 = left, 3 = down
+	int RunSFXonce;
 	float slowdown; // slowdown when tiredness is high
+
+	//anim texture
+	uint32_t TxW, TxH;
+	H3Handle TxRunDown;
+	H3Handle TxRunUp;
+	H3Handle TxRunLeft;
+	H3Handle TxRunRight;
+	H3Handle TxIdleDown;
+	H3Handle TxIdleUp;
+	H3Handle TxIdleLeft;
+	H3Handle TxIdleRight;
 
 	bool* pt_isWin;
 	bool* pt_isEnd;
@@ -29,73 +45,68 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 {
 	PlayerComponent_Properties* props = (PlayerComponent_Properties*)properties;
 
-	//movement Vertical
-	if (H3_Input_IsKeyDown(K_Z)|| H3_Input_IsKeyDown(K_W)||H3_Input_IsGamepadBtnDown(GB_DPad_Up)|| H3_Input_IsKeyDown(K_Up))
-	{
-		if (props->IsShift) {
-			props->IsSprint = true;
-		}
-		else {
-			props->IsSprint = false;
-		}
-		props->pvy = -125;
-	}
-	else if (H3_Input_IsKeyDown(K_S)||H3_Input_IsKeyDown(K_Down) || H3_Input_IsGamepadBtnDown(GB_DPad_Down))
-	{
-		if (props->IsShift) {
-			props->IsSprint = true;
-		}
-		else {
-			props->IsSprint = false;
-		}
-		props->pvy = 125;
-	}
-	else
-	{
-		props->IsSprint = false;
-		props->pvy = 0;
-	}
-
 	//movement horizontal
-	if (H3_Input_IsKeyDown(K_Q)||H3_Input_IsKeyDown(K_A) || H3_Input_IsGamepadBtnDown(GB_DPad_Left) || H3_Input_IsKeyDown(K_Left))
+	if (H3_Input_IsKeyDown(K_Q) || H3_Input_IsKeyDown(K_A) || H3_Input_IsGamepadBtnDown(GB_DPad_Left) || H3_Input_IsKeyDown(K_Left))
 	{
-		if (props->IsShift) {
-			props->IsSprint = true;
-		}
-		else {
-			props->IsSprint = false;
-		}
+		props->IsMovingH = true;
 		props->pvx = -125;
+		props->direction = 2; // left
 	}
 	else if (H3_Input_IsKeyDown(K_D) || H3_Input_IsKeyDown(K_Right) || H3_Input_IsGamepadBtnDown(GB_DPad_Right))
 	{
-		if (props->IsShift) {
-			props->IsSprint = true;
-		}
-		else {
-			props->IsSprint = false;
-		}
+		props->IsMovingH = true;
 		props->pvx = 125;
+		props->direction = 0; // right
 	}
 	else
 	{
-		props->IsSprint = false;
+		props->IsMovingH = false;
 		props->pvx = 0;
 	}
+
+	//movement Vertical
+	if (H3_Input_IsKeyDown(K_Z)|| H3_Input_IsKeyDown(K_W)||H3_Input_IsGamepadBtnDown(GB_DPad_Up)|| H3_Input_IsKeyDown(K_Up))
+	{
+		props->IsMovingV = true;
+		props->pvy = -125;
+		props->direction = 1; // up
+	}
+	else if (H3_Input_IsKeyDown(K_S)||H3_Input_IsKeyDown(K_Down) || H3_Input_IsGamepadBtnDown(GB_DPad_Down))
+	{
+		props->IsMovingV = true;
+		props->pvy = 125;
+		props->direction = 3; // down
+	}
+	else
+	{
+		props->IsMovingV = false;
+		props->pvy = 0;
+	}
+
 	//sprint
 	if (H3_Input_IsKeyDown(K_Shift) || H3_Input_IsGamepadBtnDown(GB_A))
 	{
 		props->speed = 1.65 * props->slowdown;
 		props->IsShift = true;
-		//H3_Sound_Play(props->RunSFX, 10,true);
+		
 	}
 	else
 	{
-		//H3_Sound_Stop(props->RunSFX);
 		props->speed = 1 * props->slowdown;
 		props->IsShift = false;
 	}
-
+	if ((props->IsMovingH || props->IsMovingV) && props->IsShift) {
+		props->IsSprint = true;
+		props->RunSFXonce += 1;
+	}
+	else {
+		props->RunSFXonce = 0;
+		H3_Sound_Stop(props->RunSFX);
+		props->IsSprint = false;
+	}
+	if (props->RunSFXonce==1) {
+		H3_Sound_Play(props->RunSFX, 80, true);
+	}
 	H3_Object_SetVelocity(object, props->pvx * props->speed, props->pvy * props->speed);
 
 	//player death
@@ -105,6 +116,44 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 		*props->pt_isGame	= false;
 		*props->pt_isEnd	= true;
 	}
+
+	//animation
+	if (props->IsMovingH || props->IsMovingV) {
+		//run
+		if (props->direction == 1) {
+			AnimatedSpriteComponent_SetTextureEx(object, props->TxRunUp);
+		}
+		else if (props->direction == 3) {
+			AnimatedSpriteComponent_SetTextureEx(object, props->TxRunDown);
+		}
+		else if (props->direction == 2) {
+			AnimatedSpriteComponent_SetTextureEx(object, props->TxRunLeft);
+		}
+		else if (props->direction == 0) {
+			AnimatedSpriteComponent_SetTextureEx(object, props->TxRunRight);
+		}
+	}
+	else {
+		//idle
+		if (props->direction == 1) {
+			AnimatedSpriteComponent_SetTextureEx(object, props->TxIdleUp);
+		}
+		else if (props->direction == 3) {
+			AnimatedSpriteComponent_SetTextureEx(object, props->TxIdleDown);
+		}
+		else if (props->direction == 2) {
+			AnimatedSpriteComponent_SetTextureEx(object, props->TxIdleLeft);
+		}
+		else if (props->direction == 0) {
+			AnimatedSpriteComponent_SetTextureEx(object, props->TxIdleRight);
+		}
+	}
+
+	//accelerate anim when sprint
+	if (props->IsSprint)
+		AnimatedSpriteComponent_SetFrameDurationEx(object, 0.1);
+	else
+		AnimatedSpriteComponent_SetFrameDurationEx(object, 0.2);
 }
 
 void* PlayerComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInGame, H3Handle energyBarRef)
@@ -112,14 +161,29 @@ void* PlayerComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInG
 	PlayerComponent_Properties* properties = malloc(sizeof(PlayerComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	properties->RunSFX = H3_Sound_Load("assets/SFX/RunSFX.wav");
+	properties->RunSFXonce = 0;
 	properties->pt_isWin	= isWin;
 	properties->pt_isEnd	= isEndGame;
 	properties->pt_isGame	= isInGame;
 	properties->energyBar	= energyBarRef;
-
 	properties->speed = 1;
+	properties->IsMovingV = false;
+	properties->IsMovingH = false;
 	properties->IsSprint = false;
 	properties->IsShift = false;
+
+	//load texture anim
+	properties->TxRunDown	= H3_Texture_Load("assets/Sprites/player/PlayerMovefront.png", &properties->TxW, &properties->TxH);
+	properties->TxRunUp		= H3_Texture_Load("assets/Sprites/player/PlayerMoveBehind.png", &properties->TxW, &properties->TxH);
+	properties->TxRunLeft	= H3_Texture_Load("assets/Sprites/player/PlayerMoveLeft.png", &properties->TxW, &properties->TxH);
+	properties->TxRunRight	= H3_Texture_Load("assets/Sprites/player/PlayerMoveRight.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleDown	= H3_Texture_Load("assets/Sprites/player/PlayerIdleFront.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleUp	= H3_Texture_Load("assets/Sprites/player/PlayerIdlebehind.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleLeft	= H3_Texture_Load("assets/Sprites/player/PlayerIdleLeft.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleRight	= H3_Texture_Load("assets/Sprites/player/playerIdleRight.png", &properties->TxW, &properties->TxH);
+
+
+	properties->direction = 3; //down
 	return properties;
 }
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(PlayerComponent,PLAYERCOMPONENT_TYPEID, bool, IsSprint);

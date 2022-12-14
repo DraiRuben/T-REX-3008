@@ -154,9 +154,8 @@ int main()
 			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
 
 			//player
-			H3_Object_AddComponent(player, SPRITECOMPONENT_CREATE("assets/Sprites/p.png", 0x22));
-			//H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/EnemyIdle.png", 0x22, 4, 1, true));
-			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 20, 30, 0x22, false));
+			H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/player/PlayerMovefront.png", 0x22, 6, 0.2, true));
+			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 32, 48, 0x22, false));
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE(&IsWin, &IsEndGame, &IsNewGame, energyBar));
 			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE(&GameScene,&energyBar));
 			H3_Object_SetTranslation(player, 1750, 2100);
