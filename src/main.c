@@ -25,6 +25,7 @@
 #include "components/maplayercomponent.h"
 #include "components/cameracomponent.h"
 #include "components/animatedspritecomponent.h"
+#include "components/EndMenu.h"
 
 #ifndef NDEBUG
 # pragma comment(lib, "h3-s-d.lib")
@@ -256,12 +257,18 @@ int main()
 
 		//end Game Menu
 		if (IsEndGame) {
+		
 			H3Handle EndGameScene = H3_Scene_Create(screen, true);
-			H3Handle cam = H3_Object_Create(EndGameScene, "cam", NULL);
-			H3_Object_AddComponent(cam, CAMERACOMPONENT_CREATE(480,270));
-			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime", cam);
+
+			H3Handle EndView = H3_Object_Create(EndGameScene, "EndView", NULL);
+			H3_Object_SetTranslation(EndView, 960, 540);
+			H3_SetView(screen, H3_Object_GetTransform(EndView), 1920, 1080);
+
+			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime", NULL);
+			H3_Object_AddComponent(EndTime, ENDMENUCOMPONENT_CREATE(&IsEndGame, &IsNewGame,&IsWin));
 			H3_Object_AddComponent(EndTime, TEXTCOMPONENT_CREATE(FinalTime, clockprops));
-			H3_Object_SetTranslation(EndTime, 0, -110);
+			H3_Object_SetTranslation(EndTime, 0, 0);
+
 			while (IsEndGame)
 			{
 				H3_DoFrame(screen, EndGameScene);

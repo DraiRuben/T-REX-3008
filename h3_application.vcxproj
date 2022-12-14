@@ -165,6 +165,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Include\components\EndMenu.c" />
     <ClCompile Include="src\components\aislespawnercomponent.c" />
     <ClCompile Include="src\components\cashregistercomponent.c" />
     <ClCompile Include="src\components\ClockComponent.c" />
@@ -191,6 +192,7 @@
     <ClInclude Include="Include\components\collectablecomponent.h" />
     <ClInclude Include="Include\components\Credits.h" />
     <ClInclude Include="Include\components\digicodecomponent.h" />
+    <ClInclude Include="Include\components\EndMenu.h" />
     <ClInclude Include="Include\components\EnemyComponent.h" />
     <ClInclude Include="Include\components\inventorycomponent.h" />
     <ClInclude Include="Include\components\MainMenu.h" />
