@@ -175,13 +175,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	if (props->ObjSlot2 != NULL) {
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 		H3_Object_SetTranslation(props->ObjSlot2, (props->playerX + 150), (props->playerY - 115));
-		if (props->triggerObj!= NULL 
-			//allows for picking up multiple items in single trigger instance
-			&& CollectableComponent_GettypeEx(props->triggerObj) != 1
-			&& CollectableComponent_GettypeEx(props->triggerObj) != 3
-			&& CollectableComponent_GettypeEx(props->triggerObj) != 5
-			&& CollectableComponent_GettypeEx(props->triggerObj) !=7
-			&& CollectableComponent_GettypeEx(props->triggerObj) !=10) {
+		if (props->triggerObj!= NULL){
 			H3_Object_SetRenderOrder(props->ObjSlot2, 12);
 			if (CollectableComponent_GettypeEx(props->triggerObj) != 12
 				&& CollectableComponent_GettypeEx(props->triggerObj) != 13
