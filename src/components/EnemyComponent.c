@@ -120,7 +120,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 		}
 		//raycast check obstacle at certain disance between player and bot each second except for tempBots
 		props->RaycastTimer += H3_GetDeltaTime();
-		if (distance < 200 && props->RaycastTimer>0.2&& !props->IsTemp) {
+		if (distance < 200 && props->RaycastTimer>0.2) {
 			*props->raycast_index += 1;
 			snprintf(props->raycasts, 256, "ray_%d", *props->raycast_index);
 			props->raycasting = H3_Object_Create(*props->GameScene, props->raycasts, NULL);
@@ -272,11 +272,11 @@ void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Ha
 	properties->player = player;
 
 	//texture animation
-	properties->TxRunDown	= H3_Texture_Load("assets/Sprites/player/PlayerMovefront.png", &properties->TxW, &properties->TxH);
-	properties->TxRunUp		= H3_Texture_Load("assets/Sprites/player/PlayerMoveBehind.png", &properties->TxW, &properties->TxH);
-	properties->TxRunLeft	= H3_Texture_Load("assets/Sprites/player/PlayerMoveLeft.png", &properties->TxW, &properties->TxH);
-	properties->TxRunRight	= H3_Texture_Load("assets/Sprites/player/PlayerMoveRight.png", &properties->TxW, &properties->TxH);
-	properties->TxIdleDown	= H3_Texture_Load("assets/Sprites/player/PlayerMovefront.png", &properties->TxW, &properties->TxH);
+	properties->TxRunDown	= H3_Texture_Load("assets/Sprites/Enemy/EnemyMoveRun.png", &properties->TxW, &properties->TxH);
+	properties->TxRunUp		= H3_Texture_Load("assets/Sprites/Enemy/EnemyRunUp.png", &properties->TxW, &properties->TxH);
+	properties->TxRunLeft	= H3_Texture_Load("assets/Sprites/Enemy/EnemyRunLeft.png", &properties->TxW, &properties->TxH);
+	properties->TxRunRight	= H3_Texture_Load("assets/Sprites/Enemy/EnemyRunRight.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleDown	= H3_Texture_Load("assets/Sprites/Enemy/EnemyIdleDown.png", &properties->TxW, &properties->TxH);
 
 	return properties;
 }

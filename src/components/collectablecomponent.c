@@ -68,4 +68,6 @@ H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECO
 //type 9 = Black Key
 //type 10 = fishAisle
 //type 11 = fish
-//type 12 = Door
+//type 12 = Reserve Door 
+//type 13 = Exit Door
+//type 14 = crowbar
