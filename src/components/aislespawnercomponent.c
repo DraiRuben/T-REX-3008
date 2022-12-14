@@ -46,13 +46,13 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 					if (props->aisleID <= 100 && props->aisleID>90) {
 						limit -= 10;
 						H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->monsterAisle, 0x11));
-						H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(1,33));
+						H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(1,33,NULL));
 						H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 264, 82, 0x11, true));
 						IsMonsterInitialized = true;
 					}
 					else if (props->aisleID <= 90 && props->aisleID>75) {
 						H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->schoolAisle, 0x11));
-						H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(3, 15));
+						H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(3, 15,NULL));
 						H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 264, 82, 0x11, true));
 					}
 					else if (props->aisleID <= 75) {
@@ -62,7 +62,7 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 				else {
 					limit -= 10;
 					H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->monsterAisle, 0x11));
-					H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(1,33));
+					H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(1,33,NULL));
 					H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 264, 82, 0x11, true));
 					IsMonsterInitialized = true;
 				}
@@ -82,7 +82,7 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 			snprintf(props->AisleTempName, 256, "Aisle_%d", props->AisleTempIndex);
 			H3Handle Aisle = H3_Object_Create2(*props->GameScene, props->AisleTempName, NULL, 5);
 			H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->bakeryAisle, 0x11));
-			H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(5, 8));
+			H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(5, 8,NULL));
 			H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 144, 80, 0x11, true));
 			H3_Object_SetTranslation(Aisle, 824 + i * 192, 2256);
 		}
@@ -93,7 +93,7 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 				snprintf(props->AisleTempName, 256, "Aisle_%d", props->AisleTempIndex);
 				H3Handle Aisle = H3_Object_Create2(*props->GameScene, props->AisleTempName, NULL, 5);
 				H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->butcherAisle, 0x11));
-				H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(7, 4));
+				H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(7, 4,NULL));
 				H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 96, 48, 0x11, true));
 				H3_Object_SetTranslation(Aisle, 80 + u * 160, 1616+ i*96);
 			}
@@ -105,17 +105,17 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 				snprintf(props->AisleTempName, 256, "Aisle_%d", props->AisleTempIndex);
 				H3Handle Aisle = H3_Object_Create2(*props->GameScene, props->AisleTempName, NULL, 5);
 				H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->fishAisle, 0x11));
-				H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(10, 2));
+				H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(10, 2,NULL));
 				H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 96, 48, 0x11, true));
 				H3_Object_SetTranslation(Aisle, 48 + u * 128, 2256 + i * 116);
 			}
 		}
 		//reserve door
 		H3Handle Door = H3_Object_Create2(*props->GameScene, "Door", NULL, 5);
+		H3Handle DoorColl = H3_Object_Create2(*props->GameScene, "DoorColl", NULL, 5);
 		H3_Object_AddComponent(Door, SPRITECOMPONENT_CREATE(props->Door, 0x11));
-		H3_Object_AddComponent(Door, COLLECTABLECOMPONENT_CREATE(10, 2));
-		H3_Object_EnablePhysics(Door, H3_BOX_COLLIDER(CDT_Static, 96, 64, 0x11, true));
-		H3Handle DoorColl= H3_Object_Create2(*props->GameScene, "DoorColl", NULL, 5);
+		H3_Object_AddComponent(Door, COLLECTABLECOMPONENT_CREATE(12, 2,DoorColl));
+		H3_Object_EnablePhysics(Door, H3_BOX_COLLIDER(CDT_Static, 110, 100, 0x11, true));
 		H3_Object_EnablePhysics(DoorColl, H3_BOX_COLLIDER(CDT_Static, 90, 58, 0x11, false));
 		H3_Object_SetTranslation(DoorColl, 58, 1120);
 		H3_Object_SetTranslation(Door,58,1120);

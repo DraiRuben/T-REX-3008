@@ -11,6 +11,7 @@ void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform
 
 void* ClockComponent_CreateProperties(SH3TextProperties* textprops,bool* IsNewWave);
 
+H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(ClockComponent, char, time);
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(ClockComponent, float, hours);
 
 H3_CAPI_END_BLOCK

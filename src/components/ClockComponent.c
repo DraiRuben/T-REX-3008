@@ -57,6 +57,7 @@ void ClockComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform
 	}
 	//enter time in textcomp
 	TextComponent_SetTextEx(object, props->time);
+	
 }
 
 void* ClockComponent_CreateProperties(SH3TextProperties* textprops, bool* IsNewWave)
@@ -70,5 +71,5 @@ void* ClockComponent_CreateProperties(SH3TextProperties* textprops, bool* IsNewW
 	properties->textprops = textprops;
 	return properties;
 }
-
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(ClockComponent, CLOCKCOMPONENT_TYPEID, char, time);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(ClockComponent, CLOCKCOMPONENT_TYPEID, float, hours);
