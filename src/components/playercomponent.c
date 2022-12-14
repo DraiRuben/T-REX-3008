@@ -16,6 +16,7 @@ typedef struct
 	bool IsMovingH;
 	int direction; //0 = right, 1 = up, 2 = left, 3 = down
 	int RunSFXonce;
+	int WalkSFXonce;
 	float slowdown; // slowdown when tiredness is high
 
 	//anim texture
@@ -34,6 +35,7 @@ typedef struct
 	bool* pt_isGame;
 	H3Handle energyBar;
 	H3Handle RunSFX;
+	H3Handle WalkSFX;
 } PlayerComponent_Properties;
 
 void PlayerComponent_Terminate(void* properties)
@@ -96,22 +98,37 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 		props->IsShift = false;
 	}
 	if ((props->IsMovingH || props->IsMovingV) && props->IsShift) {
+		H3_Sound_Stop(props->WalkSFX);
+		props->WalkSFXonce = 0;
 		props->IsSprint = true;
 		props->RunSFXonce += 1;
 	}
+	else if (props->IsMovingH || props->IsMovingV) {
+		H3_Sound_Stop(props->RunSFX);
+		props->RunSFXonce = 0;
+		props->WalkSFXonce += 1;
+		props->IsSprint = false;
+	}
 	else {
+		props->WalkSFXonce = 0;
 		props->RunSFXonce = 0;
 		H3_Sound_Stop(props->RunSFX);
+		H3_Sound_Stop(props->WalkSFX);
 		props->IsSprint = false;
 	}
 	if (props->RunSFXonce==1) {
 		H3_Sound_Play(props->RunSFX, 80, true);
+	}
+	if (props->WalkSFXonce == 1) {
+		H3_Sound_Play(props->WalkSFX, 80, true);
 	}
 	H3_Object_SetVelocity(object, props->pvx * props->speed, props->pvy * props->speed);
 
 	//player death
 	if (TirednessComponent_GettirednessEx(props->energyBar) >= 1)
 	{
+		H3_Sound_Stop(props->WalkSFX);
+		H3_Sound_Stop(props->RunSFX);
 		*props->pt_isWin	= false;
 		*props->pt_isGame	= false;
 		*props->pt_isEnd	= true;
@@ -161,7 +178,9 @@ void* PlayerComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInG
 	PlayerComponent_Properties* properties = malloc(sizeof(PlayerComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	properties->RunSFX = H3_Sound_Load("assets/SFX/RunSFX.wav");
+	properties->WalkSFX = H3_Sound_Load("assets/SFX/WalkSFX.wav");
 	properties->RunSFXonce = 0;
+	properties->WalkSFXonce = 0;
 	properties->pt_isWin	= isWin;
 	properties->pt_isEnd	= isEndGame;
 	properties->pt_isGame	= isInGame;

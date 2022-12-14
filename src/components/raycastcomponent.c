@@ -20,7 +20,7 @@ void RaycastComponent_Terminate(void* properties)
 void RaycastComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties) {
 	RaycastComponent_Properties* props = (RaycastComponent_Properties*)properties;
 	props->DestroyTimer += H3_GetDeltaTime();
-	if (props->DestroyTimer > 3) {
+	if (props->DestroyTimer > 3||props->Owner==NULL) {
 		H3_Object_Destroy(object,false);
 	}
 	

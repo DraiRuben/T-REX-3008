@@ -9,6 +9,7 @@ typedef struct
 	int type;
 	bool isDoneOnce;
 	bool isInHand;
+	H3Handle DoorColl;
 } CollectableComponent_Properties;
 
 void CollectableComponent_Terminate(void* properties)
@@ -38,10 +39,11 @@ void CollectableComponent_Update(H3Handle h3, H3Handle object, SH3Transform* tra
 	}
 }
 
-void* CollectableComponent_CreateProperties(int type, int durability)
+void* CollectableComponent_CreateProperties(int type, int durability, H3Handle DoorColl)
 {
 	CollectableComponent_Properties* properties = malloc(sizeof(CollectableComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
+	properties->DoorColl = DoorColl;
 	properties->type = type;
 	properties->durability = durability;
 	properties->isInHand = false;
@@ -49,7 +51,7 @@ void* CollectableComponent_CreateProperties(int type, int durability)
 
 	return properties;
 }
-
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECOMPONENT_TYPEID, H3Handle, DoorColl);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECOMPONENT_TYPEID, bool, isInHand);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECOMPONENT_TYPEID, int, type);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECOMPONENT_TYPEID, int, durability);
@@ -64,3 +66,6 @@ H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECO
 //type 7 = meatAisle
 //type 8 = Meat
 //type 9 = Black Key
+//type 10 = fishAisle
+//type 11 = fish
+//type 12 = Door
