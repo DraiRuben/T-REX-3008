@@ -241,6 +241,13 @@ int main()
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 			}
+			//set gameover text
+			if (IsWin) {
+				snprintf(FinalTime, 256, "                   You Escaped at: %s\n Who knows what dreadful fate would've befell upon you", TextComponent_GetTextEx(time));
+			}
+			else {
+				snprintf(FinalTime, 256, "                   You Died at: %s\n You shall forever be part of this place", TextComponent_GetTextEx(time));
+			}
 			H3_Music_Stop(music);
 			H3_Scene_Destroy(GameScene);
 		}
@@ -254,13 +261,7 @@ int main()
 			H3_Object_SetTranslation(EndView, 960, 540);
 			H3_SetView(screen, H3_Object_GetTransform(EndView), 1920, 1080);
 
-			//set gameover text
-			if (IsWin) {
-				snprintf(FinalTime, 256, "                   You Escaped at: %s\n Who knows what dreadful fate would've befell upon you", TextComponent_GetTextEx(time));
-			}
-			else {
-				snprintf(FinalTime, 256, "                   You Died at: %s\n You shall forever be part of this place", TextComponent_GetTextEx(time));
-			}
+			
 			//create and display gameover text
 			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime", NULL);
 			H3_Object_AddComponent(EndTime, ENDMENUCOMPONENT_CREATE(&IsEndGame, &IsNewGame, &IsWin));
