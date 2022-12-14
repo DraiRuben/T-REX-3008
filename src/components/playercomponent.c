@@ -1,7 +1,6 @@
 #include <components/playercomponent.h>
 
 #include <components/tirednesscomponent.h>
-
 #include <stdlib.h>
 
 typedef struct
@@ -11,6 +10,9 @@ typedef struct
 	float pvx, pvy;
 	bool IsSprint;
 	bool IsShift;
+	bool IsMovingV;
+	bool IsMovingH;
+	int RunSFXonce;
 	float slowdown; // slowdown when tiredness is high
 
 	bool* pt_isWin;
@@ -32,54 +34,35 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	//movement Vertical
 	if (H3_Input_IsKeyDown(K_Z)|| H3_Input_IsKeyDown(K_W)||H3_Input_IsGamepadBtnDown(GB_DPad_Up)|| H3_Input_IsKeyDown(K_Up))
 	{
-		if (props->IsShift) {
-			props->IsSprint = true;
-		}
-		else {
-			props->IsSprint = false;
-		}
+		props->IsMovingV = true;
 		props->pvy = -125;
 	}
 	else if (H3_Input_IsKeyDown(K_S)||H3_Input_IsKeyDown(K_Down) || H3_Input_IsGamepadBtnDown(GB_DPad_Down))
 	{
-		if (props->IsShift) {
-			props->IsSprint = true;
-		}
-		else {
-			props->IsSprint = false;
-		}
+		props->IsMovingV = true;
 		props->pvy = 125;
 	}
 	else
 	{
-		props->IsSprint = false;
+		props->IsMovingV = false;
 		props->pvy = 0;
 	}
 
 	//movement horizontal
 	if (H3_Input_IsKeyDown(K_Q)||H3_Input_IsKeyDown(K_A) || H3_Input_IsGamepadBtnDown(GB_DPad_Left) || H3_Input_IsKeyDown(K_Left))
 	{
-		if (props->IsShift) {
-			props->IsSprint = true;
-		}
-		else {
-			props->IsSprint = false;
-		}
+		props->IsMovingH = true;
 		props->pvx = -125;
 	}
 	else if (H3_Input_IsKeyDown(K_D) || H3_Input_IsKeyDown(K_Right) || H3_Input_IsGamepadBtnDown(GB_DPad_Right))
 	{
-		if (props->IsShift) {
-			props->IsSprint = true;
-		}
-		else {
-			props->IsSprint = false;
-		}
+		props->IsMovingH = true;
+
 		props->pvx = 125;
 	}
 	else
 	{
-		props->IsSprint = false;
+		props->IsMovingH = false;
 		props->pvx = 0;
 	}
 	//sprint
@@ -87,15 +70,25 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	{
 		props->speed = 1.65 * props->slowdown;
 		props->IsShift = true;
-		//H3_Sound_Play(props->RunSFX, 10,true);
+		
 	}
 	else
 	{
-		//H3_Sound_Stop(props->RunSFX);
 		props->speed = 1 * props->slowdown;
 		props->IsShift = false;
 	}
-
+	if ((props->IsMovingH || props->IsMovingV) && props->IsShift) {
+		props->IsSprint = true;
+		props->RunSFXonce += 1;
+	}
+	else {
+		props->RunSFXonce = 0;
+		H3_Sound_Stop(props->RunSFX);
+		props->IsSprint = false;
+	}
+	if (props->RunSFXonce==1) {
+		H3_Sound_Play(props->RunSFX, 80, true);
+	}
 	H3_Object_SetVelocity(object, props->pvx * props->speed, props->pvy * props->speed);
 
 	//player death
@@ -112,12 +105,14 @@ void* PlayerComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInG
 	PlayerComponent_Properties* properties = malloc(sizeof(PlayerComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	properties->RunSFX = H3_Sound_Load("assets/SFX/RunSFX.wav");
+	properties->RunSFXonce = 0;
 	properties->pt_isWin	= isWin;
 	properties->pt_isEnd	= isEndGame;
 	properties->pt_isGame	= isInGame;
 	properties->energyBar	= energyBarRef;
-
 	properties->speed = 1;
+	properties->IsMovingV = false;
+	properties->IsMovingH = false;
 	properties->IsSprint = false;
 	properties->IsShift = false;
 	return properties;
