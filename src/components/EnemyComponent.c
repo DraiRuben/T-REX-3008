@@ -2,6 +2,7 @@
 #include "components/playercomponent.h"
 #include "components/tirednesscomponent.h"
 #include "components/spritecomponent.h"
+#include "components/animatedspritecomponent.h"
 #include "components/raycastcomponent.h"
 #include "components/SpawnerComponent.h"
 #include "components/ClockComponent.h"
@@ -50,8 +51,16 @@ typedef struct
 	//ref to player and scene
 	H3Handle* player;
 	H3Handle* GameScene;
-
 	H3Handle energyBar;
+
+	//texture animation
+	//anim texture
+	uint32_t TxW, TxH;
+	H3Handle TxRunDown;
+	H3Handle TxRunUp;
+	H3Handle TxRunLeft;
+	H3Handle TxRunRight;
+	H3Handle TxIdleDown;
 } EnemyComponent_Properties;
 
 
@@ -59,12 +68,14 @@ void EnemyComponent_Terminate(void* properties)
 {
 	free(properties);
 }
+
 //player pos in map
 float px, py;
 //distance between player and enemy for vector normalization
 float distance;
 float distancetemp;
 float globalAggroOff = 0;
+
 void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties) {
 	EnemyComponent_Properties* props = (EnemyComponent_Properties*)properties;
 	//tracks player and enemy position
@@ -109,7 +120,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 		}
 		//raycast check obstacle at certain disance between player and bot each second except for tempBots
 		props->RaycastTimer += H3_GetDeltaTime();
-		if (distance < 200 && props->RaycastTimer>1&& !props->IsTemp) {
+		if (distance < 200 && props->RaycastTimer>0.2&& !props->IsTemp) {
 			*props->raycast_index += 1;
 			snprintf(props->raycasts, 256, "ray_%d", *props->raycast_index);
 			props->raycasting = H3_Object_Create(*props->GameScene, props->raycasts, NULL);
@@ -125,9 +136,6 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 	if (props->IsAggro == true) {
 		//go to player position once to start loop
 		props->FollowTimer += H3_GetDeltaTime();
-		if (props->FollowTimer >= 7) {
-			H3_Object_SetVelocity(object, (px - props->x) / distance * 500, (py - props->y) / distance * 500);
-		}
 		if (props->ResetIndexes) {
 			props->index = 0;
 			props->index2 = 0;
@@ -154,7 +162,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 		
 		//if not seen for 5 sec (15 if during wave) then stop aggro
 		props->AggroTimer -= H3_GetDeltaTime();
-		if (props->RaycastTimer > 1&& !props->IsStunned) {
+		if (props->RaycastTimer > 0.2&& !props->IsStunned) {
 			*props->raycast_index += 1;
 			snprintf(props->raycasts, 256, "ray_%d", *props->raycast_index);
 			props->raycasting = H3_Object_Create(*props->GameScene, props->raycasts, NULL);
@@ -177,7 +185,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 		}
 		//raycast check obstacle each second to reset aggrotimer if needed
 		props->RaycastTimer += H3_GetDeltaTime();
-		if (distance < 200 && props->RaycastTimer>1&& !props->IsStunned) {
+		if (distance < 200 && props->RaycastTimer>0.2&& !props->IsStunned) {
 			*props->raycast_index += 1;
 			snprintf(props->raycasts, 256, "ray_%d", *props->raycast_index);
 			props->raycasting = H3_Object_Create(*props->GameScene, props->raycasts, NULL);
@@ -193,7 +201,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 	if (props->isTouchPlayer)
 	{
 		float tiredness = TirednessComponent_GettirednessEx(props->energyBar);
-		tiredness += 0.05f * H3_GetDeltaTime(); //fills 5%/s	 in sprint
+		tiredness += 0.1f * H3_GetDeltaTime(); //fills 10%/s	 in sprint
 		TirednessComponent_SettirednessEx(props->energyBar, tiredness);
 	}
 
@@ -218,6 +226,22 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 			props->StunTimer = 0;
 		}
 	}
+
+	//animation
+	float vx, vy;
+	H3_Object_GetVelocity(object, &vx, &vy);
+
+	if (vx > vy && vx > -vy) //run
+		AnimatedSpriteComponent_SetTextureEx(object, props->TxRunRight);
+	else if (vx < vy && vx < -vy)
+		AnimatedSpriteComponent_SetTextureEx(object, props->TxRunLeft);
+	else if (vy > vx && vy > -vx)
+		AnimatedSpriteComponent_SetTextureEx(object, props->TxRunDown);
+	else if (vy < vx && vy < -vx)
+		AnimatedSpriteComponent_SetTextureEx(object, props->TxRunUp);
+
+	if (vx == 0 && vy == 0)	//Idle
+		AnimatedSpriteComponent_SetTextureEx(object, props->TxIdleDown);
 }
 
 
@@ -246,6 +270,14 @@ void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Ha
 	properties->ResetIndexes = false;
 	properties->raycasting = NULL;
 	properties->player = player;
+
+	//texture animation
+	properties->TxRunDown	= H3_Texture_Load("assets/Sprites/player/PlayerMovefront.png", &properties->TxW, &properties->TxH);
+	properties->TxRunUp		= H3_Texture_Load("assets/Sprites/player/PlayerMoveBehind.png", &properties->TxW, &properties->TxH);
+	properties->TxRunLeft	= H3_Texture_Load("assets/Sprites/player/PlayerMoveLeft.png", &properties->TxW, &properties->TxH);
+	properties->TxRunRight	= H3_Texture_Load("assets/Sprites/player/PlayerMoveRight.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleDown	= H3_Texture_Load("assets/Sprites/player/PlayerMovefront.png", &properties->TxW, &properties->TxH);
+
 	return properties;
 }
 

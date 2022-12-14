@@ -31,7 +31,7 @@ void CashRegisterComponent_Update(H3Handle h3, H3Handle object, SH3Transform* tr
 		resetCode(props->digicode);
 		H3Handle Key = H3_Object_Create2(*props->GameScene,"Key",NULL,4);
 		H3_Object_AddComponent(Key, SPRITECOMPONENT_CREATE("assets/Objects/BlackKey.png", 0x22));
-		H3_Object_AddComponent(Key, COLLECTABLECOMPONENT_CREATE(9, 1));
+		H3_Object_AddComponent(Key, COLLECTABLECOMPONENT_CREATE(9, 1,NULL));
 		H3_Object_EnablePhysics(Key, H3_BOX_COLLIDER(CDT_Dynamic, 12, 6, 0x11, true));
 		H3_Transform_GetPosition(H3_Object_GetTransform(*props->Player), &px, &py);
 		H3_Object_SetTranslation(Key, px-50, py);
