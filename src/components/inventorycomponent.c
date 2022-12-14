@@ -110,8 +110,20 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3_Object_EnablePhysics(Meat, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Meat;
 		}
+		//fish Aisle
+		else if (CollectableComponent_GettypeEx(props->triggerObj) == 10) {
+			CollectableComponent_SetdurabilityEx(props->triggerObj, CollectableComponent_GetdurabilityEx(props->triggerObj) - 1);
+			snprintf(Object, 256, "object_%d", object_index++);
+			H3Handle Fish = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
+			H3_Object_AddComponent(Fish, SPRITECOMPONENT_CREATE("assets/Objects/fish.png", 0x22));
+			H3_Object_AddComponent(Fish, COLLECTABLECOMPONENT_CREATE(11, 1));
+			H3_Object_AddComponent(Fish, PROJECTILECOMPONENT_CREATE(object));
+			H3_Object_EnablePhysics(Fish, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
+			props->ObjSlot2 = Fish;
+		}
 		//object on the ground
-		else if ((CollectableComponent_GettypeEx(props->triggerObj) == 8 
+		else if ((CollectableComponent_GettypeEx(props->triggerObj) == 11
+			||CollectableComponent_GettypeEx(props->triggerObj) == 8 
 			|| CollectableComponent_GettypeEx(props->triggerObj) == 6
 			|| CollectableComponent_GettypeEx(props->triggerObj) == 4)
 			&& !ProjectileComponent_GetIsLaunchedEx(props->triggerObj)) {
@@ -164,7 +176,8 @@ void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision)
 		{
 			if (CollectableComponent_GettypeEx(collision.other) == 4
 				|| CollectableComponent_GettypeEx(collision.other) == 6
-				|| CollectableComponent_GettypeEx(collision.other) == 8) {
+				|| CollectableComponent_GettypeEx(collision.other) == 8
+				|| CollectableComponent_GettypeEx(collision.other) == 11) {
 				if (!ProjectileComponent_GetIsLaunchedEx(collision.other)) {
 					props->triggerObj = collision.other;
 					props->nbTrigger++;
@@ -193,7 +206,8 @@ void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other)
 		{
 			if (CollectableComponent_GettypeEx(other) == 4
 				|| CollectableComponent_GettypeEx(other) == 6
-				|| CollectableComponent_GettypeEx(other) == 8) {
+				|| CollectableComponent_GettypeEx(other) == 8
+				|| CollectableComponent_GettypeEx(other) == 11) {
 				if (!ProjectileComponent_GetIsLaunchedEx(other)) {
 					props->triggerObj = other;
 					props->nbTrigger++;

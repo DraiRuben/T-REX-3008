@@ -127,7 +127,9 @@ int main()
 			H3Handle backBar = H3_Texture_Load("assets/Sprites/EmptyBar.png", &backBarWidth, &backBarHeight);
 
 			
-
+			//music
+			H3Handle music = H3_Music_Load("assets/SFX/AmbiantSFX.wav");
+			H3_Music_Play(music, 1, true);
 			//Map init
 			H3Handle map = H3_Map_Load("assets/Map/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
