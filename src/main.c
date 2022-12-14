@@ -19,6 +19,7 @@
 #include "components/aislespawnercomponent.h"
 #include "components/cashregistercomponent.h"
 #include "components/digicodecomponent.h"
+#include "components/EndMenu.h"
 
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
@@ -52,6 +53,17 @@ int main()
 	SH3TextProperties clockprops = (SH3TextProperties){
 			.font = H3_Font_Load("assets/Fonts/Comfortaa-regular.ttf"),
 			.size = 12,
+			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
+			.hasOutline = false,
+			.anchor = 0x22,
+			.isBold = false,
+			.isItalic = false,
+			.isUnderlined = false,
+			.isViewLocal = false,
+	};
+	SH3TextProperties endtextprops = (SH3TextProperties){
+			.font = H3_Font_Load("assets/Fonts/Comfortaa-regular.ttf"),
+			.size = 40,
 			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
 			.hasOutline = false,
 			.anchor = 0x22,
@@ -156,8 +168,9 @@ int main()
 			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
 
 			//Random Aisle Init
+			bool GlobalAggro = false;
 			H3Handle AisleSpawner = H3_Object_Create(GameScene, "AisleSpawner", NULL);
-			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene, &player));
+			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene, &player,&IsFinalRush,&GlobalAggro));
 
 			//player
 			H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/player/PlayerMovefront.png", 0x22, 6, 0.2, true));
@@ -181,9 +194,9 @@ int main()
 			//enemies init
 			bool IsNewWave = false;
 			bool IsWave = false;
-			bool GlobalAggro = false;
+			
 			H3Handle spawner = H3_Object_Create2(GameScene, "Spawner", NULL, 3);
-			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar,&IsNewWave,&IsWave,&GlobalAggro));
+			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar,&IsNewWave,&IsWave,&GlobalAggro,&IsFinalRush));
 			
 			//Time
 			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 10);
@@ -250,7 +263,12 @@ int main()
 			H3_Object_SetTranslation(cashregister5, 1504, 2016);
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
-				sprintf_s(FinalTime, 256, TextComponent_GetTextEx(time));
+			}
+			if (IsWin) {
+				snprintf(FinalTime, 256, "                   You Escaped at: %s\n Who knows what dreadful fate would've befell upon you", TextComponent_GetTextEx(time));
+			}
+			else {
+				snprintf(FinalTime, 256, "                   You Died at: %s\n You shall forever be part of this place", TextComponent_GetTextEx(time));
 			}
 			H3_Music_Stop(music);
 			H3_Scene_Destroy(GameScene);
@@ -259,9 +277,15 @@ int main()
 		//end Game Menu
 		if (IsEndGame) {
 			H3Handle EndGameScene = H3_Scene_Create(screen, true);
-			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime",NULL);
-			H3_Object_AddComponent(EndTime, TEXTCOMPONENT_CREATE(FinalTime, clockprops));
-			H3_Object_SetTranslation(EndTime, 220, 900);
+
+			H3Handle EndView = H3_Object_Create(EndGameScene, "EndView", NULL);
+			H3_Object_SetTranslation(EndView, 960, 540);
+			H3_SetView(screen, H3_Object_GetTransform(EndView), 1920, 1080);
+
+			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime", NULL);
+			H3_Object_AddComponent(EndTime, ENDMENUCOMPONENT_CREATE(&IsEndGame, &IsNewGame, &IsWin));
+			H3_Object_AddComponent(EndTime, TEXTCOMPONENT_CREATE(FinalTime, endtextprops));
+			H3_Object_SetTranslation(EndTime, 960, 550);
 			while (IsEndGame)
 			{
 				H3_DoFrame(screen, EndGameScene);

@@ -22,6 +22,8 @@ typedef struct
 	char Door[100];
 	bool IsInitialized;
 	bool hasCrowBarSpawned;
+	bool* IsFinalRush;
+	bool* GlobalAggro;
 	char AisleTempName[256];
 	int AisleTempIndex;
 	//ref to scene and player
@@ -174,11 +176,13 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 		H3_Object_EnablePhysics(crowbar, H3_BOX_COLLIDER(CDT_Dynamic, 16, 16, 0x22, true));
 		H3_Object_SetTranslation(crowbar, px+20, py);
 		props->hasCrowBarSpawned = true;
+		*props->IsFinalRush = true;
+		*props->GlobalAggro = true;
 	}
 }
 
 
-void* AisleSpawnerComponent_CreateProperties(H3Handle* GameScene,H3Handle* Player)
+void* AisleSpawnerComponent_CreateProperties(H3Handle* GameScene,H3Handle* Player, bool* IsFinalRush,bool* GlobalAggro)
 {
 	AisleSpawnerComponent_Properties* properties = malloc(sizeof(AisleSpawnerComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
@@ -186,8 +190,10 @@ void* AisleSpawnerComponent_CreateProperties(H3Handle* GameScene,H3Handle* Playe
 	properties->AisleTempIndex = 0;
 	properties->Player = Player;
 	properties->GameScene = GameScene;
+	properties->GlobalAggro = GlobalAggro;
 	properties->IsInitialized = false;
 	properties->hasCrowBarSpawned = false;
+	properties->IsFinalRush = IsFinalRush;
 	//why did I do that ? I don't even know myself
 	sprintf_s(props->uselessAisle, 100, "assets/map/rayonpif.png");
 	sprintf_s(props->schoolAisle, 100, "assets/map/rayonscolaire.png");
