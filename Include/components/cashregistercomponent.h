@@ -13,11 +13,11 @@ void CashRegisterComponent_CollisionLeave(H3Handle object, H3Handle other);
 
 void resetCode(H3Handle digicode);
 
-void* CashRegisterComponent_CreateProperties(H3Handle Digicode, bool* caseIsOpen);
+void* CashRegisterComponent_CreateProperties(H3Handle Digicode, bool* cashregisterIsOpen, H3Handle* GameScene, H3Handle* Player);
 
 H3_CAPI_END_BLOCK
 
-#define CASHREGISTERCOMPONENT_CREATE(DIGICODE, ADRS_CASHREGISTEROPEN)  /* ADRS = address */           \
+#define CASHREGISTERCOMPONENT_CREATE(DIGICODE, ADRS_CASHREGISTEROPEN, GAMESCENE, PLAYER)  /* ADRS = address */           \
 	(SH3Component) {                                               \
 		.Terminate          = CashRegisterComponent_Terminate,             \
 		.Update             = CashRegisterComponent_Update,                \
@@ -25,7 +25,7 @@ H3_CAPI_END_BLOCK
 		.OnCollisionLeave   = CashRegisterComponent_CollisionLeave,        \
 		.isInitialized      = false,                               \
 		.componentType      = CASHREGISTERCOMPONENT_TYPEID,                \
-		.properties         = CashRegisterComponent_CreateProperties(DIGICODE, ADRS_CASHREGISTEROPEN) \
+		.properties         = CashRegisterComponent_CreateProperties(DIGICODE, ADRS_CASHREGISTEROPEN, GAMESCENE, PLAYER) \
 	}
 
 #endif /* _H3_COMPONENTS_CASHREGISTERCOMPONENT_H_ */

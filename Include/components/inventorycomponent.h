@@ -8,6 +8,7 @@
 H3_CAPI_BEGIN_BLOCK
 void InventoryComponent_Terminate(void* properties);
 void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties);
+void InventoryComponent_Draw(H3Handle h3, SH3Transform* transform, void* properties);
 void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision);
 void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other);
 
@@ -20,6 +21,7 @@ H3_CAPI_END_BLOCK
 	(SH3Component) {                                                 \
 		.Terminate          = InventoryComponent_Terminate,          \
 		.Update             = InventoryComponent_Update,             \
+		.Draw				= InventoryComponent_Draw,               \
 		.OnTriggerEnter     = InventoryComponent_OnTriggerEnter,     \
 		.OnTriggerLeave     = InventoryComponent_OnTriggerLeave,     \
 		.isInitialized      = false,                                 \

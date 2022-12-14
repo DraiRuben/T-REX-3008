@@ -59,3 +59,8 @@ H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECO
 //type 2 = monsterCan
 //type 3 = bookAisle
 //type 4 = book
+//type 5 = bakeryAisle
+//type 6 = B A G U E T T E
+//type 7 = meatAisle
+//type 8 = Meat
+//type 9 = Black Key
