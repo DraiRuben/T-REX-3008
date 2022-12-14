@@ -76,8 +76,6 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 
 	//idle
 	if (props->IsAggro == false) {
-
-
 		//chooses a random direction every 7 sec
 		props->DirectionTimer += H3_GetDeltaTime();
 		if (props->DirectionTimer > 7) {
@@ -125,9 +123,6 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 	if (props->IsAggro == true) {
 		//go to player position once to start loop
 		props->FollowTimer += H3_GetDeltaTime();
-		if (props->FollowTimer >= 7) {
-			H3_Object_SetVelocity(object, (px - props->x) / distance * 500, (py - props->y) / distance * 500);
-		}
 		if (props->ResetIndexes) {
 			props->index = 0;
 			props->index2 = 0;
@@ -170,7 +165,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 			props->index = 0;
 			props->IsAggro = false;
 			if (props->IsTemp) {
-				if (fabs(px - props->x) > 240 && fabs(py - props->y) > 135) {
+				if (distance>10) {
 					H3_Object_Destroy(object, false);
 				}
 			}
@@ -193,7 +188,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 	if (props->isTouchPlayer)
 	{
 		float tiredness = TirednessComponent_GettirednessEx(props->energyBar);
-		tiredness += 0.05f * H3_GetDeltaTime(); //fills 5%/s	 in sprint
+		tiredness += 0.1f * H3_GetDeltaTime(); //fills 10%/s	 in sprint
 		TirednessComponent_SettirednessEx(props->energyBar, tiredness);
 	}
 

@@ -23,7 +23,7 @@
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
 #include "components/maplayercomponent.h"
-
+#include "components/cameracomponent.h"
 
 #ifndef NDEBUG
 # pragma comment(lib, "h3-s-d.lib")
@@ -72,6 +72,8 @@ int main()
 	bool IsNewGame = false;
 	bool IsEndGame = false;
 	bool IsWin = false;
+
+	char FinalTime[256];
 	while (1) {
 		//Main Menu
 		if (IsMainMenu) {
@@ -243,17 +245,22 @@ int main()
 			H3_Object_SetTranslation(cashregister3, 1504, 1696);
 			H3_Object_SetTranslation(cashregister4, 1504, 1856);
 			H3_Object_SetTranslation(cashregister5, 1504, 2016);
-
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
+				sprintf_s(FinalTime, 256, TextComponent_GetTextEx(time));
 			}
+			H3_Music_Stop(music);
 			H3_Scene_Destroy(GameScene);
 		}
 
 		//end Game Menu
 		if (IsEndGame) {
 			H3Handle EndGameScene = H3_Scene_Create(screen, true);
-
+			H3Handle cam = H3_Object_Create(EndGameScene, "cam", NULL);
+			H3_Object_AddComponent(cam, CAMERACOMPONENT_CREATE(480,270));
+			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime", cam);
+			H3_Object_AddComponent(EndTime, TEXTCOMPONENT_CREATE(FinalTime, clockprops));
+			H3_Object_SetTranslation(EndTime, 0, -110);
 			while (IsEndGame)
 			{
 				H3_DoFrame(screen, EndGameScene);

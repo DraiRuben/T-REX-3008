@@ -94,6 +94,7 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	//player death
 	if (TirednessComponent_GettirednessEx(props->energyBar) >= 1)
 	{
+		H3_Sound_Stop(props->RunSFX);
 		*props->pt_isWin	= false;
 		*props->pt_isGame	= false;
 		*props->pt_isEnd	= true;
