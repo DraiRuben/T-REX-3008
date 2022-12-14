@@ -171,6 +171,7 @@
     <ClCompile Include="src\components\collectablecomponent.c" />
     <ClCompile Include="src\components\Credits.c" />
     <ClCompile Include="src\components\digicodecomponent.c" />
+    <ClCompile Include="src\components\EndMenu.c" />
     <ClCompile Include="src\components\EnemyComponent.c" />
     <ClCompile Include="src\components\inventorycomponent.c" />
     <ClCompile Include="src\components\MainMenu.c" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Include\components\collectablecomponent.h" />
     <ClInclude Include="Include\components\Credits.h" />
     <ClInclude Include="Include\components\digicodecomponent.h" />
+    <ClInclude Include="Include\components\EndMenu.h" />
     <ClInclude Include="Include\components\EnemyComponent.h" />
     <ClInclude Include="Include\components\inventorycomponent.h" />
     <ClInclude Include="Include\components\MainMenu.h" />

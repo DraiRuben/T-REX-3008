@@ -118,10 +118,10 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 		props->IsSprint = false;
 	}
 	if (props->RunSFXonce==1) {
-		H3_Sound_Play(props->RunSFX, 80, true);
+		H3_Sound_Play(props->RunSFX, 0.2, true);
 	}
 	if (props->WalkSFXonce == 1) {
-		H3_Sound_Play(props->WalkSFX, 80, true);
+		H3_Sound_Play(props->WalkSFX, 0.2, true);
 	}
 	H3_Object_SetVelocity(object, props->pvx * props->speed, props->pvy * props->speed);
 

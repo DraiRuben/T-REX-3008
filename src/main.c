@@ -19,6 +19,7 @@
 #include "components/aislespawnercomponent.h"
 #include "components/cashregistercomponent.h"
 #include "components/digicodecomponent.h"
+#include "components/EndMenu.h"
 
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
@@ -52,6 +53,17 @@ int main()
 	SH3TextProperties clockprops = (SH3TextProperties){
 			.font = H3_Font_Load("assets/Fonts/Comfortaa-regular.ttf"),
 			.size = 12,
+			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
+			.hasOutline = false,
+			.anchor = 0x22,
+			.isBold = false,
+			.isItalic = false,
+			.isUnderlined = false,
+			.isViewLocal = false,
+	};
+	SH3TextProperties endtextprops = (SH3TextProperties){
+			.font = H3_Font_Load("assets/Fonts/Comfortaa-regular.ttf"),
+			.size = 40,
 			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
 			.hasOutline = false,
 			.anchor = 0x22,
@@ -251,7 +263,12 @@ int main()
 			H3_Object_SetTranslation(cashregister5, 1504, 2016);
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
-				sprintf_s(FinalTime, 256, TextComponent_GetTextEx(time));
+			}
+			if (IsWin) {
+				snprintf(FinalTime, 256, "                   You Escaped at: %s\n Who knows what dreadful fate would've befell upon you", TextComponent_GetTextEx(time));
+			}
+			else {
+				snprintf(FinalTime, 256, "                   You Died at: %s\n You shall forever be part of this place", TextComponent_GetTextEx(time));
 			}
 			H3_Music_Stop(music);
 			H3_Scene_Destroy(GameScene);
@@ -260,9 +277,15 @@ int main()
 		//end Game Menu
 		if (IsEndGame) {
 			H3Handle EndGameScene = H3_Scene_Create(screen, true);
-			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime",NULL);
-			H3_Object_AddComponent(EndTime, TEXTCOMPONENT_CREATE(FinalTime, clockprops));
-			H3_Object_SetTranslation(EndTime, 220, 900);
+
+			H3Handle EndView = H3_Object_Create(EndGameScene, "EndView", NULL);
+			H3_Object_SetTranslation(EndView, 960, 540);
+			H3_SetView(screen, H3_Object_GetTransform(EndView), 1920, 1080);
+
+			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime", NULL);
+			H3_Object_AddComponent(EndTime, ENDMENUCOMPONENT_CREATE(&IsEndGame, &IsNewGame, &IsWin));
+			H3_Object_AddComponent(EndTime, TEXTCOMPONENT_CREATE(FinalTime, endtextprops));
+			H3_Object_SetTranslation(EndTime, 960, 550);
 			while (IsEndGame)
 			{
 				H3_DoFrame(screen, EndGameScene);
