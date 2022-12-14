@@ -164,6 +164,19 @@ int main()
 			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE(&GameScene,&energyBar));
 			H3_Object_SetTranslation(player, 1750, 2100);
 
+
+
+
+			//crowbar temporaire
+			H3Handle crowbar = H3_Object_Create2(GameScene, "crowbar", NULL, 3);
+			H3_Object_AddComponent(crowbar, SPRITECOMPONENT_CREATE("assets/Objects/PiedDeBiche.png", 0x22));
+			H3_Object_AddComponent(crowbar, COLLECTABLECOMPONENT_CREATE(14, 1, NULL));
+			H3_Object_EnablePhysics(crowbar, H3_BOX_COLLIDER(CDT_Dynamic, 16, 16, 0x22, true));
+			H3_Object_SetTranslation(crowbar, 39*32, 5*32);
+
+
+
+
 			//camera
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(480, 270, player));
 			H3_Object_SetTranslation(camera, 1850, 1125);
@@ -174,8 +187,6 @@ int main()
 			H3_Object_AddComponent(energyBar, TIREDNESSCOMPONENT_CREATE(fullBar,player,camera,GameScene));
 			H3_Object_SetTranslation(energyBar, -234, -128);
 
-			
-			
 			//enemies init
 			bool IsNewWave = false;
 			bool IsWave = false;
@@ -246,6 +257,8 @@ int main()
 			H3_Object_SetTranslation(cashregister3, 1504, 1696);
 			H3_Object_SetTranslation(cashregister4, 1504, 1856);
 			H3_Object_SetTranslation(cashregister5, 1504, 2016);
+
+			//game loop
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
 				sprintf_s(FinalTime, 256, TextComponent_GetTextEx(time));

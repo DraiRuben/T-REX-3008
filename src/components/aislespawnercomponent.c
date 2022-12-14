@@ -109,7 +109,8 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 				H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 96, 48, 0x11, true));
 				H3_Object_SetTranslation(Aisle, 48 + u * 128, 2256 + i * 116);
 			}
-		}
+		}  
+
 		//reserve door
 		H3Handle Door = H3_Object_Create2(*props->GameScene, "Door", NULL, 5);
 		H3Handle DoorColl = H3_Object_Create2(*props->GameScene, "DoorColl", NULL, 5);
@@ -119,6 +120,13 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 		H3_Object_EnablePhysics(DoorColl, H3_BOX_COLLIDER(CDT_Static, 90, 58, 0x11, false));
 		H3_Object_SetTranslation(DoorColl, 58, 1120);
 		H3_Object_SetTranslation(Door,58,1120);
+		
+		//exit door
+		H3Handle ExitDoorTrig = H3_Object_Create2(*props->GameScene, "ExitDoorTrigger", NULL, 5);
+		H3_Object_AddComponent(ExitDoorTrig, COLLECTABLECOMPONENT_CREATE(13, 1, NULL));
+		H3_Object_EnablePhysics(ExitDoorTrig, H3_BOX_COLLIDER(CDT_Static, 80, 80, 0x22, true));
+		H3_Object_SetTranslation(ExitDoorTrig, 1168, 64);
+
 		props->IsInitialized = true;
 	}
 }
