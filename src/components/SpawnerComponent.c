@@ -29,6 +29,9 @@ typedef struct
 	H3Handle* player;
 	H3Handle* GameScene;
 	H3Handle energyBar;
+	//sfx
+	H3Handle NewWaveSFX;
+	H3Handle SpottedSFX;
 
 } SpawnerComponent_Properties;
 
@@ -72,7 +75,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 		H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
 		H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
 		H3_Object_AddComponent(enemy, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Enemy/EnemyIdleDown.png", 0x22, 6, 0.25, true));
-		H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro, false));
+		H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro, false, &props->SpottedSFX));
 		H3_Object_SetTranslation(enemy, props->x, props->y);
 
 		i += 1;
@@ -81,6 +84,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 	}		
 	//for wave every hour
 	if (*props->IsNewWave) {
+		H3_Sound_Play(props->NewWaveSFX, 0.6, false);
 		props->amount += 2;
 		*props->GlobalAggro = true;
 		for (u = 0; u < 5; u++) {
@@ -105,7 +109,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 			H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
 			H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
 			H3_Object_AddComponent(enemy, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Enemy/EnemyIdleDown.png", 0x22, 6, 0.25, true));
-			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro,true));
+			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro,true,&props->SpottedSFX));
 			H3_Object_SetTranslation(enemy, props->x, props->y);
 			Sleep(1);
 		}
@@ -119,7 +123,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 			H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
 			H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
 			H3_Object_AddComponent(enemy, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Enemy/EnemyIdleDown.png", 0x22, 6, 0.25, true));
-			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro, false));
+			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro, false, &props->SpottedSFX));
 			H3_Object_SetTranslation(enemy, 1200, 100);
 		}
 		//around player
@@ -128,7 +132,7 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 			H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
 			H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
 			H3_Object_AddComponent(enemy, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Enemy/EnemyIdleDown.png", 0x22, 6, 0.25, true));
-			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro, false));
+			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro, false, &props->SpottedSFX));
 			if (i == 0) {
 				H3_Object_SetTranslation(enemy, px, py+ 150);
 			}
@@ -163,6 +167,8 @@ void* SpawnerComponent_CreateProperties(H3Handle* player, H3Handle* GameScene, H
 	properties->y = 2100;
 	properties->raycast_index = 0;
 	properties->DoOnce = false;
+	properties->NewWaveSFX = H3_Sound_Load("assets/SFX/NewWaveSFX.wav");
+	properties->SpottedSFX = H3_Sound_Load("assets/SFX/SpottedSFX.wav");
 	return properties;
 }
 

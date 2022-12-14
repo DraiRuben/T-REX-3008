@@ -61,6 +61,9 @@ typedef struct
 	H3Handle TxRunLeft;
 	H3Handle TxRunRight;
 	H3Handle TxIdleDown;
+	//sfx
+	H3Handle* SpottedSFX;
+	bool SpottedSFXonce;
 } EnemyComponent_Properties;
 
 
@@ -87,6 +90,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 
 	//idle
 	if (props->IsAggro == false) {
+		props->SpottedSFXonce = false;
 		//chooses a random direction every 7 sec
 		props->DirectionTimer += H3_GetDeltaTime();
 		if (props->DirectionTimer > 7) {
@@ -132,6 +136,10 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 
 	//aggro'd
 	if (props->IsAggro == true) {
+		if (!props->SpottedSFXonce) {
+			H3_Sound_Play(*props->SpottedSFX, 0.6, false);
+			props->SpottedSFXonce = true;
+		}
 		props->FollowTimer += H3_GetDeltaTime();
 		//used by raycast so the bot doesn't do the same path as player if the player can be seen by the bot
 		if (props->ResetIndexes) {
@@ -249,7 +257,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 }
 
 
-void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Handle* GameScene, H3Handle energyBarRef,bool* IsNewWave,bool* GlobalAggro,bool IsTemp)
+void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Handle* GameScene, H3Handle energyBarRef,bool* IsNewWave,bool* GlobalAggro,bool IsTemp,H3Handle* SpottedSFX)
 {
 	EnemyComponent_Properties* properties = malloc(sizeof(EnemyComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
@@ -282,6 +290,9 @@ void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Ha
 	properties->TxRunRight	= H3_Texture_Load("assets/Sprites/Enemy/EnemyRunRight.png", &properties->TxW, &properties->TxH);
 	properties->TxIdleDown	= H3_Texture_Load("assets/Sprites/Enemy/EnemyIdleDown.png", &properties->TxW, &properties->TxH);
 
+	//sfx
+	properties->SpottedSFX = SpottedSFX;
+	properties->SpottedSFXonce = false;
 	return properties;
 }
 

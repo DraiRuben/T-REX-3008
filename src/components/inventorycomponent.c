@@ -19,6 +19,7 @@ typedef struct
 	H3Handle ObjSlot1;
 	H3Handle ObjSlot2;	//hand
 	H3Handle OpenDoor;
+	H3Handle HitSFX;
 	H3Handle* EnergyBar;
 	H3Handle* GameScene;
 } InventoryComponent_Properties;
@@ -83,7 +84,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3Handle Book = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
 			H3_Object_AddComponent(Book, SPRITECOMPONENT_CREATE("assets/Objects/book.png", 0x22));
 			H3_Object_AddComponent(Book, COLLECTABLECOMPONENT_CREATE(4, 1, NULL));
-			H3_Object_AddComponent(Book, PROJECTILECOMPONENT_CREATE(object));
+			H3_Object_AddComponent(Book, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX));
 			H3_Object_EnablePhysics(Book, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Book;
 		}
@@ -94,7 +95,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3Handle Baguette = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
 			H3_Object_AddComponent(Baguette, SPRITECOMPONENT_CREATE("assets/Objects/baguette.png", 0x22));
 			H3_Object_AddComponent(Baguette, COLLECTABLECOMPONENT_CREATE(6, 1,NULL));
-			H3_Object_AddComponent(Baguette, PROJECTILECOMPONENT_CREATE(object));
+			H3_Object_AddComponent(Baguette, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX));
 			H3_Object_EnablePhysics(Baguette, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Baguette;
 		}
@@ -106,7 +107,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3Handle Meat = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
 			H3_Object_AddComponent(Meat, SPRITECOMPONENT_CREATE("assets/Objects/meat.png", 0x22));
 			H3_Object_AddComponent(Meat, COLLECTABLECOMPONENT_CREATE(8, 1,NULL));
-			H3_Object_AddComponent(Meat, PROJECTILECOMPONENT_CREATE(object));
+			H3_Object_AddComponent(Meat, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX));
 			H3_Object_EnablePhysics(Meat, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Meat;
 		}
@@ -117,7 +118,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3Handle Fish = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
 			H3_Object_AddComponent(Fish, SPRITECOMPONENT_CREATE("assets/Objects/fish.png", 0x22));
 			H3_Object_AddComponent(Fish, COLLECTABLECOMPONENT_CREATE(11, 1,NULL));
-			H3_Object_AddComponent(Fish, PROJECTILECOMPONENT_CREATE(object));
+			H3_Object_AddComponent(Fish, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX));
 			H3_Object_EnablePhysics(Fish, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Fish;
 		}
@@ -277,6 +278,7 @@ void* InventoryComponent_CreateProperties(H3Handle* GameScene, H3Handle* EnergyB
 	properties->ObjSlot2 = NULL;
 	properties->EnergyBar = EnergyBar;
 	properties->GameScene = GameScene;
+	properties->HitSFX= H3_Sound_Load("assets/SFX/ProjectileHitSFX.wav");
 	properties->OpenDoor = H3_Texture_Load("assets/map/DoorOpen.png", &w, &h);
 	return properties;
 }
