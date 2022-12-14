@@ -156,8 +156,9 @@ int main()
 			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
 
 			//Random Aisle Init
+			bool GlobalAggro = false;
 			H3Handle AisleSpawner = H3_Object_Create(GameScene, "AisleSpawner", NULL);
-			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene, &player));
+			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene, &player,&IsFinalRush,&GlobalAggro));
 
 			//player
 			H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/player/PlayerMovefront.png", 0x22, 6, 0.2, true));
@@ -181,9 +182,9 @@ int main()
 			//enemies init
 			bool IsNewWave = false;
 			bool IsWave = false;
-			bool GlobalAggro = false;
+			
 			H3Handle spawner = H3_Object_Create2(GameScene, "Spawner", NULL, 3);
-			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar,&IsNewWave,&IsWave,&GlobalAggro));
+			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar,&IsNewWave,&IsWave,&GlobalAggro,&IsFinalRush));
 			
 			//Time
 			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 10);

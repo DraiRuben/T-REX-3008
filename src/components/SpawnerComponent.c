@@ -15,6 +15,8 @@ typedef struct
 	bool* GlobalAggro;
 	bool* IsWave;
 	bool* IsNewWave;
+	bool* IsFinalRush;
+	bool DoOnce;
 	float x, y;
 	//raycast
 	int raycast_index;
@@ -108,15 +110,46 @@ void SpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transfor
 		}
 		*props->IsNewWave = false;
 	}
-	
+	//for final Rush
+	if (*props->IsFinalRush && !props->DoOnce) {
+		//in front of door
+		for (int i = 0; i < 4; i++) {
+			snprintf(props->enemies, 256, "enemy_%d", props->enemy_index++);
+			H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
+			H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
+			H3_Object_AddComponent(enemy, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Enemy/EnemyIdleDown.png", 0x22, 6, 0.25, true));
+			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro, false));
+			H3_Object_SetTranslation(enemy, 1200, 100);
+		}
+		//around player
+		for (int i = 0; i < 3; i++) {
+			snprintf(props->enemies, 256, "enemy_%d", props->enemy_index++);
+			H3Handle enemy = H3_Object_Create2(*props->GameScene, props->enemies, NULL, 3);
+			H3_Object_EnablePhysics(enemy, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
+			H3_Object_AddComponent(enemy, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Enemy/EnemyIdleDown.png", 0x22, 6, 0.25, true));
+			H3_Object_AddComponent(enemy, ENEMYCOMPONENT_CREATE(props->player, &props->raycast_index, props->GameScene, props->energyBar, props->IsNewWave, props->GlobalAggro, false));
+			if (i == 0) {
+				H3_Object_SetTranslation(enemy, px, py+ 150);
+			}
+			else if (i == 1) {
+				H3_Object_SetTranslation(enemy, px+250, py);
+			}
+			else if (i == 2) {
+				H3_Object_SetTranslation(enemy, px - 250, py);
+			}
+			
+		}
+		props->DoOnce = true;
+	}
 }
 
 
-void* SpawnerComponent_CreateProperties(H3Handle* player, H3Handle* GameScene, H3Handle energyBarRef,bool* IsNewWave,bool* IsWave,bool* GlobalAggro)
+void* SpawnerComponent_CreateProperties(H3Handle* player, H3Handle* GameScene, H3Handle energyBarRef,bool* IsNewWave,bool* IsWave,bool* GlobalAggro, bool* IsFinalRush)
 {
 	SpawnerComponent_Properties* properties = malloc(sizeof(SpawnerComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	properties->GlobalAggro = GlobalAggro;
+	properties->IsFinalRush = IsFinalRush;
 	properties->IsWave = IsWave;
 	properties->IsNewWave = IsNewWave;
 	properties->energyBar = energyBarRef;
@@ -128,6 +161,7 @@ void* SpawnerComponent_CreateProperties(H3Handle* player, H3Handle* GameScene, H
 	properties->x = 1750;
 	properties->y = 2100;
 	properties->raycast_index = 0;
+	properties->DoOnce = false;
 	return properties;
 }
 
