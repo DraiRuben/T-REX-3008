@@ -40,15 +40,17 @@ int main()
 
 	//Text props Init
 	SH3TextProperties textprops = (SH3TextProperties){
-			.font = H3_Font_Load("assets/Fonts/Toriko.ttf"),
-			.size = 50,
-			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
-			.hasOutline = false,
-			.anchor = 0x22,
-			.isBold = true,
-			.isItalic = false,
-			.isUnderlined = false,
-			.isViewLocal = false,
+				.font = H3_Font_Load("assets/Fonts/Toriko.ttf"),
+				.size = 50,
+				.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
+				.hasOutline = true,
+				.outlineThickness = 2,
+				.outlineColor = {.r = 0,.g = 0,.b = 0,.a = 255},
+				.anchor = 0x22,
+				.isBold = true,
+				.isItalic = false,
+				.isUnderlined = false,
+				.isViewLocal = false,
 	};
 	SH3TextProperties clockprops = (SH3TextProperties){
 			.font = H3_Font_Load("assets/Fonts/Comfortaa-regular.ttf"),
@@ -102,8 +104,8 @@ int main()
 			H3_Object_SetTranslation(InstanceCode, 220, 900);
 			H3Handle GameName = H3_Object_Create2(MainMenuScene, "GameName", NULL, 1);
 			H3_Object_AddComponent(GameName, TEXTCOMPONENT_CREATE("CREEPY MALMART", textprops));
-			H3_Object_Scale(GameName, 2);
 			H3_Object_SetTranslation(GameName, 950, 100);
+			H3_Object_Scale(GameName, 2);
 			H3Handle LaHordeLogo = H3_Object_Create2(MainMenuScene, "LaHordeLogo", NULL, 1);
 			H3_Object_AddComponent(LaHordeLogo, SPRITECOMPONENT_CREATE("assets/Menu/LaHordeLogo.png",0x22));
 			H3_Object_SetTranslation(LaHordeLogo, 1800, 900);
