@@ -72,7 +72,6 @@ void DigicodeComponent_Draw(H3Handle h3, SH3Transform* transform, void* properti
 		props->fourthNumb	= props->btn0;
 		props->whichNumb	= 1;
 		props->realCode = props->code;
-		printf("code : %d\n", props->realCode);
 		props->code = 0;
 	}
 	if (myButton(h3, props->btn0, (props->digicodeX     ), (props->digicodeY + 64), properties)) {

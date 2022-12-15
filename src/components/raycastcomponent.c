@@ -35,7 +35,7 @@ void* RaycastComponent_CreateProperties(H3Handle Owner)
 	properties->Owner = Owner;
 	return properties;
 }
-
+//destroys on contact with obstacle, otherwise reset aggro timer of hit enemy and their movement indexes for better pathfinding
 void RaycastComponentCollision(H3Handle object, SH3Collision obj_id) {
 	SH3Component* component = H3_Object_GetComponent(object, RAYCASTCOMPONENT_TYPEID);
 	RaycastComponent_Properties* props = (RaycastComponent_Properties*)(component->properties);
@@ -44,10 +44,8 @@ void RaycastComponentCollision(H3Handle object, SH3Collision obj_id) {
 	}
 	else if (H3_Object_HasComponent(obj_id.other, PLAYERCOMPONENT_TYPEID)) {
 		EnemyComponent_SetIsAggroEx(props->Owner, true);
-		if (!EnemyComponent_GetIsTempEx(props->Owner)) {
-			EnemyComponent_SetAggroTimerEx(props->Owner, 5);
-			EnemyComponent_SetFollowTimerEx(props->Owner, 3);
-		}
+		EnemyComponent_SetAggroTimerEx(props->Owner, 5);
+		EnemyComponent_SetFollowTimerEx(props->Owner, 3);
 		EnemyComponent_SetResetIndexesEx(props->Owner, true);
 		H3_Object_Destroy(object, false);
 	}

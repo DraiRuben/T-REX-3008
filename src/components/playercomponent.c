@@ -30,6 +30,7 @@ typedef struct
 	H3Handle TxIdleLeft;
 	H3Handle TxIdleRight;
 
+	bool playerWin;
 	bool* pt_isWin;
 	bool* pt_isEnd;
 	bool* pt_isGame;
@@ -47,7 +48,7 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 {
 	PlayerComponent_Properties* props = (PlayerComponent_Properties*)properties;
 
-	//movement horizontal
+	//Horizontal Movement
 	if (H3_Input_IsKeyDown(K_Q) || H3_Input_IsKeyDown(K_A) || H3_Input_IsGamepadBtnDown(GB_DPad_Left) || H3_Input_IsKeyDown(K_Left))
 	{
 		props->IsMovingH = true;
@@ -62,11 +63,11 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	}
 	else
 	{
-		props->IsMovingH = false;
+		props->IsMovingH = false;//none
 		props->pvx = 0;
 	}
 
-	//movement Vertical
+	//Vertical Movement
 	if (H3_Input_IsKeyDown(K_Z)|| H3_Input_IsKeyDown(K_W)||H3_Input_IsGamepadBtnDown(GB_DPad_Up)|| H3_Input_IsKeyDown(K_Up))
 	{
 		props->IsMovingV = true;
@@ -81,7 +82,7 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 	}
 	else
 	{
-		props->IsMovingV = false;
+		props->IsMovingV = false;// none
 		props->pvy = 0;
 	}
 
@@ -97,6 +98,7 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 		props->speed = 1 * props->slowdown;
 		props->IsShift = false;
 	}
+	//enables sprint bool if moving and uses sfx
 	if ((props->IsMovingH || props->IsMovingV) && props->IsShift) {
 		H3_Sound_Stop(props->WalkSFX);
 		props->WalkSFXonce = 0;
@@ -116,12 +118,16 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 		H3_Sound_Stop(props->WalkSFX);
 		props->IsSprint = false;
 	}
+
+	//sfx play management
 	if (props->RunSFXonce==1) {
-		H3_Sound_Play(props->RunSFX, 80, true);
+		H3_Sound_Play(props->RunSFX, 0.2, true);
 	}
 	if (props->WalkSFXonce == 1) {
-		H3_Sound_Play(props->WalkSFX, 80, true);
+		H3_Sound_Play(props->WalkSFX, 0.2, true);
 	}
+
+	//apply computed movement to player
 	H3_Object_SetVelocity(object, props->pvx * props->speed, props->pvy * props->speed);
 
 	//player death
@@ -134,9 +140,19 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 		*props->pt_isEnd	= true;
 	}
 
-	//animation
+	//playerWin
+	if (props->playerWin)
+	{
+		H3_Sound_Stop(props->WalkSFX);
+		H3_Sound_Stop(props->RunSFX);
+		*props->pt_isWin	= true;
+		*props->pt_isGame	= false;
+		*props->pt_isEnd	= true;
+	}
+
+	//animations
 	if (props->IsMovingH || props->IsMovingV) {
-		//run
+		//moving
 		if (props->direction == 1) {
 			AnimatedSpriteComponent_SetTextureEx(object, props->TxRunUp);
 		}
@@ -190,6 +206,7 @@ void* PlayerComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInG
 	properties->IsMovingH = false;
 	properties->IsSprint = false;
 	properties->IsShift = false;
+	properties->playerWin = false;
 
 	//load texture anim
 	properties->TxRunDown	= H3_Texture_Load("assets/Sprites/player/PlayerMovefront.png", &properties->TxW, &properties->TxH);
@@ -207,3 +224,4 @@ void* PlayerComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInG
 }
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(PlayerComponent,PLAYERCOMPONENT_TYPEID, bool, IsSprint);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(PlayerComponent, PLAYERCOMPONENT_TYPEID, float, slowdown);
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(PlayerComponent, PLAYERCOMPONENT_TYPEID, bool, playerWin);

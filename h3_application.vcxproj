@@ -165,18 +165,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Include\components\EndMenu.c" />
     <ClCompile Include="src\components\aislespawnercomponent.c" />
     <ClCompile Include="src\components\cashregistercomponent.c" />
     <ClCompile Include="src\components\ClockComponent.c" />
     <ClCompile Include="src\components\collectablecomponent.c" />
     <ClCompile Include="src\components\Credits.c" />
     <ClCompile Include="src\components\digicodecomponent.c" />
+    <ClCompile Include="src\components\EndMenu.c" />
     <ClCompile Include="src\components\EnemyComponent.c" />
     <ClCompile Include="src\components\inventorycomponent.c" />
     <ClCompile Include="src\components\MainMenu.c" />
     <ClCompile Include="src\components\monsterecomponent.c" />
     <ClCompile Include="src\components\mycameracomponent.c" />
+    <ClCompile Include="src\components\pentagramcomponent.c" />
     <ClCompile Include="src\components\playercomponent.c" />
     <ClCompile Include="src\components\projectileComponent.c" />
     <ClCompile Include="src\components\raycastcomponent.c" />
@@ -198,6 +199,7 @@
     <ClInclude Include="Include\components\MainMenu.h" />
     <ClInclude Include="Include\components\monsterecomponent.h" />
     <ClInclude Include="Include\components\mycameracomponent.h" />
+    <ClInclude Include="Include\components\pentagramcomponent.h" />
     <ClInclude Include="Include\components\playercomponent.h" />
     <ClInclude Include="Include\components\projectileComponent.h" />
     <ClInclude Include="Include\components\raycastcomponent.h" />

@@ -13,6 +13,7 @@
 
 typedef struct
 {
+	//useful bools
 	bool IsStunned;
 	bool* IsNewWave;
 	bool IsAggro;
@@ -54,13 +55,15 @@ typedef struct
 	H3Handle energyBar;
 
 	//texture animation
-	//anim texture
 	uint32_t TxW, TxH;
 	H3Handle TxRunDown;
 	H3Handle TxRunUp;
 	H3Handle TxRunLeft;
 	H3Handle TxRunRight;
 	H3Handle TxIdleDown;
+	//sfx
+	H3Handle* SpottedSFX;
+	bool SpottedSFXonce;
 } EnemyComponent_Properties;
 
 
@@ -87,8 +90,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 
 	//idle
 	if (props->IsAggro == false) {
-
-
+		props->SpottedSFXonce = false;
 		//chooses a random direction every 7 sec
 		props->DirectionTimer += H3_GetDeltaTime();
 		if (props->DirectionTimer > 7) {
@@ -118,9 +120,9 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 				props->IdleMoveTimer = 0;
 			}
 		}
-		//raycast check obstacle at certain disance between player and bot each second except for tempBots
+		//raycast to check if the bot can see the player
 		props->RaycastTimer += H3_GetDeltaTime();
-		if (distance < 200 && props->RaycastTimer>0.2&& !props->IsTemp) {
+		if (distance < 200 && props->RaycastTimer>0.2) {
 			*props->raycast_index += 1;
 			snprintf(props->raycasts, 256, "ray_%d", *props->raycast_index);
 			props->raycasting = H3_Object_Create(*props->GameScene, props->raycasts, NULL);
@@ -134,8 +136,12 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 
 	//aggro'd
 	if (props->IsAggro == true) {
-		//go to player position once to start loop
+		if (!props->SpottedSFXonce) {
+			H3_Sound_Play(*props->SpottedSFX, 0.6, false);
+			props->SpottedSFXonce = true;
+		}
 		props->FollowTimer += H3_GetDeltaTime();
+		//used by raycast so the bot doesn't do the same path as player if the player can be seen by the bot
 		if (props->ResetIndexes) {
 			props->index = 0;
 			props->index2 = 0;
@@ -149,18 +155,22 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 			props->index += 1;
 			props->FollowTimer = 0;
 		}
-		//go to player position in list
-		distancetemp = sqrtf((props->px[props->index2] - props->x) * (props->px[props->index2] - props->x) + (props->py[props->index2] - props->y) * (props->py[props->index2] - props->y));
+		
+		
+		//get player and self pos
 		H3_Transform_GetPosition(transform, &props->x, &props->y);
 		H3_Transform_GetPosition(H3_Object_GetTransform(*props->player), &px, &py);
+		//vector normalisation for movement with list
+		distancetemp = sqrtf((props->px[props->index2] - props->x) * (props->px[props->index2] - props->x) + (props->py[props->index2] - props->y) * (props->py[props->index2] - props->y));
+		//go to player position in list if not stunned and not touching player as to not push him
 		if (!props->isTouchPlayer && !props->IsStunned) {
 			H3_Object_SetVelocity(object, (props->px[props->index2] - props->x) / distancetemp * 110, (props->py[props->index2] - props->y) / distancetemp * 110);
 		}
+		//go to next pos in list if close enough to current pos in list
 		if (fabs( props->px[props->index2]-props->x ) < 10 && fabs(props->py[props->index2]-props->y) < 10) {
 			props->index2 += 1;
 		}
-		
-		//if not seen for 5 sec (15 if during wave) then stop aggro
+		//if not seen for 5 sec (15s if during wave) then stop aggro
 		props->AggroTimer -= H3_GetDeltaTime();
 		if (props->RaycastTimer > 0.2&& !props->IsStunned) {
 			*props->raycast_index += 1;
@@ -183,7 +193,8 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 				}
 			}
 		}
-		//raycast check obstacle each second to reset aggrotimer if needed
+
+		//raycast check obstacle each second to reset aggrotimer if needed, MAY BE REPETITIVE
 		props->RaycastTimer += H3_GetDeltaTime();
 		if (distance < 200 && props->RaycastTimer>0.2&& !props->IsStunned) {
 			*props->raycast_index += 1;
@@ -197,7 +208,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 		}
 	}
 
-	//add tiredness when touch player
+	//increases tiredness when touching player
 	if (props->isTouchPlayer)
 	{
 		float tiredness = TirednessComponent_GettirednessEx(props->energyBar);
@@ -215,6 +226,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 			globalAggroOff = 0;
 		}
 	}
+
 	//for projectile and melee stun
 	if (props->IsStunned) {
 		props->StunTimer += H3_GetDeltaTime();
@@ -227,7 +239,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 		}
 	}
 
-	//animation
+	//animation based on current velocity, works well except when player pushes the enemies
 	float vx, vy;
 	H3_Object_GetVelocity(object, &vx, &vy);
 
@@ -245,7 +257,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 }
 
 
-void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Handle* GameScene, H3Handle energyBarRef,bool* IsNewWave,bool* GlobalAggro,bool IsTemp)
+void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Handle* GameScene, H3Handle energyBarRef,bool* IsNewWave,bool* GlobalAggro,bool IsTemp,H3Handle* SpottedSFX)
 {
 	EnemyComponent_Properties* properties = malloc(sizeof(EnemyComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
@@ -272,15 +284,19 @@ void* EnemyComponent_CreateProperties(H3Handle* player, int* raycast_index, H3Ha
 	properties->player = player;
 
 	//texture animation
-	properties->TxRunDown	= H3_Texture_Load("assets/Sprites/player/PlayerMovefront.png", &properties->TxW, &properties->TxH);
-	properties->TxRunUp		= H3_Texture_Load("assets/Sprites/player/PlayerMoveBehind.png", &properties->TxW, &properties->TxH);
-	properties->TxRunLeft	= H3_Texture_Load("assets/Sprites/player/PlayerMoveLeft.png", &properties->TxW, &properties->TxH);
-	properties->TxRunRight	= H3_Texture_Load("assets/Sprites/player/PlayerMoveRight.png", &properties->TxW, &properties->TxH);
-	properties->TxIdleDown	= H3_Texture_Load("assets/Sprites/player/PlayerMovefront.png", &properties->TxW, &properties->TxH);
+	properties->TxRunDown	= H3_Texture_Load("assets/Sprites/Enemy/EnemyMoveRun.png", &properties->TxW, &properties->TxH);
+	properties->TxRunUp		= H3_Texture_Load("assets/Sprites/Enemy/EnemyRunUp.png", &properties->TxW, &properties->TxH);
+	properties->TxRunLeft	= H3_Texture_Load("assets/Sprites/Enemy/EnemyRunLeft.png", &properties->TxW, &properties->TxH);
+	properties->TxRunRight	= H3_Texture_Load("assets/Sprites/Enemy/EnemyRunRight.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleDown	= H3_Texture_Load("assets/Sprites/Enemy/EnemyIdleDown.png", &properties->TxW, &properties->TxH);
 
+	//sfx
+	properties->SpottedSFX = SpottedSFX;
+	properties->SpottedSFXonce = false;
 	return properties;
 }
 
+//detect player collision
 void EnemyCollisionEnter(H3Handle object, SH3Collision obj_id) {
 	SH3Component* component = H3_Object_GetComponent(object, ENEMYCOMPONENT_TYPEID);
 	EnemyComponent_Properties* props = (EnemyComponent_Properties*)(component->properties);

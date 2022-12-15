@@ -13,6 +13,7 @@ void* PlayerComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInG
 
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(PlayerComponent, bool, IsSprint);
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(PlayerComponent, float, slowdown);
+H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(PlayerComponent, bool, playerWin);
 H3_CAPI_END_BLOCK
 
 #define PLAYERCOMPONENT_CREATE(ADRS_ISWIN, ADRS_ISEND, ADRS_ISGAME, ENERGYBAR)   /* ADRS = address*/                              \

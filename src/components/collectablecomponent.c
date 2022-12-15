@@ -34,6 +34,7 @@ void CollectableComponent_Update(H3Handle h3, H3Handle object, SH3Transform* tra
 	{
 		props->isDoneOnce = false;
 	}
+	//destroy if durability reaches 0
 	if (props->durability <= 0) {
 		H3_Object_Destroy(object, false);
 	}
@@ -56,7 +57,7 @@ H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECO
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECOMPONENT_TYPEID, int, type);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECOMPONENT_TYPEID, int, durability);
 
-//types:
+//types:dddddd
 //type 1 = monsterAisle
 //type 2 = monsterCan
 //type 3 = bookAisle
@@ -68,4 +69,6 @@ H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECO
 //type 9 = Black Key
 //type 10 = fishAisle
 //type 11 = fish
-//type 12 = Door
+//type 12 = Reserve Door 
+//type 13 = Exit Door
+//type 14 = crowbar

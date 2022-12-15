@@ -19,13 +19,13 @@
 #include "components/aislespawnercomponent.h"
 #include "components/cashregistercomponent.h"
 #include "components/digicodecomponent.h"
+#include "components/EndMenu.h"
 
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
 #include "components/maplayercomponent.h"
 #include "components/cameracomponent.h"
 #include "components/animatedspritecomponent.h"
-#include "components/EndMenu.h"
 
 #ifndef NDEBUG
 # pragma comment(lib, "h3-s-d.lib")
@@ -53,6 +53,17 @@ int main()
 	SH3TextProperties clockprops = (SH3TextProperties){
 			.font = H3_Font_Load("assets/Fonts/Comfortaa-regular.ttf"),
 			.size = 12,
+			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
+			.hasOutline = false,
+			.anchor = 0x22,
+			.isBold = false,
+			.isItalic = false,
+			.isUnderlined = false,
+			.isViewLocal = false,
+	};
+	SH3TextProperties endtextprops = (SH3TextProperties){
+			.font = H3_Font_Load("assets/Fonts/Comfortaa-regular.ttf"),
+			.size = 40,
 			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
 			.hasOutline = false,
 			.anchor = 0x22,
@@ -130,17 +141,17 @@ int main()
 			H3Handle fullBar = H3_Texture_Load("assets/Sprites/AllBar.png", &barWidth, &barHeight);
 			H3Handle backBar = H3_Texture_Load("assets/Sprites/EmptyBar.png", &backBarWidth, &backBarHeight);
 
-			
+			bool IsFinalRush = false;
 			//music
 			H3Handle music = H3_Music_Load("assets/SFX/AmbiantSFX.wav");
 			H3_Music_Play(music, 1, true);
 			//Map init
 			H3Handle map = H3_Map_Load("assets/Map/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
-			H3Handle maplayer4 = H3_Object_Create2(GameScene, "layer carpet", NULL, 2);
-			H3_Object_AddComponent(maplayer4, MAPLAYERCOMPONENT_CREATE(map, "carpet"));
 			H3Handle maplayer = H3_Object_Create2(GameScene, "layer floor", NULL, 1);
 			H3_Object_AddComponent(maplayer, MAPLAYERCOMPONENT_CREATE(map, "floor"));
+			H3Handle maplayer4 = H3_Object_Create2(GameScene, "layer carpet", NULL, 2);
+			H3_Object_AddComponent(maplayer4, MAPLAYERCOMPONENT_CREATE(map, "carpet"));
 			H3Handle maplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL, 5);
 			H3_Object_AddComponent(maplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
 			H3Handle maplayer1 = H3_Object_Create2(GameScene, "layer object", NULL, 5);
@@ -148,15 +159,18 @@ int main()
 			H3Handle maplayer2 = H3_Object_Create2(GameScene, "layer object up", NULL, 6);
 			H3_Object_AddComponent(maplayer2, MAPLAYERCOMPONENT_CREATE(map, "object up"));
 			
-			//Random Aisle Init
-			H3Handle AisleSpawner = H3_Object_Create(GameScene, "AisleSpawner", NULL);
-			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene));
+			
 
 			//related objects
 			H3Handle player = H3_Object_Create2(GameScene, "player", NULL,3);
 			H3Handle camera = H3_Object_Create(GameScene, "camera", NULL);
 			H3Handle emptyBar = H3_Object_Create2(GameScene, "emptyBar", camera, 10);
 			H3Handle energyBar = H3_Object_Create2(GameScene, "energybar", camera, 10);
+
+			//Random Aisle Init
+			bool GlobalAggro = false;
+			H3Handle AisleSpawner = H3_Object_Create(GameScene, "AisleSpawner", NULL);
+			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene, &player,&IsFinalRush,&GlobalAggro));
 
 			//player
 			H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/player/PlayerMovefront.png", 0x22, 6, 0.2, true));
@@ -180,9 +194,9 @@ int main()
 			//enemies init
 			bool IsNewWave = false;
 			bool IsWave = false;
-			bool GlobalAggro = false;
+			
 			H3Handle spawner = H3_Object_Create2(GameScene, "Spawner", NULL, 3);
-			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar,&IsNewWave,&IsWave,&GlobalAggro));
+			H3_Object_AddComponent(spawner, SPAWNERCOMPONENT_CREATE(&player, &GameScene,energyBar,&IsNewWave,&IsWave,&GlobalAggro,&IsFinalRush));
 			
 			//Time
 			H3Handle time = H3_Object_Create2(GameScene, "Clock", camera, 10);
@@ -201,19 +215,8 @@ int main()
 			
 			//shadow effect
 			H3Handle gradient = H3_Object_Create2(GameScene, "gradient", camera, 9);
-			H3Handle gradient1 = H3_Object_Create2(GameScene, "gradient1", camera, 9);
-			H3Handle gradient2 = H3_Object_Create2(GameScene, "gradient2", camera, 9);
-			H3Handle gradient3 = H3_Object_Create2(GameScene, "gradient3", camera, 9);
-			H3Handle gradient4 = H3_Object_Create2(GameScene, "gradient4", camera, 9);
-			H3Handle gradient5 = H3_Object_Create2(GameScene, "gradient5", camera, 9);
-
 			H3_Object_AddComponent(gradient, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
-			H3_Object_AddComponent(gradient1, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
-			H3_Object_AddComponent(gradient2, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
-			H3_Object_AddComponent(gradient3, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
-			H3_Object_AddComponent(gradient4, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
-			H3_Object_AddComponent(gradient5, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
-
+		
 			//Digicodes
 			H3Handle digicode = H3_Object_Create2(GameScene, "digicode", camera, 10);
 			H3_Object_AddComponent(digicode, SPRITECOMPONENT_CREATE("assets/Sprites/Digicode.png", 0x22));
@@ -222,34 +225,28 @@ int main()
 			H3_Object_SetEnabled(digicode, false);
 
 			//cash registers
+			char cashregisters[256];
+			int CR_index = 0;
+			int CR_y[6] = { 1248, 1376, 1536,1696,1856,2016 };
 			bool cashregisterIsOpen = false;
-			H3Handle cashregister0 = H3_Object_Create2(GameScene, "caisse0", NULL, 4);
-			H3Handle cashregister1 = H3_Object_Create2(GameScene, "caisse1", NULL, 4);
-			H3Handle cashregister2 = H3_Object_Create2(GameScene, "caisse2", NULL, 4);
-			H3Handle cashregister3 = H3_Object_Create2(GameScene, "caisse3", NULL, 4);
-			H3Handle cashregister4 = H3_Object_Create2(GameScene, "caisse4", NULL, 4);
-			H3Handle cashregister5 = H3_Object_Create2(GameScene, "caisse5", NULL, 4);
-			H3_Object_AddComponent(cashregister0, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen,&GameScene,&player));
-			H3_Object_AddComponent(cashregister1, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
-			H3_Object_AddComponent(cashregister2, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
-			H3_Object_AddComponent(cashregister3, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
-			H3_Object_AddComponent(cashregister4, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
-			H3_Object_AddComponent(cashregister5, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
-			H3_Object_EnablePhysics(cashregister0, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
-			H3_Object_EnablePhysics(cashregister1, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
-			H3_Object_EnablePhysics(cashregister2, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
-			H3_Object_EnablePhysics(cashregister3, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
-			H3_Object_EnablePhysics(cashregister4, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
-			H3_Object_EnablePhysics(cashregister5, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
-			H3_Object_SetTranslation(cashregister0, 1504, 1248);
-			H3_Object_SetTranslation(cashregister1, 1504, 1376);
-			H3_Object_SetTranslation(cashregister2, 1504, 1536);
-			H3_Object_SetTranslation(cashregister3, 1504, 1696);
-			H3_Object_SetTranslation(cashregister4, 1504, 1856);
-			H3_Object_SetTranslation(cashregister5, 1504, 2016);
+			for (int i = 0; i < 6; i++) {
+				snprintf(cashregisters, 256, "caisse_%d", CR_index++);
+				H3Handle cashregister = H3_Object_Create2(GameScene, cashregisters, NULL, 4);
+				H3_Object_AddComponent(cashregister, CASHREGISTERCOMPONENT_CREATE(digicode, &cashregisterIsOpen, &GameScene, &player));
+				H3_Object_EnablePhysics(cashregister, H3_BOX_COLLIDER(CDT_Static, 32, 32, A_Top + A_Left, true));
+				H3_Object_SetTranslation(cashregister, 1504, CR_y[i]);
+
+			}
+
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
-				sprintf_s(FinalTime, 256, TextComponent_GetTextEx(time));
+			}
+			//set gameover text
+			if (IsWin) {
+				snprintf(FinalTime, 256, "                           You Escaped at : %s\n Who knows what dreadful fate would've befell upon you", TextComponent_GetTextEx(time));
+			}
+			else {
+				snprintf(FinalTime, 256, "                You Died at : %s\n You shall forever be part of this place", TextComponent_GetTextEx(time));
 			}
 			H3_Music_Stop(music);
 			H3_Scene_Destroy(GameScene);
@@ -257,17 +254,19 @@ int main()
 
 		//end Game Menu
 		if (IsEndGame) {
-		
 			H3Handle EndGameScene = H3_Scene_Create(screen, true);
 
+			//reset view because of cam
 			H3Handle EndView = H3_Object_Create(EndGameScene, "EndView", NULL);
 			H3_Object_SetTranslation(EndView, 960, 540);
 			H3_SetView(screen, H3_Object_GetTransform(EndView), 1920, 1080);
 
+			
+			//create and display gameover text
 			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime", NULL);
-			H3_Object_AddComponent(EndTime, ENDMENUCOMPONENT_CREATE(&IsEndGame, &IsNewGame,&IsWin));
-			H3_Object_AddComponent(EndTime, TEXTCOMPONENT_CREATE(FinalTime, clockprops));
-			H3_Object_SetTranslation(EndTime, 0, 0);
+			H3_Object_AddComponent(EndTime, ENDMENUCOMPONENT_CREATE(&IsEndGame, &IsNewGame, &IsMainMenu, &IsWin));
+			H3_Object_AddComponent(EndTime, TEXTCOMPONENT_CREATE(FinalTime, endtextprops));
+			H3_Object_SetTranslation(EndTime, 960, 520);
 
 			while (IsEndGame)
 			{

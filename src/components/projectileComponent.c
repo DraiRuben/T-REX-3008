@@ -13,6 +13,7 @@ typedef struct
 {
 	bool IsLaunched;
 	H3Handle player;
+	H3Handle* HitSFX;
 } ProjectileComponent_Properties;
 
 
@@ -33,6 +34,7 @@ void ProjectileComponentPreUpdate(H3Handle h3, H3Handle object, SH3Transform* tr
 	H3_Transform_GetPosition(H3_Object_GetTransform(props->player), &px, &py);
 	//computes distance between player and enemy for vector normalization
 	distance = sqrtf((mx/4 - 240) * (mx/4 - 240) + (my/4 - 135) * (my/4 - 135));
+	//launches thing
 	if (H3_Input_IsMouseBtnPressed(MB_Left) && CollectableComponent_GetisInHandEx(object)) {
 		props->IsLaunched = true;
 		H3_Object_SetTranslation(object, px, py);
@@ -46,12 +48,13 @@ void ProjectileComponentPreUpdate(H3Handle h3, H3Handle object, SH3Transform* tr
 }
 
 
-void* ProjectileComponent_CreateProperties(H3Handle player)
+void* ProjectileComponent_CreateProperties(H3Handle player,H3Handle* HitSFX)
 {
 	ProjectileComponent_Properties* properties = malloc(sizeof(ProjectileComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	properties->player = player;
 	properties->IsLaunched = false;
+	properties->HitSFX = HitSFX;
 	return properties;
 }
 float vx, vy;
@@ -59,11 +62,13 @@ float vx, vy;
 void ProjectileCollisionEnter(H3Handle object, SH3Collision obj_id) {
 	SH3Component* component = H3_Object_GetComponent(object, PROJECTILECOMPONENT_TYPEID);
 	ProjectileComponent_Properties* props = (ProjectileComponent_Properties*)(component->properties);
-
+	
 	if (props->IsLaunched && obj_id.other == NULL) {
+		H3_Sound_Play(*props->HitSFX, 0.4, false);
 		CollectableComponent_SetdurabilityEx(object, CollectableComponent_GetdurabilityEx(object) - 1);
 	}
 	else if (props->IsLaunched && H3_Object_HasComponent(obj_id.other, ENEMYCOMPONENT_TYPEID)) {
+		H3_Sound_Play(*props->HitSFX, 0.4, false);
 		H3_Object_GetVelocity(object, &vx, &vy);
 		EnemyComponent_SetIsStunnedEx(obj_id.other, true);
 		H3_Object_SetVelocity(obj_id.other, vx/2, vy /2);
