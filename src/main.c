@@ -20,6 +20,7 @@
 #include "components/cashregistercomponent.h"
 #include "components/digicodecomponent.h"
 #include "components/EndMenu.h"
+#include "components/inventorygirlcomponent.h"
 
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
@@ -87,6 +88,7 @@ int main()
 	bool IsNewGame = false;
 	bool IsEndGame = false;
 	bool IsWin = false;
+	bool IsMan = false;
 	H3Handle MainMenuMusic = H3_Music_Load("assets/SFX/MainMenuSong.wav");
 	H3Handle GameMusic = H3_Music_Load("assets/SFX/AmbiantSFX.wav");
 	H3_Music_Play(MainMenuMusic, 0.7, true);
@@ -180,10 +182,16 @@ int main()
 			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene, &player,&IsFinalRush,&GlobalAggro));
 
 			//player
-			H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/player/PlayerMovefront.png", 0x22, 6, 0.2, true));
-			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
+			if (IsMan) {
+				H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/player/PlayerMovefront.png", 0x22, 6, 0.2, true));
+				H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE(&GameScene, &energyBar, IsMan));
+			}
+			else {
+				H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/player/PlayerMovefront.png", 0x22, 6, 0.2, true));
+				H3_Object_AddComponent(player, INVENTORYGIRLCOMPONENT_CREATE(&GameScene, &energyBar, IsMan));
+			}
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE(&IsWin, &IsEndGame, &IsNewGame, energyBar));
-			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE(&GameScene,&energyBar));
+			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
 			H3_Object_SetTranslation(player, 1750, 2400);
 
 			//camera

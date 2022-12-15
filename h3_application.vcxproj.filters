@@ -81,6 +81,9 @@
     <ClCompile Include="src\components\EndMenu.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
+    <ClCompile Include="src\components\inventorygirlcomponent.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\components\MainMenu.h">
@@ -138,6 +141,9 @@
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\EndMenu.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\components\inventorygirlcomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
   </ItemGroup>

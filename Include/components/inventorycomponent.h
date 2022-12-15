@@ -12,12 +12,12 @@ void InventoryComponent_Draw(H3Handle h3, SH3Transform* transform, void* propert
 void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision);
 void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other);
 
-void* InventoryComponent_CreateProperties(H3Handle* GameScene,H3Handle* EnergyBar);
+void* InventoryComponent_CreateProperties(H3Handle* GameScene,H3Handle* EnergyBar, bool IsMan);
 
 H3_DECLARE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(InventoryComponent, H3Handle, ObjSlot2);
 H3_CAPI_END_BLOCK
 
-#define INVENTORYCOMPONENT_CREATE(GAMESCENE,ENERGYBAR)									 \
+#define INVENTORYCOMPONENT_CREATE(GAMESCENE,ENERGYBAR, ISMAN)									 \
 	(SH3Component) {                                                 \
 		.Terminate          = InventoryComponent_Terminate,          \
 		.Update             = InventoryComponent_Update,             \
@@ -26,7 +26,7 @@ H3_CAPI_END_BLOCK
 		.OnTriggerLeave     = InventoryComponent_OnTriggerLeave,     \
 		.isInitialized      = false,                                 \
 		.componentType      = INVENTORYCOMPONENT_TYPEID,             \
-		.properties         = InventoryComponent_CreateProperties(GAMESCENE,ENERGYBAR)  \
+		.properties         = InventoryComponent_CreateProperties(GAMESCENE,ENERGYBAR,ISMAN)  \
 	}
 
 #endif /* _H3_COMPONENTS_INVENTORYCOMPONENT_H_ */

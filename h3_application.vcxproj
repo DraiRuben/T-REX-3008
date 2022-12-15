@@ -174,6 +174,7 @@
     <ClCompile Include="src\components\EndMenu.c" />
     <ClCompile Include="src\components\EnemyComponent.c" />
     <ClCompile Include="src\components\inventorycomponent.c" />
+    <ClCompile Include="src\components\inventorygirlcomponent.c" />
     <ClCompile Include="src\components\MainMenu.c" />
     <ClCompile Include="src\components\monsterecomponent.c" />
     <ClCompile Include="src\components\mycameracomponent.c" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Include\components\EndMenu.h" />
     <ClInclude Include="Include\components\EnemyComponent.h" />
     <ClInclude Include="Include\components\inventorycomponent.h" />
+    <ClInclude Include="Include\components\inventorygirlcomponent.h" />
     <ClInclude Include="Include\components\MainMenu.h" />
     <ClInclude Include="Include\components\monsterecomponent.h" />
     <ClInclude Include="Include\components\mycameracomponent.h" />

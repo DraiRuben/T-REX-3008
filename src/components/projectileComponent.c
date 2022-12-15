@@ -3,6 +3,7 @@
 #include "components/projectileComponent.h"
 #include "components/collectablecomponent.h"
 #include "components/inventorycomponent.h"
+#include "components/inventorygirlcomponent.h"
 #include "components/EnemyComponent.h"
 
 #include <stdlib.h>
@@ -11,6 +12,7 @@
 
 typedef struct
 {
+	bool IsMan;
 	bool IsLaunched;
 	H3Handle player;
 	H3Handle ThrowSFX;
@@ -42,7 +44,12 @@ void ProjectileComponentPreUpdate(H3Handle h3, H3Handle object, SH3Transform* tr
 		H3_Sound_Play(props->ThrowSFX, 0.5, false);
 		H3_Object_SetTranslation(object, px, py);
 		H3_Object_SetVelocity(object, (mx/4 - 240) / distance*500, (my/4 - 135) / distance*500);
-		InventoryComponent_SetObjSlot2Ex(props->player, NULL);
+		
+		if (props->IsMan)
+			InventoryComponent_SetObjSlot2Ex(props->player, NULL);
+		else
+			InventoryGirlComponent_SetObjSlot3Ex(props->player, NULL);
+
 		CollectableComponent_SetisInHandEx(object, false);
 	}
 	if (props->IsLaunched) {
@@ -51,14 +58,17 @@ void ProjectileComponentPreUpdate(H3Handle h3, H3Handle object, SH3Transform* tr
 }
 
 
-void* ProjectileComponent_CreateProperties(H3Handle player,H3Handle* HitSFX)
+void* ProjectileComponent_CreateProperties(H3Handle player,H3Handle* HitSFX, bool IsMan)
 {
 	ProjectileComponent_Properties* properties = malloc(sizeof(ProjectileComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
+
+	properties->IsMan = IsMan;
 	properties->player = player;
 	properties->IsLaunched = false;
 	properties->HitSFX = HitSFX;
 	properties->ThrowSFX = H3_Sound_Load("assets/SFX/ThrowSFX.wav");
+
 	return properties;
 }
 float vx, vy;
