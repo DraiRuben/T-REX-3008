@@ -22,8 +22,9 @@ void PentagramComponent_Terminate(void* properties)
 
 void PentagramComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties) {
 	PentagramComponent_Properties* props = (PentagramComponent_Properties*)properties;
-	
-
+	if (props->IsActivated) {
+		H3_Object_DisablePhysics(object);
+	}
 }
 
 

@@ -177,7 +177,7 @@ int main()
 			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE(&IsWin, &IsEndGame, &IsNewGame, energyBar));
 			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE(&GameScene,&energyBar));
-			H3_Object_SetTranslation(player, 1750, 2100);
+			H3_Object_SetTranslation(player, 1750, 2400);
 
 			//camera
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(480, 270, player));
