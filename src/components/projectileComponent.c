@@ -13,6 +13,7 @@ typedef struct
 {
 	bool IsLaunched;
 	H3Handle player;
+	H3Handle ThrowSFX;
 	H3Handle* HitSFX;
 } ProjectileComponent_Properties;
 
@@ -36,7 +37,9 @@ void ProjectileComponentPreUpdate(H3Handle h3, H3Handle object, SH3Transform* tr
 	distance = sqrtf((mx/4 - 240) * (mx/4 - 240) + (my/4 - 135) * (my/4 - 135));
 	//launches thing
 	if (H3_Input_IsMouseBtnPressed(MB_Left) && CollectableComponent_GetisInHandEx(object)) {
+		H3_Object_SetRenderOrder(object, 3);
 		props->IsLaunched = true;
+		H3_Sound_Play(props->ThrowSFX, 0.5, false);
 		H3_Object_SetTranslation(object, px, py);
 		H3_Object_SetVelocity(object, (mx/4 - 240) / distance*500, (my/4 - 135) / distance*500);
 		InventoryComponent_SetObjSlot2Ex(props->player, NULL);
@@ -55,6 +58,7 @@ void* ProjectileComponent_CreateProperties(H3Handle player,H3Handle* HitSFX)
 	properties->player = player;
 	properties->IsLaunched = false;
 	properties->HitSFX = HitSFX;
+	properties->ThrowSFX = H3_Sound_Load("assets/SFX/ThrowSFX.wav");
 	return properties;
 }
 float vx, vy;

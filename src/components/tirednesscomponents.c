@@ -73,7 +73,7 @@ void TirednessComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	{
 		//time limit to reduce tiredness
 		props->counter += H3_GetDeltaTime();
-		if (props->counter >= 8)
+		if (props->counter >= 10)
 		{
 			props->recovEnergy--;
 			props->counter = 0.0f;
