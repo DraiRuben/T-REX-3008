@@ -1,5 +1,5 @@
 #include <components/cashregistercomponent.h>
-#include <components/playercomponent.h>
+#include <components/mancomponent.h>
 #include <components/digicodecomponent.h>
 #include <components/spritecomponent.h>
 #include <components/collectablecomponent.h>
@@ -47,7 +47,7 @@ void CashRegisterComponent_CollisionEnter(H3Handle object, SH3Collision collisio
 	SH3Component* component = H3_Object_GetComponent(object, CASHREGISTERCOMPONENT_TYPEID);
 	CashRegisterComponent_Properties* props = (CashRegisterComponent_Properties*)component->properties;
 
-	if (!*props->isOpen && collision.other != NULL && H3_Object_HasComponent(collision.other, PLAYERCOMPONENT_TYPEID))
+	if (!*props->isOpen && collision.other != NULL && (H3_Object_HasComponent(collision.other, MANCOMPONENT_TYPEID) || H3_Object_HasComponent(collision.other, MANCOMPONENT_TYPEID)))
 	{
 		H3_Object_SetEnabled(props->digicode, true);
 	}
@@ -58,7 +58,7 @@ void CashRegisterComponent_CollisionLeave(H3Handle object, H3Handle other)
 	SH3Component* component = H3_Object_GetComponent(object, CASHREGISTERCOMPONENT_TYPEID);
 	CashRegisterComponent_Properties* props = (CashRegisterComponent_Properties*)component->properties;
 
-	if (!*props->isOpen && other != NULL && H3_Object_HasComponent(other, PLAYERCOMPONENT_TYPEID))
+	if (!*props->isOpen && other != NULL && (H3_Object_HasComponent(other, MANCOMPONENT_TYPEID)|| H3_Object_HasComponent(other, MANCOMPONENT_TYPEID)))
 	{
 		resetCode(props->digicode);
 		

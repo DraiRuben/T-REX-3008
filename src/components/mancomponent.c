@@ -1,4 +1,4 @@
-#include <components/playercomponent.h>
+#include <components/mancomponent.h>
 
 #include <components/tirednesscomponent.h>
 #include <components/animatedspritecomponent.h>
@@ -37,16 +37,16 @@ typedef struct
 	H3Handle energyBar;
 	H3Handle RunSFX;
 	H3Handle WalkSFX;
-} PlayerComponent_Properties;
+} ManComponent_Properties;
 
-void PlayerComponent_Terminate(void* properties)
+void ManComponent_Terminate(void* properties)
 {
 	free(properties);
 }
 
-void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties)
+void ManComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties)
 {
-	PlayerComponent_Properties* props = (PlayerComponent_Properties*)properties;
+	ManComponent_Properties* props = (ManComponent_Properties*)properties;
 
 	//Horizontal Movement
 	if (H3_Input_IsKeyDown(K_Q) || H3_Input_IsKeyDown(K_A) || H3_Input_IsGamepadBtnDown(GB_DPad_Left) || H3_Input_IsKeyDown(K_Left))
@@ -189,9 +189,9 @@ void PlayerComponent_Update(H3Handle h3, H3Handle object, SH3Transform* transfor
 		AnimatedSpriteComponent_SetFrameDurationEx(object, 0.2);
 }
 
-void* PlayerComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInGame, H3Handle energyBarRef)
+void* ManComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInGame, H3Handle energyBarRef)
 {
-	PlayerComponent_Properties* properties = malloc(sizeof(PlayerComponent_Properties));
+	ManComponent_Properties* properties = malloc(sizeof(ManComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	properties->RunSFX = H3_Sound_Load("assets/SFX/RunSFX.wav");
 	properties->WalkSFX = H3_Sound_Load("assets/SFX/WalkSFX.wav");
@@ -209,19 +209,19 @@ void* PlayerComponent_CreateProperties(bool* isWin, bool* isEndGame, bool* isInG
 	properties->playerWin = false;
 
 	//load texture anim
-	properties->TxRunDown	= H3_Texture_Load("assets/Sprites/player/PlayerMovefront.png", &properties->TxW, &properties->TxH);
-	properties->TxRunUp		= H3_Texture_Load("assets/Sprites/player/PlayerMoveBehind.png", &properties->TxW, &properties->TxH);
-	properties->TxRunLeft	= H3_Texture_Load("assets/Sprites/player/PlayerMoveLeft.png", &properties->TxW, &properties->TxH);
-	properties->TxRunRight	= H3_Texture_Load("assets/Sprites/player/PlayerMoveRight.png", &properties->TxW, &properties->TxH);
-	properties->TxIdleDown	= H3_Texture_Load("assets/Sprites/player/PlayerIdleFront.png", &properties->TxW, &properties->TxH);
-	properties->TxIdleUp	= H3_Texture_Load("assets/Sprites/player/PlayerIdlebehind.png", &properties->TxW, &properties->TxH);
-	properties->TxIdleLeft	= H3_Texture_Load("assets/Sprites/player/PlayerIdleLeft.png", &properties->TxW, &properties->TxH);
-	properties->TxIdleRight	= H3_Texture_Load("assets/Sprites/player/playerIdleRight.png", &properties->TxW, &properties->TxH);
+	properties->TxRunDown	= H3_Texture_Load("assets/Sprites/Man/ManMovefront.png", &properties->TxW, &properties->TxH);
+	properties->TxRunUp		= H3_Texture_Load("assets/Sprites/Man/ManMoveBehind.png", &properties->TxW, &properties->TxH);
+	properties->TxRunLeft	= H3_Texture_Load("assets/Sprites/Man/ManMoveLeft.png", &properties->TxW, &properties->TxH);
+	properties->TxRunRight	= H3_Texture_Load("assets/Sprites/Man/ManMoveRight.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleDown	= H3_Texture_Load("assets/Sprites/Man/ManIdleFront.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleUp	= H3_Texture_Load("assets/Sprites/Man/ManIdlebehind.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleLeft	= H3_Texture_Load("assets/Sprites/Man/ManIdleLeft.png", &properties->TxW, &properties->TxH);
+	properties->TxIdleRight	= H3_Texture_Load("assets/Sprites/Man/ManIdleRight.png", &properties->TxW, &properties->TxH);
 
 
 	properties->direction = 3; //down
 	return properties;
 }
-H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(PlayerComponent,PLAYERCOMPONENT_TYPEID, bool, IsSprint);
-H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(PlayerComponent, PLAYERCOMPONENT_TYPEID, float, slowdown);
-H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(PlayerComponent, PLAYERCOMPONENT_TYPEID, bool, playerWin);
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RO_EX(ManComponent,MANCOMPONENT_TYPEID, bool, IsSprint);
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(ManComponent, MANCOMPONENT_TYPEID, float, slowdown);
+H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(ManComponent, MANCOMPONENT_TYPEID, bool, playerWin);

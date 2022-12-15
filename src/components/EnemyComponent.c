@@ -1,5 +1,5 @@
 #include "components/EnemyComponent.h"
-#include "components/playercomponent.h"
+#include "components/mancomponent.h"
 #include "components/tirednesscomponent.h"
 #include "components/spritecomponent.h"
 #include "components/animatedspritecomponent.h"
@@ -290,7 +290,7 @@ void EnemyCollisionEnter(H3Handle object, SH3Collision obj_id) {
 	SH3Component* component = H3_Object_GetComponent(object, ENEMYCOMPONENT_TYPEID);
 	EnemyComponent_Properties* props = (EnemyComponent_Properties*)(component->properties);
 
-	if (obj_id.other != NULL && H3_Object_HasComponent(obj_id.other, PLAYERCOMPONENT_TYPEID))
+	if (obj_id.other != NULL && (H3_Object_HasComponent(obj_id.other, MANCOMPONENT_TYPEID)|| H3_Object_HasComponent(obj_id.other, MANCOMPONENT_TYPEID)))
 	{
 		props->isTouchPlayer = true;
 	}
@@ -300,7 +300,7 @@ void EnemyCollisionLeave(H3Handle object, H3Handle other) {
 	SH3Component* component = H3_Object_GetComponent(object, ENEMYCOMPONENT_TYPEID);
 	EnemyComponent_Properties* props = (EnemyComponent_Properties*)(component->properties);
 
-	if (other != NULL && H3_Object_HasComponent(other, PLAYERCOMPONENT_TYPEID))
+	if (other != NULL && (H3_Object_HasComponent(other, MANCOMPONENT_TYPEID)|| H3_Object_HasComponent(other, MANCOMPONENT_TYPEID)))
 	{
 		props->isTouchPlayer = false;
 	}
