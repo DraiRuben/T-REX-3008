@@ -148,10 +148,10 @@ int main()
 			//Map init
 			H3Handle map = H3_Map_Load("assets/Map/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
-			H3Handle maplayer4 = H3_Object_Create2(GameScene, "layer carpet", NULL, 2);
-			H3_Object_AddComponent(maplayer4, MAPLAYERCOMPONENT_CREATE(map, "carpet"));
 			H3Handle maplayer = H3_Object_Create2(GameScene, "layer floor", NULL, 1);
 			H3_Object_AddComponent(maplayer, MAPLAYERCOMPONENT_CREATE(map, "floor"));
+			H3Handle maplayer4 = H3_Object_Create2(GameScene, "layer carpet", NULL, 2);
+			H3_Object_AddComponent(maplayer4, MAPLAYERCOMPONENT_CREATE(map, "carpet"));
 			H3Handle maplayer3 = H3_Object_Create2(GameScene, "layer wall", NULL, 5);
 			H3_Object_AddComponent(maplayer3, MAPLAYERCOMPONENT_CREATE(map, "wall"));
 			H3Handle maplayer1 = H3_Object_Create2(GameScene, "layer object", NULL, 5);
@@ -243,10 +243,10 @@ int main()
 			}
 			//set gameover text
 			if (IsWin) {
-				snprintf(FinalTime, 256, "                   You Escaped at: %s\n Who knows what dreadful fate would've befell upon you", TextComponent_GetTextEx(time));
+				snprintf(FinalTime, 256, "                           You Escaped at : %s\n Who knows what dreadful fate would've befell upon you", TextComponent_GetTextEx(time));
 			}
 			else {
-				snprintf(FinalTime, 256, "                   You Died at: %s\n You shall forever be part of this place", TextComponent_GetTextEx(time));
+				snprintf(FinalTime, 256, "                You Died at : %s\n You shall forever be part of this place", TextComponent_GetTextEx(time));
 			}
 			H3_Music_Stop(music);
 			H3_Scene_Destroy(GameScene);
@@ -264,9 +264,10 @@ int main()
 			
 			//create and display gameover text
 			H3Handle EndTime = H3_Object_Create(EndGameScene, "EndTime", NULL);
-			H3_Object_AddComponent(EndTime, ENDMENUCOMPONENT_CREATE(&IsEndGame, &IsNewGame, &IsWin));
+			H3_Object_AddComponent(EndTime, ENDMENUCOMPONENT_CREATE(&IsEndGame, &IsNewGame, &IsMainMenu, &IsWin));
 			H3_Object_AddComponent(EndTime, TEXTCOMPONENT_CREATE(FinalTime, endtextprops));
-			H3_Object_SetTranslation(EndTime, 960, 550);
+			H3_Object_SetTranslation(EndTime, 960, 520);
+
 			while (IsEndGame)
 			{
 				H3_DoFrame(screen, EndGameScene);
