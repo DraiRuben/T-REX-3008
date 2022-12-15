@@ -20,6 +20,7 @@ typedef struct
 	H3Handle ObjSlot2;	//hand
 	H3Handle OpenDoor;
 	H3Handle HitSFX;
+	H3Handle DoorOpenSFX;
 	H3Handle* EnergyBar;
 	H3Handle* GameScene;
 } InventoryComponent_Properties;
@@ -146,6 +147,8 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 					props->nbTrigger = 0;
 					props->triggerObj = NULL;
 				}
+				if (CollectableComponent_GettypeEx(props->ObjSlot2) == 2)
+					MonstereComponent_SetisReadyToUseEx(props->ObjSlot2, false);
 		}
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 	}
@@ -157,6 +160,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 		&& CollectableComponent_GettypeEx(props->ObjSlot2) ==9
 		&& CollectableComponent_GettypeEx(props->triggerObj) == 12)
 	{
+		H3_Sound_Play(props->DoorOpenSFX, 0.3, false);
 		SpriteComponent_SetTextureEx(props->triggerObj, props->OpenDoor);
 		H3_Object_Destroy(CollectableComponent_GetDoorCollEx(props->triggerObj), false);
 		CollectableComponent_SetdurabilityEx(props->ObjSlot2, 0);
@@ -187,14 +191,6 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	if (props->ObjSlot2 != NULL) {
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 		H3_Object_SetTranslation(props->ObjSlot2, (props->playerX + 150), (props->playerY - 115));
-		/*if (props->triggerObj!= NULL){
-			H3_Object_SetRenderOrder(props->ObjSlot2, 12);
-			if (CollectableComponent_GettypeEx(props->triggerObj) != 12
-				&& CollectableComponent_GettypeEx(props->triggerObj) != 13
-				&&CollectableComponent_GettypeEx(props->triggerObj) != 2) {
-				props->triggerObj = NULL;
-			}
-		}*/
 		H3_Object_SetRenderOrder(props->ObjSlot2, 12);
 
 	}
@@ -284,6 +280,7 @@ void* InventoryComponent_CreateProperties(H3Handle* GameScene, H3Handle* EnergyB
 	properties->ObjSlot2 = NULL;
 	properties->EnergyBar = EnergyBar;
 	properties->GameScene = GameScene;
+	properties->DoorOpenSFX = H3_Sound_Load("assets/SFX/DoorOpenSFX.wav");
 	properties->HitSFX= H3_Sound_Load("assets/SFX/ProjectileHitSFX.wav");
 	properties->OpenDoor = H3_Texture_Load("assets/map/DoorOpen.png", &w, &h);
 	return properties;

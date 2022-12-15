@@ -12,6 +12,7 @@ typedef struct
 	H3Handle* Player;
 	H3Handle* GameScene;
 	H3Handle digicode;
+	H3Handle OpenSFX;
 	bool* isOpen;
 } CashRegisterComponent_Properties;
 
@@ -29,6 +30,7 @@ void CashRegisterComponent_Update(H3Handle h3, H3Handle object, SH3Transform* tr
 	{
 		*props->isOpen = true;
 		resetCode(props->digicode);
+		H3_Sound_Play(props->OpenSFX, 80, false);
 		H3Handle Key = H3_Object_Create2(*props->GameScene,"Key",NULL,4);
 		H3_Object_AddComponent(Key, SPRITECOMPONENT_CREATE("assets/Objects/BlackKey.png", 0x22));
 		H3_Object_AddComponent(Key, COLLECTABLECOMPONENT_CREATE(9, 1,NULL));
@@ -88,6 +90,7 @@ void* CashRegisterComponent_CreateProperties(H3Handle Digicode, bool* cashregist
 	properties->Player = Player;
 	properties->GameScene = GameScene;
 	properties->digicode = Digicode;
+	properties->OpenSFX = H3_Sound_Load("assets/SFX/CashRegisterSFX.wav");
 	//properties->isOpen = false;
 	properties->isOpen = cashregisterIsOpen;
 

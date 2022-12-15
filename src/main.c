@@ -85,11 +85,15 @@ int main()
 	bool IsNewGame = false;
 	bool IsEndGame = false;
 	bool IsWin = false;
+	H3Handle MainMenuMusic = H3_Music_Load("assets/SFX/MainMenuSong.wav");
+	H3Handle GameMusic = H3_Music_Load("assets/SFX/AmbiantSFX.wav");
+	H3_Music_Play(MainMenuMusic, 0.7, true);
 
 	char FinalTime[256];
 	while (1) {
 		//Main Menu
 		if (IsMainMenu) {
+			
 			H3Handle MainMenuScene = H3_Scene_Create(screen, true);
 			H3Handle MainMenu = H3_Object_Create2(MainMenuScene, "MainMenu", NULL, 1);
 			H3_Object_AddComponent(MainMenu, MAINMENUCOMPONENT_CREATE(&IsMainMenu,&IsCredits,&IsSettings,&IsNewGame));
@@ -97,7 +101,8 @@ int main()
 			H3_Object_AddComponent(InstanceCode, TEXTCOMPONENT_CREATE("2022-I1, by T-REX 3008", textprops));
 			H3_Object_SetTranslation(InstanceCode, 220, 900);
 			H3Handle GameName = H3_Object_Create2(MainMenuScene, "GameName", NULL, 1);
-			H3_Object_AddComponent(GameName, TEXTCOMPONENT_CREATE("GAMENAME PLACEHOLDER", textprops));
+			H3_Object_AddComponent(GameName, TEXTCOMPONENT_CREATE("CREEPY MALMART", textprops));
+			H3_Object_Scale(GameName, 2);
 			H3_Object_SetTranslation(GameName, 950, 100);
 			H3Handle LaHordeLogo = H3_Object_Create2(MainMenuScene, "LaHordeLogo", NULL, 1);
 			H3_Object_AddComponent(LaHordeLogo, SPRITECOMPONENT_CREATE("assets/Menu/LaHordeLogo.png",0x22));
@@ -135,6 +140,7 @@ int main()
 
 		//game
 		if (IsNewGame) {
+			H3_Music_Stop(MainMenuMusic);
 			H3Handle GameScene = H3_Scene_Create(screen, true);
 			uint32_t barWidth, barHeight;
 			uint32_t backBarWidth, backBarHeight;
@@ -143,8 +149,7 @@ int main()
 
 			bool IsFinalRush = false;
 			//music
-			H3Handle music = H3_Music_Load("assets/SFX/AmbiantSFX.wav");
-			H3_Music_Play(music, 1, true);
+			H3_Music_Play(GameMusic, 1, true);
 			//Map init
 			H3Handle map = H3_Map_Load("assets/Map/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
@@ -252,7 +257,8 @@ int main()
 			else {
 				snprintf(FinalTime, 256, "                You Died at : %s\n You shall forever be part of this place", TextComponent_GetTextEx(time));
 			}
-			H3_Music_Stop(music);
+			H3_Music_Stop(GameMusic);
+			H3_Music_Play(MainMenuMusic, 0.7, true);
 			H3_Scene_Destroy(GameScene);
 		}
 
