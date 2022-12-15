@@ -37,6 +37,7 @@ void ProjectileComponentPreUpdate(H3Handle h3, H3Handle object, SH3Transform* tr
 	//launches thing
 	if (H3_Input_IsMouseBtnPressed(MB_Left) && CollectableComponent_GetisInHandEx(object)) {
 		props->IsLaunched = true;
+		H3_Object_SetRenderOrder(object, 3);
 		H3_Object_SetTranslation(object, px, py);
 		H3_Object_SetVelocity(object, (mx/4 - 240) / distance*500, (my/4 - 135) / distance*500);
 		InventoryComponent_SetObjSlot2Ex(props->player, NULL);

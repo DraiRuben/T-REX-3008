@@ -212,7 +212,7 @@ void EnemyComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform,
 	if (props->isTouchPlayer)
 	{
 		float tiredness = TirednessComponent_GettirednessEx(props->energyBar);
-		tiredness += 0.1f * H3_GetDeltaTime(); //fills 10%/s	 in sprint
+		tiredness += 0.15f * H3_GetDeltaTime(); //fills 15%/s
 		TirednessComponent_SettirednessEx(props->energyBar, tiredness);
 	}
 

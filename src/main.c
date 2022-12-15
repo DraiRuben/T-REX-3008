@@ -97,8 +97,10 @@ int main()
 			H3_Object_AddComponent(InstanceCode, TEXTCOMPONENT_CREATE("2022-I1, by T-REX 3008", textprops));
 			H3_Object_SetTranslation(InstanceCode, 220, 900);
 			H3Handle GameName = H3_Object_Create2(MainMenuScene, "GameName", NULL, 1);
-			H3_Object_AddComponent(GameName, TEXTCOMPONENT_CREATE("GAMENAME PLACEHOLDER", textprops));
+			H3_Object_AddComponent(GameName, TEXTCOMPONENT_CREATE("CREEPY MALMART", textprops));
 			H3_Object_SetTranslation(GameName, 950, 100);
+			H3_Object_Scale(GameName, 2);
+
 			H3Handle LaHordeLogo = H3_Object_Create2(MainMenuScene, "LaHordeLogo", NULL, 1);
 			H3_Object_AddComponent(LaHordeLogo, SPRITECOMPONENT_CREATE("assets/Menu/LaHordeLogo.png",0x22));
 			H3_Object_SetTranslation(LaHordeLogo, 1800, 900);
@@ -114,7 +116,7 @@ int main()
 			H3Handle Credits = H3_Object_Create2(CreditsScene, "Credits", NULL, 1);
 			H3_Object_AddComponent(Credits, CREDITSCOMPONENT_CREATE(&IsCredits,&IsMainMenu));
 			H3Handle CreditText = H3_Object_Create2(CreditsScene, "CreditsText", NULL, 1);
-			H3_Object_AddComponent(CreditText, TEXTCOMPONENT_CREATE("A big thanks to Nicolas, Arthur, Dorian and Ruben\n who worked really hard.\n\n As well as to limezu on itch.io whose\n assetpack we couldn't have done without", textprops));
+			H3_Object_AddComponent(CreditText, TEXTCOMPONENT_CREATE("A big thanks to Nicolas, Arthur, Dorian and Ruben\n who worked really hard.\n\n As well as to limezu on itch.io whose\n assetpack we couldn't have done without\n\n This game was inspired by \"Don't Shop At The Isomart After Dark\", by u/A_Vesperin", textprops));
 			H3_Object_SetTranslation(CreditText, 950, 300);
 			while (IsCredits) {
 				H3_DoFrame(screen, CreditsScene);
@@ -177,7 +179,7 @@ int main()
 			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
 			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE(&IsWin, &IsEndGame, &IsNewGame, energyBar));
 			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE(&GameScene,&energyBar));
-			H3_Object_SetTranslation(player, 1750, 2100);
+			H3_Object_SetTranslation(player, 1750, 2400);
 
 			//camera
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(480, 270, player));
@@ -240,7 +242,11 @@ int main()
 
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
+				if (ClockComponent_GethoursEx(time) == 8) {
+					PlayerComponent_SetplayerWinEx(player, true);
+				}
 			}
+
 			//set gameover text
 			if (IsWin) {
 				snprintf(FinalTime, 256, "                           You Escaped at : %s\n Who knows what dreadful fate would've befell upon you", TextComponent_GetTextEx(time));

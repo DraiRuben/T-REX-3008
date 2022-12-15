@@ -136,9 +136,9 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 					props->triggerObj = NULL;
 				}
 		}
-		else if (CollectableComponent_GettypeEx(props->triggerObj) == 2
-			||CollectableComponent_GettypeEx(props->triggerObj) == 9
-			|| CollectableComponent_GettypeEx(props->triggerObj) == 14) {
+		else if (  CollectableComponent_GettypeEx(props->triggerObj) == 2
+				|| CollectableComponent_GettypeEx(props->triggerObj) == 9
+				|| CollectableComponent_GettypeEx(props->triggerObj) == 14) {
 				props->ObjSlot2 = props->triggerObj;
 			
 				props->nbTrigger--;
@@ -146,6 +146,9 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 					props->nbTrigger = 0;
 					props->triggerObj = NULL;
 				}
+				if (CollectableComponent_GettypeEx(props->ObjSlot2) == 2)
+					MonstereComponent_SetisReadyToUseEx(props->ObjSlot2, false);
+
 		}
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 	}
@@ -187,19 +190,8 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	if (props->ObjSlot2 != NULL) {
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 		H3_Object_SetTranslation(props->ObjSlot2, (props->playerX + 150), (props->playerY - 115));
-		/*if (props->triggerObj!= NULL){
-			H3_Object_SetRenderOrder(props->ObjSlot2, 12);
-			if (CollectableComponent_GettypeEx(props->triggerObj) != 12
-				&& CollectableComponent_GettypeEx(props->triggerObj) != 13
-				&&CollectableComponent_GettypeEx(props->triggerObj) != 2) {
-				props->triggerObj = NULL;
-			}
-		}*/
 		H3_Object_SetRenderOrder(props->ObjSlot2, 12);
-
 	}
-	
-	printf("%d", props->nbTrigger);
 }
 
 
