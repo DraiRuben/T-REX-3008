@@ -17,6 +17,8 @@ typedef struct
 	H3Handle NewGameBtn;
 	H3Handle MainMenuBtn;
 	H3Handle ExitBtn;
+	H3Handle TextureEndWin;
+	H3Handle TextureEndWin2;
 } EndMenuComponent_Properties;
 
 void EndMenuComponent_Terminate(void* properties)
@@ -33,7 +35,20 @@ void EndMenuComponent_Draw(H3Handle h3, SH3Transform* transform, void* propertie
 {
 	//texture EndMenu
 	EndMenuComponent_Properties* props = (EndMenuComponent_Properties*)properties;
-	H3_Texture_Draw(h3, 0, 0, props->TextureEnd, 0x22);
+
+	if (!*props->IsWin)
+	{
+
+		H3_Texture_Draw(h3, 0, 0, props->TextureEnd, 0x22);
+
+	}
+
+	else if (*props->IsWin) 
+	{
+		H3_Texture_Draw(h3, 0, 0, props->TextureEndWin, 0x22);
+		H3_Texture_Draw(h3, -50,-450, props->TextureEndWin2, A_Top + A_Left);
+	}
+	    
 
 	//relaunch game
 	if (H3_Button(h3, props->NewGameBtn, 800, 370, 0x11)) {
@@ -65,6 +80,9 @@ void* EndMenuComponent_CreateProperties(bool* IsEndMenu, bool* IsNewGame, bool* 
 	properties->NewGameBtn = H3_Texture_Load("assets/Menu/NewGame.png", &props->w, &props->h);
 	properties->MainMenuBtn = H3_Texture_Load("assets/Menu/NewGame.png", &props->w, &props->h);
 	properties->ExitBtn = H3_Texture_Load("assets/Menu/Exit.png", &props->w, &props->h);
+	properties->TextureEndWin = H3_Texture_Load("assets/Menu/fond noir.jpg", &props->w, &props->h);
+	properties->TextureEndWin2 = H3_Texture_Load("assets/Menu/evade.png", &props->w, &props->h);
+
 
 	properties->IsEndMenu = IsEndMenu;
 	properties->IsNewGame = IsNewGame;
