@@ -49,7 +49,6 @@ void* CollectableComponent_CreateProperties(int type, int durability, H3Handle D
 	properties->durability = durability;
 	properties->isInHand = false;
 	properties->isDoneOnce = false;
-
 	return properties;
 }
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECOMPONENT_TYPEID, H3Handle, DoorColl);
