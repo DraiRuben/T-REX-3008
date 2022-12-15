@@ -3,7 +3,8 @@
 #include <components/spritecomponent.h>
 #include <components/collectablecomponent.h>
 #include <components/monsterecomponent.h>
-#include <components/playercomponent.h>
+#include <components/mancomponent.h>
+#include <components/womancomponent.h>
 #include <components/projectileComponent.h>
 
 #include <stdlib.h>
@@ -180,7 +181,7 @@ void InventoryGirlComponent_Update(H3Handle h3, H3Handle object, SH3Transform* t
 		&& CollectableComponent_GettypeEx(props->ObjSlot3) == 14
 		&& CollectableComponent_GettypeEx(props->triggerObj) == 13)
 	{
-		PlayerComponent_SetplayerWinEx(object, true);
+		WomanComponent_SetplayerWinEx(object, true);
 		CollectableComponent_SetdurabilityEx(props->ObjSlot3, 0);
 		props->ObjSlot3 = NULL;
 	}
@@ -202,7 +203,6 @@ void InventoryGirlComponent_Update(H3Handle h3, H3Handle object, SH3Transform* t
 		CollectableComponent_SetisInHandEx(props->ObjSlot3, true);
 		H3_Object_SetTranslation(props->ObjSlot3, (props->playerX + 115), (props->playerY - 115));
 		H3_Object_SetRenderOrder(props->ObjSlot3, 12);
-
 	}
 }
 

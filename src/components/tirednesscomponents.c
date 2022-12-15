@@ -1,6 +1,6 @@
 #include <components/tirednesscomponent.h>
 
-#include <components/playercomponent.h>
+#include <components/mancomponent.h>
 #include <components/spritecomponent.h>
 
 #include <stdlib.h>
@@ -62,7 +62,7 @@ void TirednessComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	//filled tiredness bar
 	if (props->tiredness < 1)
 	{
-		if (PlayerComponent_GetIsSprintEx(props->player))
+		if (ManComponent_GetIsSprintEx(props->player))
 			props->tiredness += 0.01f * H3_GetDeltaTime(); //fill 1%/s	 in sprint
 		else
 			props->tiredness += 0.001f * H3_GetDeltaTime();//fill 0.1%/s in normal run
@@ -106,10 +106,10 @@ void TirednessComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	if (props->tiredness > 0.5)
 	{
 		float slowdown = (1 - props->tiredness) * 1.5 + 0.25;
-		PlayerComponent_SetslowdownEx(props->player, slowdown);
+		ManComponent_SetslowdownEx(props->player, slowdown);
 	}
 	else
-		PlayerComponent_SetslowdownEx(props->player, 1);
+		ManComponent_SetslowdownEx(props->player, 1);
 }
 
 void* TirednessComponent_CreateProperties(H3Handle textureBar, H3Handle playerRef, H3Handle cameraRef, H3Handle sceneRef)

@@ -39,7 +39,7 @@
     <ClCompile Include="src\components\ClockComponent.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\playercomponent.c">
+    <ClCompile Include="src\components\mancomponent.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
     <ClCompile Include="src\components\EnemyComponent.c">
@@ -81,6 +81,9 @@
     <ClCompile Include="src\components\EndMenu.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
+    <ClCompile Include="src\components\womancomponent.c">
+      <Filter>Source Files\components</Filter>
+    </ClCompile>
     <ClCompile Include="src\components\inventorygirlcomponent.c">
       <Filter>Source Files\components</Filter>
     </ClCompile>
@@ -101,7 +104,7 @@
     <ClInclude Include="Include\components\ClockComponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
-    <ClInclude Include="Include\components\playercomponent.h">
+    <ClInclude Include="Include\components\mancomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\EnemyComponent.h">
@@ -141,6 +144,9 @@
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\EndMenu.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\components\womancomponent.h">
       <Filter>Header Files\components</Filter>
     </ClInclude>
     <ClInclude Include="Include\components\inventorygirlcomponent.h">

@@ -3,7 +3,7 @@
 #include <components/spritecomponent.h>
 #include <components/collectablecomponent.h>
 #include <components/monsterecomponent.h>
-#include <components/playercomponent.h>
+#include <components/mancomponent.h>
 #include <components/projectileComponent.h>
 
 #include <stdlib.h>
@@ -175,7 +175,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 		&& CollectableComponent_GettypeEx(props->ObjSlot2) == 14
 		&& CollectableComponent_GettypeEx(props->triggerObj) == 13)
 	{
-		PlayerComponent_SetplayerWinEx(object, true);
+		ManComponent_SetplayerWinEx(object, true);
 		CollectableComponent_SetdurabilityEx(props->ObjSlot2, 0);
 		props->ObjSlot2 = NULL;
 	}

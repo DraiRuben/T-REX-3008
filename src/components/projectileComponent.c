@@ -1,5 +1,6 @@
 #include "components/ProjectileComponent.h"
-#include "components/playercomponent.h"
+#include "components/mancomponent.h"
+#include "components/womancomponent.h"
 #include "components/projectileComponent.h"
 #include "components/collectablecomponent.h"
 #include "components/inventorycomponent.h"
