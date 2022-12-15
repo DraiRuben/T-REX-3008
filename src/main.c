@@ -40,17 +40,17 @@ int main()
 
 	//Text props Init
 	SH3TextProperties textprops = (SH3TextProperties){
-			.font = H3_Font_Load("assets/Fonts/Toriko.ttf"),
-			.size = 50,
-			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
-			.hasOutline = true,
-			.outlineThickness = 2,
-			.outlineColor = {.r = 0,.g = 0,.b = 0,.a = 255},
-			.anchor = 0x22,
-			.isBold = true,
-			.isItalic = false,
-			.isUnderlined = false,
-			.isViewLocal = false,
+				.font = H3_Font_Load("assets/Fonts/Toriko.ttf"),
+				.size = 50,
+				.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
+				.hasOutline = true,
+				.outlineThickness = 2,
+				.outlineColor = {.r = 0,.g = 0,.b = 0,.a = 255},
+				.anchor = 0x22,
+				.isBold = true,
+				.isItalic = false,
+				.isUnderlined = false,
+				.isViewLocal = false,
 	};
 	SH3TextProperties clockprops = (SH3TextProperties){
 			.font = H3_Font_Load("assets/Fonts/Comfortaa-regular.ttf"),

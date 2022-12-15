@@ -13,7 +13,6 @@ typedef struct
 
 	uint32_t w, h;
 	H3Handle TextureMain;
-	H3Handle TextureMain2;
 	H3Handle NewGameBtn;
 	H3Handle CreditsBtn;
 	H3Handle SettingsBtn;
@@ -25,7 +24,6 @@ void MainMenuComponent_Terminate(void* properties)
 	MainMenuComponent_Properties* props = (MainMenuComponent_Properties*)properties;
 
 	H3_Texture_Destroy(props->TextureMain);
-	H3_Texture_Destroy(props->TextureMain2);
 	H3_Texture_Destroy(props->NewGameBtn);
 	H3_Texture_Destroy(props->CreditsBtn);
 	H3_Texture_Destroy(props->SettingsBtn);
@@ -38,14 +36,12 @@ void MainMenuComponent_Draw(H3Handle h3, SH3Transform* transform, void* properti
 	//texture MainMenu
 	MainMenuComponent_Properties* props = (MainMenuComponent_Properties*)properties;
 	H3_Texture_Draw(h3,0,0,props->TextureMain, A_Top + A_Left);
-	H3_Texture_Draw(h3,0,0,props->TextureMain2,A_Top + A_Left);
 	
 	//launch game
 	if (H3_Button(h3, props->NewGameBtn,800, 400, 0x11)) {
 		*props->IsMainMenu = false;
 		*props->IsNewGame = true;
 		H3_Texture_Draw(h3, 0, 0, props->TextureMain, A_Top + A_Left);
-		H3_Texture_Draw(h3, 0, 0, props->TextureMain2, A_Top + A_Left);
 	}
 	//show credits
 	if (H3_Button(h3, props->CreditsBtn, 800, 500, 0x11)) {
@@ -74,7 +70,6 @@ void* MainMenuComponent_CreateProperties(bool* IsMainMenu,bool* IsCredits,bool* 
 
 	//load needed btn images
 	properties->TextureMain = H3_Texture_Load("assets/Menu/main.jpg", &props->w, &props->h);
-	properties->TextureMain2 = H3_Texture_Load("assets/Menu/Smoke-White.png", &props->w, &props->h);
 	properties->NewGameBtn = H3_Texture_Load("assets/Menu/NewGame.png", &props->w, &props->h);
 	properties->CreditsBtn = H3_Texture_Load("assets/Menu/Credits.png", &props->w, &props->h);
 	properties->SettingsBtn = H3_Texture_Load("assets/Menu/Settings.png", &props->w, &props->h);
