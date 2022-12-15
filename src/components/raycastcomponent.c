@@ -1,6 +1,6 @@
 #include "components/RaycastComponent.h"
 #include "components/EnemyComponent.h"
-#include "components/playercomponent.h"
+#include "components/mancomponent.h"
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
@@ -42,7 +42,7 @@ void RaycastComponentCollision(H3Handle object, SH3Collision obj_id) {
 	if (obj_id.other == NULL) {
 		H3_Object_Destroy(object, false);
 	}
-	else if (H3_Object_HasComponent(obj_id.other, PLAYERCOMPONENT_TYPEID)) {
+	else if (H3_Object_HasComponent(obj_id.other, MANCOMPONENT_TYPEID)|| H3_Object_HasComponent(obj_id.other, MANCOMPONENT_TYPEID)) {
 		EnemyComponent_SetIsAggroEx(props->Owner, true);
 		EnemyComponent_SetAggroTimerEx(props->Owner, 5);
 		EnemyComponent_SetFollowTimerEx(props->Owner, 3);
