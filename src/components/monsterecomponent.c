@@ -13,7 +13,7 @@ typedef struct
 {
 	H3Handle player;
 	H3Handle energyBar;
-
+	H3Handle drinkSFX;
 
 } MonstereComponent_Properties;
 
@@ -32,6 +32,7 @@ void MonstereComponent_PreUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 		//drink monstere helps to recover energy
 		if (TirednessComponent_GetrecovEnergyEx(props->energyBar) == 0)
 		{
+			H3_Sound_Play(props->drinkSFX, 0.4, false);
 			TirednessComponent_SetrecovEnergyEx(props->energyBar, 1);
 			//remove from inventory
 			InventoryComponent_SetObjSlot2Ex(props->player, NULL);
@@ -39,6 +40,7 @@ void MonstereComponent_PreUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 		}
 		else if (TirednessComponent_GetrecovEnergyEx(props->energyBar) == 1)
 		{
+			H3_Sound_Play(props->drinkSFX, 0.4, false);
 			TirednessComponent_SetrecovEnergyEx(props->energyBar, 2);
 			//remove from inventory
 			InventoryComponent_SetObjSlot2Ex(props->player, NULL);
@@ -54,6 +56,7 @@ void* MonstereComponent_CreateProperties(H3Handle playerRef, H3Handle energyBarR
 
 	properties->player		= playerRef;
 	properties->energyBar	= energyBarRef;
+	properties->drinkSFX = H3_Sound_Load("assets/SFX/DrinkSFX.wav");
 
 
 	return properties;

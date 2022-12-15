@@ -30,6 +30,9 @@ typedef struct
 	H3Handle* Player;
 	H3Handle* GameScene;
 
+	//for ailse monstere
+	int limit;
+	bool IsMonsterInitialized;
 } AisleSpawnerComponent_Properties;
 
 
@@ -42,12 +45,11 @@ H3Handle Pentagram1;
 H3Handle Pentagram2;
 H3Handle Pentagram3;
 H3Handle Pentagram4;
-int limit = 100;
-bool IsMonsterInitialized = false;
 float px, py;
 
 void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* transform, float t, float dt, void* properties) {
 	AisleSpawnerComponent_Properties* props = (AisleSpawnerComponent_Properties*)properties;
+
 	H3_Transform_GetPosition(H3_Object_GetTransform(*props->Player), &px, &py);
 	if (!props->IsInitialized) {
 		//big random Aisles
@@ -56,14 +58,14 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 				props->AisleTempIndex += 1;
 				snprintf(props->AisleTempName, 256, "Aisle_%d", props->AisleTempIndex);
 				H3Handle Aisle = H3_Object_Create2(*props->GameScene, props->AisleTempName, NULL, 5);
-				props->aisleID = rand() % limit;
-				if (!(i > 3 && u > 1 && !IsMonsterInitialized)) {
+				props->aisleID = rand() % props->limit;
+				if (!(i > 3 && u > 1 && !props->IsMonsterInitialized)) {
 					if (props->aisleID <= 100 && props->aisleID>90) {
-						limit -= 10;
+						props->limit -= 10;
 						H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->monsterAisle, 0x11));
 						H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(1,33,NULL));
 						H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 264, 82, 0x11, true));
-						IsMonsterInitialized = true;
+						props->IsMonsterInitialized = true;
 					}
 					else if (props->aisleID <= 90 && props->aisleID>75) {
 						H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->schoolAisle, 0x11));
@@ -75,11 +77,11 @@ void AisleSpawnerComponentUpdate(H3Handle h3, H3Handle object, SH3Transform* tra
 					}
 				}
 				else {
-					limit -= 10;
+					props->limit -= 10;
 					H3_Object_AddComponent(Aisle, SPRITECOMPONENT_CREATE(props->monsterAisle, 0x11));
 					H3_Object_AddComponent(Aisle, COLLECTABLECOMPONENT_CREATE(1,33,NULL));
 					H3_Object_EnablePhysics(Aisle, H3_BOX_COLLIDER(CDT_Dynamic, 264, 82, 0x11, true));
-					IsMonsterInitialized = true;
+					props->IsMonsterInitialized = true;
 				}
 
 				if (i < 4) {
@@ -187,6 +189,7 @@ void* AisleSpawnerComponent_CreateProperties(H3Handle* GameScene,H3Handle* Playe
 	AisleSpawnerComponent_Properties* properties = malloc(sizeof(AisleSpawnerComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	AisleSpawnerComponent_Properties* props = (AisleSpawnerComponent_Properties*)properties;
+	
 	properties->AisleTempIndex = 0;
 	properties->Player = Player;
 	properties->GameScene = GameScene;
@@ -194,6 +197,9 @@ void* AisleSpawnerComponent_CreateProperties(H3Handle* GameScene,H3Handle* Playe
 	properties->IsInitialized = false;
 	properties->hasCrowBarSpawned = false;
 	properties->IsFinalRush = IsFinalRush;
+
+	properties->limit = 100;
+	properties->IsMonsterInitialized = false;
 	//why did I do that ? I don't even know myself
 	sprintf_s(props->uselessAisle, 100, "assets/map/rayonpif.png");
 	sprintf_s(props->schoolAisle, 100, "assets/map/rayonscolaire.png");
