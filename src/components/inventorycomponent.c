@@ -63,7 +63,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	if (H3_Input_IsMouseBtnPressed(MB_Left) && 
 		props->triggerObj != NULL && 
 		props->ObjSlot2 == NULL
-		&&CollectableComponent_GettypeEx(props->triggerObj) != 12
+		&& CollectableComponent_GettypeEx(props->triggerObj) != 12
 		&& CollectableComponent_GettypeEx(props->triggerObj) != 13)
 	{
 		//monster Aisle
@@ -128,12 +128,24 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			|| CollectableComponent_GettypeEx(props->triggerObj) == 6
 			|| CollectableComponent_GettypeEx(props->triggerObj) == 4)
 			&& !ProjectileComponent_GetIsLaunchedEx(props->triggerObj)) {
-			props->ObjSlot2 = props->triggerObj;
+				props->ObjSlot2 = props->triggerObj;
+			
+				props->nbTrigger--;
+				if (props->nbTrigger <= 0) {
+					props->nbTrigger = 0;
+					props->triggerObj = NULL;
+				}
 		}
 		else if (CollectableComponent_GettypeEx(props->triggerObj) == 2
 			||CollectableComponent_GettypeEx(props->triggerObj) == 9
 			|| CollectableComponent_GettypeEx(props->triggerObj) == 14) {
-			props->ObjSlot2 = props->triggerObj;
+				props->ObjSlot2 = props->triggerObj;
+			
+				props->nbTrigger--;
+				if (props->nbTrigger <= 0) {
+					props->nbTrigger = 0;
+					props->triggerObj = NULL;
+				}
 		}
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 	}
@@ -175,17 +187,19 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	if (props->ObjSlot2 != NULL) {
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 		H3_Object_SetTranslation(props->ObjSlot2, (props->playerX + 150), (props->playerY - 115));
-		if (props->triggerObj!= NULL){
+		/*if (props->triggerObj!= NULL){
 			H3_Object_SetRenderOrder(props->ObjSlot2, 12);
 			if (CollectableComponent_GettypeEx(props->triggerObj) != 12
 				&& CollectableComponent_GettypeEx(props->triggerObj) != 13
 				&&CollectableComponent_GettypeEx(props->triggerObj) != 2) {
 				props->triggerObj = NULL;
 			}
-		}
-		
+		}*/
+		H3_Object_SetRenderOrder(props->ObjSlot2, 12);
+
 	}
 	
+	printf("%d", props->nbTrigger);
 }
 
 
@@ -206,20 +220,19 @@ void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision)
 	{
 		if (H3_Object_HasComponent(collision.other, COLLECTABLECOMPONENT_TYPEID))
 		{
-			if (CollectableComponent_GettypeEx(collision.other) == 4
+			//projectile 
+			if (   CollectableComponent_GettypeEx(collision.other) == 4
 				|| CollectableComponent_GettypeEx(collision.other) == 6
 				|| CollectableComponent_GettypeEx(collision.other) == 8
-				|| CollectableComponent_GettypeEx(collision.other) == 11) {
+				|| CollectableComponent_GettypeEx(collision.other) == 11) 
+			{
+				//not launched
 				if (!ProjectileComponent_GetIsLaunchedEx(collision.other)) {
 					props->triggerObj = collision.other;
 					props->nbTrigger++;
 				}
 			}
-			else if (CollectableComponent_GettypeEx(collision.other) == 9
-					|| CollectableComponent_GettypeEx(collision.other) == 14) {
-				props->triggerObj = collision.other;
-				props->nbTrigger++;
-			}
+			//others
 			else {
 				props->triggerObj = collision.other;
 				props->nbTrigger++;
@@ -237,27 +250,28 @@ void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other)
 	{
 		if (H3_Object_HasComponent(other, COLLECTABLECOMPONENT_TYPEID))
 		{
-			if (CollectableComponent_GettypeEx(other) == 4
+			//projectile 
+			if (   CollectableComponent_GettypeEx(other) == 4
 				|| CollectableComponent_GettypeEx(other) == 6
 				|| CollectableComponent_GettypeEx(other) == 8
-				|| CollectableComponent_GettypeEx(other) == 11) {
+				|| CollectableComponent_GettypeEx(other) == 11)
+			{
+				//not launched
 				if (!ProjectileComponent_GetIsLaunchedEx(other)) {
-					props->triggerObj = other;
-					props->nbTrigger++;
+					props->nbTrigger--;
 				}
 			}
-			else if (CollectableComponent_GettypeEx(other) == 9
-					|| CollectableComponent_GettypeEx(other) == 14) {
-				props->nbTrigger--;
-				if (props->nbTrigger == 0)
-					props->triggerObj = NULL;
-			}
+			//others
 			else {
 				props->nbTrigger--;
-				if (props->nbTrigger == 0)
-					props->triggerObj = NULL;
 			}
 		}
+	}
+
+	//reset trigger object
+	if (props->nbTrigger <= 0) {
+		props->nbTrigger = 0;
+		props->triggerObj = NULL;
 	}
 }
 uint32_t w = 44, h = 64;
