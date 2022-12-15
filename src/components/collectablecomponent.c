@@ -49,6 +49,7 @@ void* CollectableComponent_CreateProperties(int type, int durability, H3Handle D
 	properties->durability = durability;
 	properties->isInHand = false;
 	properties->isDoneOnce = false;
+
 	return properties;
 }
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECOMPONENT_TYPEID, H3Handle, DoorColl);
@@ -56,7 +57,7 @@ H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECO
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECOMPONENT_TYPEID, int, type);
 H3_DEFINE_COMPONENT_PROPERTY_ACCESSORS_RW_EX(CollectableComponent, COLLECTABLECOMPONENT_TYPEID, int, durability);
 
-//types:dddddd
+//types:
 //type 1 = monsterAisle
 //type 2 = monsterCan
 //type 3 = bookAisle
