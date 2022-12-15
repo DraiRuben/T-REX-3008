@@ -114,7 +114,7 @@ int main()
 			H3Handle Credits = H3_Object_Create2(CreditsScene, "Credits", NULL, 1);
 			H3_Object_AddComponent(Credits, CREDITSCOMPONENT_CREATE(&IsCredits,&IsMainMenu));
 			H3Handle CreditText = H3_Object_Create2(CreditsScene, "CreditsText", NULL, 1);
-			H3_Object_AddComponent(CreditText, TEXTCOMPONENT_CREATE("A big thanks to Nicolas, Arthur, Dorian and Ruben\n who worked really hard.\n\n As well as to limezu on itch.io whose\n assetpack we couldn't have done without", textprops));
+			H3_Object_AddComponent(CreditText, TEXTCOMPONENT_CREATE("A big thanks to Nicolas, Arthur, Dorian and Ruben\n who worked really hard.\n\n As well as to limezu on itch.io whose\n assetpack we couldn't have done without\n\n This game was inspired by \"Don't Shop At The Isomart After Dark\", by u/A_Vesperin", textprops));
 			H3_Object_SetTranslation(CreditText, 950, 300);
 			while (IsCredits) {
 				H3_DoFrame(screen, CreditsScene);
@@ -240,7 +240,11 @@ int main()
 
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
+				if (ClockComponent_GethoursEx(time) == 8) {
+					PlayerComponent_SetplayerWinEx(player, true);
+				}
 			}
+
 			//set gameover text
 			if (IsWin) {
 				snprintf(FinalTime, 256, "                           You Escaped at : %s\n Who knows what dreadful fate would've befell upon you", TextComponent_GetTextEx(time));
