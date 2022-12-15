@@ -1,5 +1,5 @@
 #include <components/cashregistercomponent.h>
-#include <components/playercomponent.h>
+#include <components/mancomponent.h>
 #include <components/digicodecomponent.h>
 #include <components/spritecomponent.h>
 #include <components/collectablecomponent.h>
@@ -12,6 +12,7 @@ typedef struct
 	H3Handle* Player;
 	H3Handle* GameScene;
 	H3Handle digicode;
+	H3Handle OpenSFX;
 	bool* isOpen;
 } CashRegisterComponent_Properties;
 
@@ -29,6 +30,7 @@ void CashRegisterComponent_Update(H3Handle h3, H3Handle object, SH3Transform* tr
 	{
 		*props->isOpen = true;
 		resetCode(props->digicode);
+		H3_Sound_Play(props->OpenSFX, 80, false);
 		H3Handle Key = H3_Object_Create2(*props->GameScene,"Key",NULL,4);
 		H3_Object_AddComponent(Key, SPRITECOMPONENT_CREATE("assets/Objects/BlackKey.png", 0x22));
 		H3_Object_AddComponent(Key, COLLECTABLECOMPONENT_CREATE(9, 1,NULL));
@@ -45,7 +47,7 @@ void CashRegisterComponent_CollisionEnter(H3Handle object, SH3Collision collisio
 	SH3Component* component = H3_Object_GetComponent(object, CASHREGISTERCOMPONENT_TYPEID);
 	CashRegisterComponent_Properties* props = (CashRegisterComponent_Properties*)component->properties;
 
-	if (!*props->isOpen && collision.other != NULL && H3_Object_HasComponent(collision.other, PLAYERCOMPONENT_TYPEID))
+	if (!*props->isOpen && collision.other != NULL && (H3_Object_HasComponent(collision.other, MANCOMPONENT_TYPEID) || H3_Object_HasComponent(collision.other, MANCOMPONENT_TYPEID)))
 	{
 		H3_Object_SetEnabled(props->digicode, true);
 	}
@@ -56,7 +58,7 @@ void CashRegisterComponent_CollisionLeave(H3Handle object, H3Handle other)
 	SH3Component* component = H3_Object_GetComponent(object, CASHREGISTERCOMPONENT_TYPEID);
 	CashRegisterComponent_Properties* props = (CashRegisterComponent_Properties*)component->properties;
 
-	if (!*props->isOpen && other != NULL && H3_Object_HasComponent(other, PLAYERCOMPONENT_TYPEID))
+	if (!*props->isOpen && other != NULL && (H3_Object_HasComponent(other, MANCOMPONENT_TYPEID)|| H3_Object_HasComponent(other, MANCOMPONENT_TYPEID)))
 	{
 		resetCode(props->digicode);
 		
@@ -88,6 +90,7 @@ void* CashRegisterComponent_CreateProperties(H3Handle Digicode, bool* cashregist
 	properties->Player = Player;
 	properties->GameScene = GameScene;
 	properties->digicode = Digicode;
+	properties->OpenSFX = H3_Sound_Load("assets/SFX/CashRegisterSFX.wav");
 	//properties->isOpen = false;
 	properties->isOpen = cashregisterIsOpen;
 

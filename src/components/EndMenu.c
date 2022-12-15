@@ -78,7 +78,7 @@ void* EndMenuComponent_CreateProperties(bool* IsEndMenu, bool* IsNewGame, bool* 
 	//load needed btn images
 	properties->TextureEnd = H3_Texture_Load("assets/Menu/bloodscene.png", &props->w, &props->h);
 	properties->NewGameBtn = H3_Texture_Load("assets/Menu/NewGame.png", &props->w, &props->h);
-	properties->MainMenuBtn = H3_Texture_Load("assets/Menu/NewGame.png", &props->w, &props->h);
+	properties->MainMenuBtn = H3_Texture_Load("assets/Menu/MainMenu.png", &props->w, &props->h);
 	properties->ExitBtn = H3_Texture_Load("assets/Menu/Exit.png", &props->w, &props->h);
 	properties->TextureEndWin = H3_Texture_Load("assets/Menu/fond noir.jpg", &props->w, &props->h);
 	properties->TextureEndWin2 = H3_Texture_Load("assets/Menu/evade.png", &props->w, &props->h);

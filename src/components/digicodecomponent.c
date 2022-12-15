@@ -19,10 +19,15 @@ typedef struct
 	int realCode;
 	int code; //temporairy
 	int whichNumb;
+
+	H3Handle clickSFX;
+
 	H3Handle firstNumb;
 	H3Handle secondNumb;
 	H3Handle thirdNumb;
 	H3Handle fourthNumb;
+
+	H3Handle FailSFX;
 
 	H3Handle btn7, btn8, btn9;
 	H3Handle btn4, btn5, btn6;
@@ -33,7 +38,6 @@ typedef struct
 void DigicodeComponent_Terminate(void* properties)
 {
 	DigicodeComponent_Properties* props = (DigicodeComponent_Properties*)properties;
-
 	H3_Texture_Destroy(props->btnClose);
 	H3_Texture_Destroy(props->btnCheck);
 	H3_Texture_Destroy(props->btn0);
@@ -49,7 +53,6 @@ void DigicodeComponent_Terminate(void* properties)
 
 	free(properties);
 }
-
 void DigicodeComponent_Draw(H3Handle h3, SH3Transform* transform, void* properties)
 {
 	DigicodeComponent_Properties* props = (DigicodeComponent_Properties*)properties;
@@ -72,37 +75,60 @@ void DigicodeComponent_Draw(H3Handle h3, SH3Transform* transform, void* properti
 		props->fourthNumb	= props->btn0;
 		props->whichNumb	= 1;
 		props->realCode = props->code;
+		if (props->realCode != 904) {
+			H3_Sound_Play(props->FailSFX, 0.4, false);
+		}
 		props->code = 0;
 	}
 	if (myButton(h3, props->btn0, (props->digicodeX     ), (props->digicodeY + 64), properties)) {
 		addToCode(props->btn0, 0, properties);
+		H3_Sound_Play(props->clickSFX, 0.2, false);
+
 	}
 	if (myButton(h3, props->btn1, (props->digicodeX - 32), (props->digicodeY + 32), properties)) {
 		addToCode(props->btn1, 1, properties);
+		H3_Sound_Play(props->clickSFX, 0.2, false);
+
 	}
 	if (myButton(h3, props->btn2, (props->digicodeX     ), (props->digicodeY + 32), properties)) {
 		addToCode(props->btn2, 2, properties);
+		H3_Sound_Play(props->clickSFX, 0.2, false);
+
 	}
 	if (myButton(h3, props->btn3, (props->digicodeX + 32), (props->digicodeY + 32), properties)) {
 		addToCode(props->btn3, 3, properties);
+		H3_Sound_Play(props->clickSFX, 0.2, false);
+
 	}
 	if (myButton(h3, props->btn4, (props->digicodeX - 32), (props->digicodeY     ), properties)) {
 		addToCode(props->btn4, 4, properties);
+		H3_Sound_Play(props->clickSFX, 0.2, false);
+
 	}
 	if (myButton(h3, props->btn5, (props->digicodeX     ), (props->digicodeY     ), properties)) {
 		addToCode(props->btn5, 5, properties);
+		H3_Sound_Play(props->clickSFX, 0.2, false);
+
 	}
 	if (myButton(h3, props->btn6, (props->digicodeX + 32), (props->digicodeY     ), properties)) {
 		addToCode(props->btn6, 6, properties);
+		H3_Sound_Play(props->clickSFX, 0.2, false);
+
 	}
 	if (myButton(h3, props->btn7, (props->digicodeX - 32), (props->digicodeY - 32), properties)) {
 		addToCode(props->btn7, 7, properties);
+		H3_Sound_Play(props->clickSFX, 0.2, false);
+
 	}
 	if (myButton(h3, props->btn8, (props->digicodeX     ), (props->digicodeY - 32), properties)) {
 		addToCode(props->btn8, 8, properties);
+		H3_Sound_Play(props->clickSFX, 0.2, false);
+
 	}
 	if (myButton(h3, props->btn9, (props->digicodeX + 32), (props->digicodeY - 32), properties)) {
 		addToCode(props->btn9, 9, properties);
+		H3_Sound_Play(props->clickSFX, 0.2, false);
+
 	}
 
 	//draw code
@@ -203,6 +229,7 @@ void* DigicodeComponent_CreateProperties(H3Handle cameraRef)
 {
 	DigicodeComponent_Properties* properties = malloc(sizeof(DigicodeComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
+	properties->clickSFX = H3_Sound_Load("assets/SFX/clickSFX.wav");
 
 	properties->camera		= cameraRef;
 
@@ -231,6 +258,7 @@ void* DigicodeComponent_CreateProperties(H3Handle cameraRef)
 	properties->widthBtn = 26;
 	properties->heightBtn = 26;
 
+	properties->FailSFX = H3_Sound_Load("assets/SFX/DCFailSFX.wav");
 	return properties;
 }
 

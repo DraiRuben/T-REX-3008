@@ -10,7 +10,7 @@
 #include "components/tirednesscomponent.h"
 #include "components/mycameracomponent.h"
 #include "components/ClockComponent.h"
-#include "components/playercomponent.h"
+#include "components/mancomponent.h"
 #include "components/EnemyComponent.h"
 #include "components/inventorycomponent.h"
 #include "components/collectablecomponent.h"
@@ -20,6 +20,8 @@
 #include "components/cashregistercomponent.h"
 #include "components/digicodecomponent.h"
 #include "components/EndMenu.h"
+#include "components/womancomponent.h"
+#include "components/inventorygirlcomponent.h"
 
 #include "components/textcomponent.h"
 #include "components/spritecomponent.h"
@@ -40,15 +42,17 @@ int main()
 
 	//Text props Init
 	SH3TextProperties textprops = (SH3TextProperties){
-			.font = H3_Font_Load("assets/Fonts/Toriko.ttf"),
-			.size = 50,
-			.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
-			.hasOutline = false,
-			.anchor = 0x22,
-			.isBold = true,
-			.isItalic = false,
-			.isUnderlined = false,
-			.isViewLocal = false,
+				.font = H3_Font_Load("assets/Fonts/Toriko.ttf"),
+				.size = 50,
+				.fillColor = {.r = 255,.g = 255,.b = 255,.a = 255},
+				.hasOutline = true,
+				.outlineThickness = 2,
+				.outlineColor = {.r = 0,.g = 0,.b = 0,.a = 255},
+				.anchor = 0x22,
+				.isBold = true,
+				.isItalic = false,
+				.isUnderlined = false,
+				.isViewLocal = false,
 	};
 	SH3TextProperties clockprops = (SH3TextProperties){
 			.font = H3_Font_Load("assets/Fonts/Comfortaa-regular.ttf"),
@@ -85,11 +89,16 @@ int main()
 	bool IsNewGame = false;
 	bool IsEndGame = false;
 	bool IsWin = false;
+	bool IsMan = true;
+	H3Handle MainMenuMusic = H3_Music_Load("assets/SFX/MainMenuSong.wav");
+	H3Handle GameMusic = H3_Music_Load("assets/SFX/AmbiantSFX.wav");
+	H3_Music_Play(MainMenuMusic, 0.7, true);
 
 	char FinalTime[256];
 	while (1) {
 		//Main Menu
 		if (IsMainMenu) {
+			
 			H3Handle MainMenuScene = H3_Scene_Create(screen, true);
 			H3Handle MainMenu = H3_Object_Create2(MainMenuScene, "MainMenu", NULL, 1);
 			H3_Object_AddComponent(MainMenu, MAINMENUCOMPONENT_CREATE(&IsMainMenu,&IsCredits,&IsSettings,&IsNewGame));
@@ -97,8 +106,9 @@ int main()
 			H3_Object_AddComponent(InstanceCode, TEXTCOMPONENT_CREATE("2022-I1, by T-REX 3008", textprops));
 			H3_Object_SetTranslation(InstanceCode, 220, 900);
 			H3Handle GameName = H3_Object_Create2(MainMenuScene, "GameName", NULL, 1);
-			H3_Object_AddComponent(GameName, TEXTCOMPONENT_CREATE("GAMENAME PLACEHOLDER", textprops));
+			H3_Object_AddComponent(GameName, TEXTCOMPONENT_CREATE("CREEPY MALMART", textprops));
 			H3_Object_SetTranslation(GameName, 950, 100);
+			H3_Object_Scale(GameName, 2);
 			H3Handle LaHordeLogo = H3_Object_Create2(MainMenuScene, "LaHordeLogo", NULL, 1);
 			H3_Object_AddComponent(LaHordeLogo, SPRITECOMPONENT_CREATE("assets/Menu/LaHordeLogo.png",0x22));
 			H3_Object_SetTranslation(LaHordeLogo, 1800, 900);
@@ -114,7 +124,7 @@ int main()
 			H3Handle Credits = H3_Object_Create2(CreditsScene, "Credits", NULL, 1);
 			H3_Object_AddComponent(Credits, CREDITSCOMPONENT_CREATE(&IsCredits,&IsMainMenu));
 			H3Handle CreditText = H3_Object_Create2(CreditsScene, "CreditsText", NULL, 1);
-			H3_Object_AddComponent(CreditText, TEXTCOMPONENT_CREATE("A big thanks to Nicolas, Arthur, Dorian and Ruben\n who worked really hard.\n\n As well as to limezu on itch.io whose\n assetpack we couldn't have done without", textprops));
+			H3_Object_AddComponent(CreditText, TEXTCOMPONENT_CREATE("A big thanks to Nicolas, Arthur, Dorian and Ruben\n who worked really hard.\n\n As well as to limezu on itch.io whose\n assetpack we couldn't have done without\n\n This game was inspired by \"Don't Shop At The Isomart After Dark\", by u/A_Vesperin", textprops));
 			H3_Object_SetTranslation(CreditText, 950, 300);
 			while (IsCredits) {
 				H3_DoFrame(screen, CreditsScene);
@@ -126,7 +136,7 @@ int main()
 		if (IsSettings) {
 			H3Handle SettingsScene = H3_Scene_Create(screen, true);
 			H3Handle Settings = H3_Object_Create2(SettingsScene, "Settings", NULL, 1);
-			H3_Object_AddComponent(Settings, SETTINGSCOMPONENT_CREATE(&IsSettings, &IsMainMenu));
+			H3_Object_AddComponent(Settings, SETTINGSCOMPONENT_CREATE(&IsSettings, &IsMainMenu,&IsMan));
 			while (IsSettings) {
 				H3_DoFrame(screen, SettingsScene);
 			}
@@ -135,6 +145,7 @@ int main()
 
 		//game
 		if (IsNewGame) {
+			H3_Music_Stop(MainMenuMusic);
 			H3Handle GameScene = H3_Scene_Create(screen, true);
 			uint32_t barWidth, barHeight;
 			uint32_t backBarWidth, backBarHeight;
@@ -143,8 +154,7 @@ int main()
 
 			bool IsFinalRush = false;
 			//music
-			H3Handle music = H3_Music_Load("assets/SFX/AmbiantSFX.wav");
-			H3_Music_Play(music, 1, true);
+			H3_Music_Play(GameMusic, 1, true);
 			//Map init
 			H3Handle map = H3_Map_Load("assets/Map/map.tmx");
 			H3_Map_RegisterObjectLayerForPhysicsInScene(GameScene, map, "collider");
@@ -173,11 +183,20 @@ int main()
 			H3_Object_AddComponent(AisleSpawner, AISLESPAWNERCOMPONENT_CREATE(&GameScene, &player,&IsFinalRush,&GlobalAggro));
 
 			//player
-			H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/player/PlayerMovefront.png", 0x22, 6, 0.2, true));
+			if (IsMan) {
+				H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE(&GameScene, &energyBar,IsMan));
+				H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Man/ManMovefront.png", 0x22, 6, 0.2, true));
+				H3_Object_AddComponent(player, MANCOMPONENT_CREATE(&IsWin, &IsEndGame, &IsNewGame, energyBar));
+			}
+			else {
+				H3_Object_AddComponent(player, INVENTORYGIRLCOMPONENT_CREATE(&GameScene, &energyBar,IsMan));
+				H3_Object_AddComponent(player, ANIMATEDSPRITECOMPONENT_CREATE("assets/Sprites/Woman/WomanMovefront.png", 0x22, 6, 0.2, true));
+				H3_Object_AddComponent(player, WOMANCOMPONENT_CREATE(&IsWin, &IsEndGame, &IsNewGame, energyBar));
+			}
+			
+			
 			H3_Object_EnablePhysics(player, H3_BOX_COLLIDER(CDT_Dynamic, 25, 38, 0x22, false));
-			H3_Object_AddComponent(player, PLAYERCOMPONENT_CREATE(&IsWin, &IsEndGame, &IsNewGame, energyBar));
-			H3_Object_AddComponent(player, INVENTORYCOMPONENT_CREATE(&GameScene,&energyBar));
-			H3_Object_SetTranslation(player, 1750, 2100);
+			H3_Object_SetTranslation(player, 1750, 2400);
 
 			//camera
 			H3_Object_AddComponent(camera, MYCAMERACOMPONENT_CREATE(480, 270, player));
@@ -204,15 +223,27 @@ int main()
 
 			//Inventory Slots
 			H3Handle slot0 = H3_Object_Create2(GameScene, "inventory, slot 0", camera, 10);	//pocket 2
-			H3Handle slot1 = H3_Object_Create2(GameScene, "inventory, slot 1", camera, 10);	//pocket 1
-			H3Handle slot2 = H3_Object_Create2(GameScene, "inventory, slot 2", camera, 10); //hand
-			H3_Object_AddComponent(slot0, SPRITECOMPONENT_CREATE("assets/Sprites/UI_inventorySlot.png", 0x22));
-			H3_Object_AddComponent(slot1, SPRITECOMPONENT_CREATE("assets/Sprites/UI_inventorySlot.png", 0x22));
-			H3_Object_AddComponent(slot2, SPRITECOMPONENT_CREATE("assets/Sprites/UI_MainSlot_Inventory.png", 0x22));
 			H3_Object_SetTranslation(slot0, 220, -115);
+			H3_Object_AddComponent(slot0, SPRITECOMPONENT_CREATE("assets/Sprites/UI_inventorySlot.png", 0x22));
+
+			H3Handle slot1 = H3_Object_Create2(GameScene, "inventory, slot 1", camera, 10);	//pocket 1
 			H3_Object_SetTranslation(slot1, 185, -115);
-			H3_Object_SetTranslation(slot2, 150, -115);
+			H3_Object_AddComponent(slot1, SPRITECOMPONENT_CREATE("assets/Sprites/UI_inventorySlot.png", 0x22));
+
+			H3Handle slot2 = H3_Object_Create2(GameScene, "inventory, slot 2", camera, 10); //hand
 			
+			if (IsMan) {
+				H3_Object_SetTranslation(slot2, 150, -115);
+				H3_Object_AddComponent(slot2, SPRITECOMPONENT_CREATE("assets/Sprites/UI_MainSlot_Inventory.png", 0x22));
+			}
+			else if (!IsMan) {
+				H3_Object_SetTranslation(slot2, 150, -115);
+				H3_Object_AddComponent(slot2, SPRITECOMPONENT_CREATE("assets/Sprites/UI_inventorySlot.png", 0x22));
+
+				H3Handle slot3 = H3_Object_Create2(GameScene, "inventory, slot 3", camera, 10); //hand
+				H3_Object_AddComponent(slot3, SPRITECOMPONENT_CREATE("assets/Sprites/UI_MainSlot_Inventory.png", 0x22));
+				H3_Object_SetTranslation(slot3, 115, -115);
+			}			
 			//shadow effect
 			H3Handle gradient = H3_Object_Create2(GameScene, "gradient", camera, 9);
 			H3_Object_AddComponent(gradient, SPRITECOMPONENT_CREATE("assets/Sprites/gradien.png", 0x22));
@@ -240,7 +271,11 @@ int main()
 
 			while (IsNewGame) {
 				H3_DoFrame(screen, GameScene);
+				if (ClockComponent_GethoursEx(time) == 8) {
+					ManComponent_SetplayerWinEx(player, true);
+				}
 			}
+
 			//set gameover text
 			if (IsWin) {
 				snprintf(FinalTime, 256, "                           You Escaped at : %s\n Who knows what dreadful fate would've befell upon you", TextComponent_GetTextEx(time));
@@ -248,7 +283,8 @@ int main()
 			else {
 				snprintf(FinalTime, 256, "                You Died at : %s\n You shall forever be part of this place", TextComponent_GetTextEx(time));
 			}
-			H3_Music_Stop(music);
+			H3_Music_Stop(GameMusic);
+			H3_Music_Play(MainMenuMusic, 0.7, true);
 			H3_Scene_Destroy(GameScene);
 		}
 

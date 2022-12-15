@@ -3,7 +3,7 @@
 #include <components/spritecomponent.h>
 #include <components/collectablecomponent.h>
 #include <components/monsterecomponent.h>
-#include <components/playercomponent.h>
+#include <components/mancomponent.h>
 #include <components/projectileComponent.h>
 
 #include <stdlib.h>
@@ -14,12 +14,14 @@ typedef struct
 	float playerX;
 	float playerY;
 	int nbTrigger;
+	bool IsMan;
 	H3Handle triggerObj;
 	H3Handle ObjSlot0;
 	H3Handle ObjSlot1;
 	H3Handle ObjSlot2;	//hand
 	H3Handle OpenDoor;
 	H3Handle HitSFX;
+	H3Handle DoorOpenSFX;
 	H3Handle* EnergyBar;
 	H3Handle* GameScene;
 } InventoryComponent_Properties;
@@ -63,7 +65,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	if (H3_Input_IsMouseBtnPressed(MB_Left) && 
 		props->triggerObj != NULL && 
 		props->ObjSlot2 == NULL
-		&&CollectableComponent_GettypeEx(props->triggerObj) != 12
+		&& CollectableComponent_GettypeEx(props->triggerObj) != 12
 		&& CollectableComponent_GettypeEx(props->triggerObj) != 13)
 	{
 		//monster Aisle
@@ -73,7 +75,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3Handle Monster = H3_Object_Create2(*props->GameScene, Object, NULL,12);
 			H3_Object_AddComponent(Monster, SPRITECOMPONENT_CREATE("assets/Objects/monstère.png", 0x22));
 			H3_Object_AddComponent(Monster, COLLECTABLECOMPONENT_CREATE(2,1, NULL));
-			H3_Object_AddComponent(Monster, MONSTERECOMPONENT_CREATE(object, *props->EnergyBar));
+			H3_Object_AddComponent(Monster, MONSTERECOMPONENT_CREATE(object, *props->EnergyBar, props->IsMan));
 			H3_Object_EnablePhysics(Monster, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Monster;
 		}
@@ -84,7 +86,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3Handle Book = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
 			H3_Object_AddComponent(Book, SPRITECOMPONENT_CREATE("assets/Objects/book.png", 0x22));
 			H3_Object_AddComponent(Book, COLLECTABLECOMPONENT_CREATE(4, 1, NULL));
-			H3_Object_AddComponent(Book, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX));
+			H3_Object_AddComponent(Book, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX, props->IsMan));
 			H3_Object_EnablePhysics(Book, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Book;
 		}
@@ -95,7 +97,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3Handle Baguette = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
 			H3_Object_AddComponent(Baguette, SPRITECOMPONENT_CREATE("assets/Objects/baguette.png", 0x22));
 			H3_Object_AddComponent(Baguette, COLLECTABLECOMPONENT_CREATE(6, 1,NULL));
-			H3_Object_AddComponent(Baguette, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX));
+			H3_Object_AddComponent(Baguette, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX, props->IsMan));
 			H3_Object_EnablePhysics(Baguette, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Baguette;
 		}
@@ -107,7 +109,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3Handle Meat = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
 			H3_Object_AddComponent(Meat, SPRITECOMPONENT_CREATE("assets/Objects/meat.png", 0x22));
 			H3_Object_AddComponent(Meat, COLLECTABLECOMPONENT_CREATE(8, 1,NULL));
-			H3_Object_AddComponent(Meat, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX));
+			H3_Object_AddComponent(Meat, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX, props->IsMan));
 			H3_Object_EnablePhysics(Meat, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Meat;
 		}
@@ -118,7 +120,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			H3Handle Fish = H3_Object_Create2(*props->GameScene, Object, NULL, 12);
 			H3_Object_AddComponent(Fish, SPRITECOMPONENT_CREATE("assets/Objects/fish.png", 0x22));
 			H3_Object_AddComponent(Fish, COLLECTABLECOMPONENT_CREATE(11, 1,NULL));
-			H3_Object_AddComponent(Fish, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX));
+			H3_Object_AddComponent(Fish, PROJECTILECOMPONENT_CREATE(object,&props->HitSFX, props->IsMan));
 			H3_Object_EnablePhysics(Fish, H3_BOX_COLLIDER(CDT_Dynamic, 12, 16, 0x22, true));
 			props->ObjSlot2 = Fish;
 		}
@@ -128,12 +130,26 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 			|| CollectableComponent_GettypeEx(props->triggerObj) == 6
 			|| CollectableComponent_GettypeEx(props->triggerObj) == 4)
 			&& !ProjectileComponent_GetIsLaunchedEx(props->triggerObj)) {
-			props->ObjSlot2 = props->triggerObj;
+				props->ObjSlot2 = props->triggerObj;
+			
+				props->nbTrigger--;
+				if (props->nbTrigger <= 0) {
+					props->nbTrigger = 0;
+					props->triggerObj = NULL;
+				}
 		}
 		else if (CollectableComponent_GettypeEx(props->triggerObj) == 2
 			||CollectableComponent_GettypeEx(props->triggerObj) == 9
 			|| CollectableComponent_GettypeEx(props->triggerObj) == 14) {
-			props->ObjSlot2 = props->triggerObj;
+				props->ObjSlot2 = props->triggerObj;
+			
+				props->nbTrigger--;
+				if (props->nbTrigger <= 0) {
+					props->nbTrigger = 0;
+					props->triggerObj = NULL;
+				}
+				if (CollectableComponent_GettypeEx(props->ObjSlot2) == 2)
+					MonstereComponent_SetisReadyToUseEx(props->ObjSlot2, false);
 		}
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 	}
@@ -145,6 +161,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 		&& CollectableComponent_GettypeEx(props->ObjSlot2) ==9
 		&& CollectableComponent_GettypeEx(props->triggerObj) == 12)
 	{
+		H3_Sound_Play(props->DoorOpenSFX, 0.3, false);
 		SpriteComponent_SetTextureEx(props->triggerObj, props->OpenDoor);
 		H3_Object_Destroy(CollectableComponent_GetDoorCollEx(props->triggerObj), false);
 		CollectableComponent_SetdurabilityEx(props->ObjSlot2, 0);
@@ -158,7 +175,7 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 		&& CollectableComponent_GettypeEx(props->ObjSlot2) == 14
 		&& CollectableComponent_GettypeEx(props->triggerObj) == 13)
 	{
-		PlayerComponent_SetplayerWinEx(object, true);
+		ManComponent_SetplayerWinEx(object, true);
 		CollectableComponent_SetdurabilityEx(props->ObjSlot2, 0);
 		props->ObjSlot2 = NULL;
 	}
@@ -175,17 +192,9 @@ void InventoryComponent_Update(H3Handle h3, H3Handle object, SH3Transform* trans
 	if (props->ObjSlot2 != NULL) {
 		CollectableComponent_SetisInHandEx(props->ObjSlot2, true);
 		H3_Object_SetTranslation(props->ObjSlot2, (props->playerX + 150), (props->playerY - 115));
-		if (props->triggerObj!= NULL){
-			H3_Object_SetRenderOrder(props->ObjSlot2, 12);
-			if (CollectableComponent_GettypeEx(props->triggerObj) != 12
-				&& CollectableComponent_GettypeEx(props->triggerObj) != 13
-				&&CollectableComponent_GettypeEx(props->triggerObj) != 2) {
-				props->triggerObj = NULL;
-			}
-		}
-		
+		H3_Object_SetRenderOrder(props->ObjSlot2, 12);
+
 	}
-	
 }
 
 
@@ -206,20 +215,19 @@ void InventoryComponent_OnTriggerEnter(H3Handle object, SH3Collision collision)
 	{
 		if (H3_Object_HasComponent(collision.other, COLLECTABLECOMPONENT_TYPEID))
 		{
-			if (CollectableComponent_GettypeEx(collision.other) == 4
+			//projectile 
+			if (   CollectableComponent_GettypeEx(collision.other) == 4
 				|| CollectableComponent_GettypeEx(collision.other) == 6
 				|| CollectableComponent_GettypeEx(collision.other) == 8
-				|| CollectableComponent_GettypeEx(collision.other) == 11) {
+				|| CollectableComponent_GettypeEx(collision.other) == 11) 
+			{
+				//not launched
 				if (!ProjectileComponent_GetIsLaunchedEx(collision.other)) {
 					props->triggerObj = collision.other;
 					props->nbTrigger++;
 				}
 			}
-			else if (CollectableComponent_GettypeEx(collision.other) == 9
-					|| CollectableComponent_GettypeEx(collision.other) == 14) {
-				props->triggerObj = collision.other;
-				props->nbTrigger++;
-			}
+			//others
 			else {
 				props->triggerObj = collision.other;
 				props->nbTrigger++;
@@ -237,41 +245,44 @@ void InventoryComponent_OnTriggerLeave(H3Handle object, H3Handle other)
 	{
 		if (H3_Object_HasComponent(other, COLLECTABLECOMPONENT_TYPEID))
 		{
-			if (CollectableComponent_GettypeEx(other) == 4
+			//projectile 
+			if (   CollectableComponent_GettypeEx(other) == 4
 				|| CollectableComponent_GettypeEx(other) == 6
 				|| CollectableComponent_GettypeEx(other) == 8
-				|| CollectableComponent_GettypeEx(other) == 11) {
+				|| CollectableComponent_GettypeEx(other) == 11)
+			{
+				//not launched
 				if (!ProjectileComponent_GetIsLaunchedEx(other)) {
-					props->triggerObj = other;
-					props->nbTrigger++;
+					props->nbTrigger--;
 				}
 			}
-			else if (CollectableComponent_GettypeEx(other) == 9
-					|| CollectableComponent_GettypeEx(other) == 14) {
-				props->nbTrigger--;
-				if (props->nbTrigger == 0)
-					props->triggerObj = NULL;
-			}
+			//others
 			else {
 				props->nbTrigger--;
-				if (props->nbTrigger == 0)
-					props->triggerObj = NULL;
 			}
 		}
 	}
+
+	//reset trigger object
+	if (props->nbTrigger <= 0) {
+		props->nbTrigger = 0;
+		props->triggerObj = NULL;
+	}
 }
 uint32_t w = 44, h = 64;
-void* InventoryComponent_CreateProperties(H3Handle* GameScene, H3Handle* EnergyBar)
+void* InventoryComponent_CreateProperties(H3Handle* GameScene, H3Handle* EnergyBar, bool IsMan)
 {
 	InventoryComponent_Properties* properties = malloc(sizeof(InventoryComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	properties->nbTrigger = 0;
+	properties->IsMan = IsMan;
 	properties->triggerObj = NULL;
 	properties->ObjSlot0 = NULL;
 	properties->ObjSlot1 = NULL;
 	properties->ObjSlot2 = NULL;
 	properties->EnergyBar = EnergyBar;
 	properties->GameScene = GameScene;
+	properties->DoorOpenSFX = H3_Sound_Load("assets/SFX/DoorOpenSFX.wav");
 	properties->HitSFX= H3_Sound_Load("assets/SFX/ProjectileHitSFX.wav");
 	properties->OpenDoor = H3_Texture_Load("assets/map/DoorOpen.png", &w, &h);
 	return properties;

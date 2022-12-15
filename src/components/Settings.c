@@ -7,10 +7,12 @@ typedef struct
 {
 	bool* IsSettings;
 	bool* IsMainMenu;
+	bool* IsMan;
 	uint32_t w, h;
 	H3Handle BackBtn;
+	H3Handle ManSprite;
+	H3Handle WomanSprite;
 	H3Handle TextureMain;
-	H3Handle TextureMain2;
 } SettingsComponent_Properties;
 
 void SettingsComponent_Terminate(void* properties)
@@ -26,7 +28,13 @@ void SettingsComponent_Draw(H3Handle h3, SH3Transform* transform, void* properti
 	SettingsComponent_Properties* props = (SettingsComponent_Properties*)properties;
 	//background texture
 		H3_Texture_Draw(h3, 0, 0, props->TextureMain, A_Top + A_Left);
-		H3_Texture_Draw(h3, 0, 0, props->TextureMain2, A_Top + A_Left);
+	//gender select
+	if (H3_Button(h3, props->ManSprite, 300, 300, 0x11)) {
+		*props->IsMan = true;
+	}
+	else if (H3_Button(h3, props->WomanSprite, 1200, 300, 0x11)) {
+		*props->IsMan = false;
+	}
 	//back button
 	if (H3_Button(h3, props->BackBtn, 800, 700, 0x11)) {
 		*props->IsMainMenu = true;
@@ -35,16 +43,18 @@ void SettingsComponent_Draw(H3Handle h3, SH3Transform* transform, void* properti
 	}
 }
 
-void* SettingsComponent_CreateProperties(bool* IsSettings, bool* IsMainMenu)
+void* SettingsComponent_CreateProperties(bool* IsSettings, bool* IsMainMenu, bool* IsMan)
 {
 	SettingsComponent_Properties* properties = malloc(sizeof(SettingsComponent_Properties));
 	H3_ASSERT_CONSOLE(properties, "Failed to allocate properties");
 	SettingsComponent_Properties* props = (SettingsComponent_Properties*)properties;
 
 	properties->TextureMain = H3_Texture_Load("assets/Menu/main.jpg", &props->w, &props->h);
-	properties->TextureMain2 = H3_Texture_Load("assets/Menu/Smoke-White.png", &props->w, &props->h);
 	properties->BackBtn = H3_Texture_Load("assets/Menu/Back.png", &props->w, &props->h);
+	properties->ManSprite= H3_Texture_Load("assets/Menu/Man.png", &props->w, &props->h);
+	properties->WomanSprite = H3_Texture_Load("assets/Menu/Woman.png", &props->w, &props->h);
 	properties->IsSettings = IsSettings;
+	properties->IsMan = IsMan;
 	properties->IsMainMenu = IsMainMenu;
 	return properties;
 }
